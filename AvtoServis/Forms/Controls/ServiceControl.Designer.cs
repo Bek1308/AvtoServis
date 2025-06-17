@@ -45,14 +45,15 @@
             tableLayoutPanel.Controls.Add(dataGridView, 0, 3);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);
+            tableLayoutPanel.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.Padding = new Padding(16);
+            tableLayoutPanel.Padding = new Padding(14, 12, 14, 12);
             tableLayoutPanel.RowCount = 4;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.Size = new Size(898, 600);
+            tableLayoutPanel.Size = new Size(786, 450);
             tableLayoutPanel.TabIndex = 0;
             // 
             // titleLabel
@@ -63,9 +64,9 @@
             titleLabel.AutoSize = true;
             titleLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             titleLabel.ForeColor = Color.FromArgb(33, 37, 41);
-            titleLabel.Location = new Point(19, 22);
+            titleLabel.Location = new Point(17, 16);
             titleLabel.Name = "titleLabel";
-            titleLabel.Size = new Size(190, 37);
+            titleLabel.Size = new Size(153, 30);
             titleLabel.TabIndex = 0;
             titleLabel.Text = "Список услуг";
             // 
@@ -80,9 +81,10 @@
             addButton.FlatStyle = FlatStyle.Flat;
             addButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             addButton.ForeColor = Color.White;
-            addButton.Location = new Point(759, 23);
+            addButton.Location = new Point(664, 17);
+            addButton.Margin = new Padding(3, 2, 3, 2);
             addButton.Name = "addButton";
-            addButton.Size = new Size(120, 36);
+            addButton.Size = new Size(105, 27);
             addButton.TabIndex = 1;
             addButton.Text = "Новая";
             addButton.UseVisualStyleBackColor = false;
@@ -96,9 +98,10 @@
             searchBox.BorderStyle = BorderStyle.FixedSingle;
             searchBox.Font = new Font("Segoe UI", 10F);
             searchBox.ForeColor = Color.FromArgb(108, 117, 125);
-            searchBox.Location = new Point(19, 71);
+            searchBox.Location = new Point(17, 52);
+            searchBox.Margin = new Padding(3, 2, 3, 2);
             searchBox.Name = "searchBox";
-            searchBox.Size = new Size(250, 30);
+            searchBox.Size = new Size(219, 25);
             searchBox.TabIndex = 2;
             searchBox.Text = "Поиск...";
             searchBox.TextChanged += SearchBox_TextChanged;
@@ -114,9 +117,9 @@
             countLabel.AutoSize = true;
             countLabel.Font = new Font("Segoe UI", 10F);
             countLabel.ForeColor = Color.FromArgb(33, 37, 41);
-            countLabel.Location = new Point(625, 74);
+            countLabel.Location = new Point(547, 55);
             countLabel.Name = "countLabel";
-            countLabel.Size = new Size(70, 23);
+            countLabel.Size = new Size(57, 19);
             countLabel.TabIndex = 3;
             countLabel.Text = "Услуг: 0";
             // 
@@ -131,9 +134,10 @@
             btnOpenFilterDialog.FlatStyle = FlatStyle.Flat;
             btnOpenFilterDialog.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnOpenFilterDialog.ForeColor = Color.White;
-            btnOpenFilterDialog.Location = new Point(19, 112);
+            btnOpenFilterDialog.Location = new Point(17, 85);
+            btnOpenFilterDialog.Margin = new Padding(3, 2, 3, 2);
             btnOpenFilterDialog.Name = "btnOpenFilterDialog";
-            btnOpenFilterDialog.Size = new Size(100, 28);
+            btnOpenFilterDialog.Size = new Size(88, 29);
             btnOpenFilterDialog.TabIndex = 4;
             btnOpenFilterDialog.Text = "Фильтры";
             btnOpenFilterDialog.UseVisualStyleBackColor = false;
@@ -150,9 +154,10 @@
             btnRefresh.FlatStyle = FlatStyle.Flat;
             btnRefresh.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnRefresh.ForeColor = Color.White;
-            btnRefresh.Location = new Point(625, 112);
+            btnRefresh.Location = new Point(547, 85);
+            btnRefresh.Margin = new Padding(3, 2, 3, 2);
             btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(100, 28);
+            btnRefresh.Size = new Size(88, 29);
             btnRefresh.TabIndex = 5;
             btnRefresh.Text = "Обновить";
             btnRefresh.UseVisualStyleBackColor = false;
@@ -188,24 +193,26 @@
             dataGridView.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridView.Dock = DockStyle.Fill;
             dataGridView.EnableHeadersVisualStyles = false;
-            dataGridView.Location = new Point(19, 149);
+            dataGridView.Location = new Point(17, 122);
+            dataGridView.Margin = new Padding(3, 2, 3, 2);
             dataGridView.Name = "dataGridView";
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersVisible = false;
             dataGridView.RowHeadersWidth = 51;
-            dataGridView.Size = new Size(860, 432);
+            dataGridView.Size = new Size(752, 314);
             dataGridView.TabIndex = 6;
             dataGridView.CellClick += DataGridView_CellClick;
             // 
             // ServiceControl
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
             Controls.Add(tableLayoutPanel);
-            MinimumSize = new Size(400, 300);
+            Margin = new Padding(3, 2, 3, 2);
+            MinimumSize = new Size(350, 225);
             Name = "ServiceControl";
-            Size = new Size(898, 600);
+            Size = new Size(786, 450);
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();

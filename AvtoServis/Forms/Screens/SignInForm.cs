@@ -56,8 +56,7 @@ namespace AvtoServis.Forms.Screens
 
         private void OpenMainForm()
         {
-            MainForm mainForm = new MainForm();
-            mainForm.Show();
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 

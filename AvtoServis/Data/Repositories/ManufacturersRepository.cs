@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace AvtoServis.Data.Repositories
 {
-    public class ManufacturersRepository : IRepository<Manufacturer>
+    public class ManufacturersRepository : IManufacturersRepository
     {
         private readonly string _connectionString;
 

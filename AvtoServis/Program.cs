@@ -13,7 +13,11 @@ namespace AvtoServis
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+            SignInForm signInForm = new SignInForm();
+            if (signInForm.ShowDialog() == DialogResult.OK)
+            {
+                Application.Run(new MainForm()); // MainForm asosiy oyna sifatida ochiladi
+            }
         }
     }
 }

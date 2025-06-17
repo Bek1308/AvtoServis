@@ -7,10 +7,28 @@
     <Compile Update="Forms\Controls\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\PartsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\Modals\CarModel\CarModelDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\CarModel\CarModelFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Parts\PartDetailsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Parts\PartsQualitiesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Parts\PartsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Parts\PartsFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Parts\QualityEditDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Services\FilterDialog.cs">

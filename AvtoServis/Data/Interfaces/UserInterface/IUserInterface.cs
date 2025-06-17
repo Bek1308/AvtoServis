@@ -1,4 +1,4 @@
-﻿namespace AvtoServis.Forms.Controls
+﻿namespace AvtoServis.Data.Interfaces.UserInterface
 {
     public interface IUserInterface
     {

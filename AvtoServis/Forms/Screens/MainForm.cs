@@ -1,4 +1,5 @@
 ﻿using AvtoServis.Data.Configuration;
+using AvtoServis.Data.Interfaces;
 using AvtoServis.Data.Repositories;
 using AvtoServis.Forms.Controls;
 using AvtoServis.ViewModels.Screens;
@@ -22,12 +23,13 @@ namespace AvtoServis.Forms.Screens
         private int targetHeight = 52; // SprContainer uchun maqsadli balandlik
         private const int TRIGGER_DISTANCE = 70; // Ishlatilmaydi, saqlanadi
         private const int TOP_PANEL_HEIGHT = 50;
-        private const int STANDARD_MENU_HEIGHT = 300; // Standard menyuning balandligi
-        private const int EXTENDED_MENU_HEIGHT = 400; // button1 menyusi bilan balandlik
+        private const int STANDARD_MENU_HEIGHT = 360; // Standard menyuning balandligi
+        private const int EXTENDED_MENU_HEIGHT = 470; // button1 menyusi bilan balandlik
         private const int COLLAPSED_HEIGHT = 52; // Yig'ilgan holat balandligi
         private readonly ServicesViewModel _servicesViewModel;
         private readonly ManufacturersViewModel _manufactureViewModel;
         private readonly CarModelsViewModel _carModelViewModel;
+        private readonly PartsViewModel _partsViewModel;
 
         public MainForm()
         {
@@ -43,7 +45,9 @@ namespace AvtoServis.Forms.Screens
             string connectionString = DatabaseConfig.ConnectionString;
             if (string.IsNullOrEmpty(connectionString))
             {
-                return; // Connection string null yoki bo'sh bo'lsa, dastur to'xtamaydi
+                MessageBox.Show("Ошибка: строка подключения к базе данных не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine("MainForm Init Error: Connection string is null or empty.");
+                return;
             }
 
             try
@@ -51,10 +55,18 @@ namespace AvtoServis.Forms.Screens
                 _servicesViewModel = new ServicesViewModel(new ServicesRepository(connectionString));
                 _manufactureViewModel = new ManufacturersViewModel(new ManufacturersRepository(connectionString));
                 _carModelViewModel = new CarModelsViewModel(new CarModelsRepository(connectionString), new CarBrandRepository(connectionString));
+                _partsViewModel = new PartsViewModel(
+                    new PartsRepository(connectionString),
+                    new PartQualitiesRepository(connectionString),
+                    new CarBrandRepository(connectionString),
+                    new ManufacturersRepository(connectionString) // Cast keraksiz, chunki ManufacturersRepository IManufacturersRepository ni implement qiladi
+                );
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Xatolik bo'lsa, view model larni null qoldirib, dastur davom etadi
+                MessageBox.Show($"Ошибка при инициализации ViewModel: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"MainForm Init Error: {ex.Message}");
+                return;
             }
         }
 
@@ -151,7 +163,7 @@ namespace AvtoServis.Forms.Screens
                 }
                 else
                 {
-                    // Expand to standard menu (300 pixels)
+                    // Expand to standard menu (360 pixels)
                     targetHeight = STANDARD_MENU_HEIGHT;
                     menuExpand = true;
                     button1MenuExpanded = false;
@@ -285,9 +297,7 @@ namespace AvtoServis.Forms.Screens
 
         private void ContentPanel_Paint(object sender, PaintEventArgs e)
         {
-
         }
-
 
         private void button6_Click_1(object sender, EventArgs e)
         {
@@ -307,6 +317,32 @@ namespace AvtoServis.Forms.Screens
             catch (Exception)
             {
                 // Xatolikni yutib yubor, dastur to'xtamasligi uchun
+            }
+        }
+
+        private void btnSpartQuality_Click(object sender, EventArgs e)
+        {
+            if (_partsViewModel == null || imageList1 == null)
+            {
+                MessageBox.Show("Ошибка: PartsViewModel или ImageList не инициализированы.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine("btnSpartQuality_Click Error: PartsViewModel or ImageList is null.");
+                return;
+            }
+            try
+            {
+                var partsControl = new PartsControl(_partsViewModel, imageList1);
+                if (partsControl == null)
+                {
+                    MessageBox.Show("Ошибка: PartsControl не создан.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Diagnostics.Debug.WriteLine("btnSpartQuality_Click Error: PartsControl is null.");
+                    return;
+                }
+                OpenUserControl(partsControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"btnSpartQuality_Click Error: {ex.Message}");
             }
         }
     }
