@@ -2,6 +2,7 @@
 using AvtoServis.Data.Interfaces;
 using AvtoServis.Data.Repositories;
 using AvtoServis.Forms.Controls;
+using AvtoServis.Services.Core;
 using AvtoServis.ViewModels.Screens;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,10 @@ namespace AvtoServis.Forms.Screens
         private readonly ManufacturersViewModel _manufactureViewModel;
         private readonly CarModelsViewModel _carModelViewModel;
         private readonly PartsViewModel _partsViewModel;
+        private readonly SuppliersViewModel _suppliersViewModel;
+        private readonly StockViewModel _stockViewModel;
+        private readonly StatusesViewModel _statusesViewModel;
+
 
         public MainForm()
         {
@@ -61,6 +66,10 @@ namespace AvtoServis.Forms.Screens
                     new CarBrandRepository(connectionString),
                     new ManufacturersRepository(connectionString) // Cast keraksiz, chunki ManufacturersRepository IManufacturersRepository ni implement qiladi
                 );
+                _suppliersViewModel = new SuppliersViewModel(new SuppliersRepository(connectionString));
+                _stockViewModel = new StockViewModel(new StockRepository(connectionString));
+                _statusesViewModel = new StatusesViewModel(new StatusRepository(connectionString));
+
             }
             catch (Exception ex)
             {
@@ -344,6 +353,102 @@ namespace AvtoServis.Forms.Screens
                 MessageBox.Show($"Ошибка при открытии PartsControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Diagnostics.Debug.WriteLine($"btnSpartQuality_Click Error: {ex.Message}");
             }
+        }
+
+        private void btnSsuplier_Click(object sender, EventArgs e)
+        {
+            if (_suppliersViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var supplierControl = new SuppliersControl(_suppliersViewModel, imageList1);
+                if (supplierControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(supplierControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии SuppliersControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+
+            }
+
+        }
+
+        private void btnSstock_Click(object sender, EventArgs e)
+        {
+            if (_stockViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var stockControl = new StockControl(_stockViewModel, imageList1);
+                if (stockControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(stockControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии StockControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+
+            }
+
+        }
+
+        private void btnSstatus_Click(object sender, EventArgs e)
+        {
+            if (_statusesViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var statusControl = new StatusesControl(_statusesViewModel, imageList1);
+                if (statusControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(statusControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии StatusControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+
+            }
+
+        }
+
+        private void btnIncome_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var indexIncomeControl = new IndexIncome();
+                if (indexIncomeControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(indexIncomeControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии indexIncomeControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+
+            }
+        }
+
+        private void sidebarContainer_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

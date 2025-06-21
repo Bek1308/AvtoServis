@@ -384,5 +384,10 @@ namespace AvtoServis.Forms.Controls
             }
             base.Dispose(disposing);
         }
+
+        private void PartsDialog_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

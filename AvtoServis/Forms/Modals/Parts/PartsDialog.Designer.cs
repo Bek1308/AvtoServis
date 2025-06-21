@@ -38,7 +38,7 @@ namespace AvtoServis.Forms.Controls
             // tableLayoutPanel
             // 
             tableLayoutPanel.ColumnCount = 3;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 158F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel.Controls.Add(lblBrand, 0, 0);
@@ -76,7 +76,7 @@ namespace AvtoServis.Forms.Controls
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 199F));
             tableLayoutPanel.RowStyles.Add(new RowStyle());
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-            tableLayoutPanel.Size = new Size(597, 654);
+            tableLayoutPanel.Size = new Size(652, 654);
             tableLayoutPanel.TabIndex = 0;
             // 
             // lblBrand
@@ -95,9 +95,9 @@ namespace AvtoServis.Forms.Controls
             cmbBrand.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbBrand.Font = new Font("Segoe UI", 10F);
             cmbBrand.FormattingEnabled = true;
-            cmbBrand.Location = new Point(219, 19);
+            cmbBrand.Location = new Point(177, 19);
             cmbBrand.Name = "cmbBrand";
-            cmbBrand.Size = new Size(176, 31);
+            cmbBrand.Size = new Size(221, 31);
             cmbBrand.TabIndex = 1;
             cmbBrand.SelectedIndexChanged += CmbBrand_SelectedIndexChanged;
             // 
@@ -108,7 +108,7 @@ namespace AvtoServis.Forms.Controls
             lblCatalogNumber.ForeColor = Color.FromArgb(33, 37, 41);
             lblCatalogNumber.Location = new Point(19, 56);
             lblCatalogNumber.Name = "lblCatalogNumber";
-            lblCatalogNumber.Size = new Size(165, 23);
+            lblCatalogNumber.Size = new Size(114, 40);
             lblCatalogNumber.TabIndex = 2;
             lblCatalogNumber.Text = "Каталожный номер";
             // 
@@ -116,9 +116,9 @@ namespace AvtoServis.Forms.Controls
             // 
             txtCatalogNumber.BorderStyle = BorderStyle.FixedSingle;
             txtCatalogNumber.Font = new Font("Segoe UI", 10F);
-            txtCatalogNumber.Location = new Point(219, 59);
+            txtCatalogNumber.Location = new Point(177, 59);
             txtCatalogNumber.Name = "txtCatalogNumber";
-            txtCatalogNumber.Size = new Size(176, 30);
+            txtCatalogNumber.Size = new Size(221, 30);
             txtCatalogNumber.TabIndex = 3;
             txtCatalogNumber.TextChanged += TxtCatalogNumber_TextChanged;
             // 
@@ -138,9 +138,9 @@ namespace AvtoServis.Forms.Controls
             cmbManufacturer.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbManufacturer.Font = new Font("Segoe UI", 10F);
             cmbManufacturer.FormattingEnabled = true;
-            cmbManufacturer.Location = new Point(219, 99);
+            cmbManufacturer.Location = new Point(177, 99);
             cmbManufacturer.Name = "cmbManufacturer";
-            cmbManufacturer.Size = new Size(176, 31);
+            cmbManufacturer.Size = new Size(221, 31);
             cmbManufacturer.TabIndex = 5;
             cmbManufacturer.SelectedIndexChanged += CmbManufacturer_SelectedIndexChanged;
             // 
@@ -160,9 +160,9 @@ namespace AvtoServis.Forms.Controls
             cmbQuality.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbQuality.Font = new Font("Segoe UI", 10F);
             cmbQuality.FormattingEnabled = true;
-            cmbQuality.Location = new Point(219, 139);
+            cmbQuality.Location = new Point(177, 139);
             cmbQuality.Name = "cmbQuality";
-            cmbQuality.Size = new Size(176, 31);
+            cmbQuality.Size = new Size(221, 31);
             cmbQuality.TabIndex = 7;
             cmbQuality.SelectedIndexChanged += CmbQuality_SelectedIndexChanged;
             // 
@@ -174,7 +174,7 @@ namespace AvtoServis.Forms.Controls
             btnManageQualities.FlatStyle = FlatStyle.Flat;
             btnManageQualities.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnManageQualities.ForeColor = Color.White;
-            btnManageQualities.Location = new Point(401, 139);
+            btnManageQualities.Location = new Point(408, 139);
             btnManageQualities.Name = "btnManageQualities";
             btnManageQualities.Size = new Size(120, 34);
             btnManageQualities.TabIndex = 8;
@@ -197,9 +197,9 @@ namespace AvtoServis.Forms.Controls
             // 
             txtPartName.BorderStyle = BorderStyle.FixedSingle;
             txtPartName.Font = new Font("Segoe UI", 10F);
-            txtPartName.Location = new Point(219, 179);
+            txtPartName.Location = new Point(177, 179);
             txtPartName.Name = "txtPartName";
-            txtPartName.Size = new Size(176, 30);
+            txtPartName.Size = new Size(221, 30);
             txtPartName.TabIndex = 10;
             txtPartName.TextChanged += TxtPartName_TextChanged;
             // 
@@ -218,10 +218,10 @@ namespace AvtoServis.Forms.Controls
             // 
             txtCharacteristics.BorderStyle = BorderStyle.FixedSingle;
             txtCharacteristics.Font = new Font("Segoe UI", 10F);
-            txtCharacteristics.Location = new Point(219, 219);
+            txtCharacteristics.Location = new Point(177, 219);
             txtCharacteristics.Multiline = true;
             txtCharacteristics.Name = "txtCharacteristics";
-            txtCharacteristics.Size = new Size(176, 74);
+            txtCharacteristics.Size = new Size(221, 74);
             txtCharacteristics.TabIndex = 12;
             // 
             // lblPhotoPath
@@ -239,9 +239,9 @@ namespace AvtoServis.Forms.Controls
             // 
             txtPhotoPath.BorderStyle = BorderStyle.FixedSingle;
             txtPhotoPath.Font = new Font("Segoe UI", 10F);
-            txtPhotoPath.Location = new Point(219, 299);
+            txtPhotoPath.Location = new Point(177, 299);
             txtPhotoPath.Name = "txtPhotoPath";
-            txtPhotoPath.Size = new Size(176, 30);
+            txtPhotoPath.Size = new Size(221, 30);
             txtPhotoPath.TabIndex = 14;
             txtPhotoPath.TextChanged += TxtPhotoPath_TextChanged;
             // 
@@ -253,7 +253,7 @@ namespace AvtoServis.Forms.Controls
             btnBrowsePhoto.FlatStyle = FlatStyle.Flat;
             btnBrowsePhoto.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBrowsePhoto.ForeColor = Color.White;
-            btnBrowsePhoto.Location = new Point(401, 299);
+            btnBrowsePhoto.Location = new Point(408, 299);
             btnBrowsePhoto.Name = "btnBrowsePhoto";
             btnBrowsePhoto.Size = new Size(120, 34);
             btnBrowsePhoto.TabIndex = 15;
@@ -264,9 +264,9 @@ namespace AvtoServis.Forms.Controls
             // pictureBox
             // 
             pictureBox.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox.Location = new Point(219, 339);
+            pictureBox.Location = new Point(177, 339);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(176, 193);
+            pictureBox.Size = new Size(225, 193);
             pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox.TabIndex = 16;
             pictureBox.TabStop = false;
@@ -280,7 +280,7 @@ namespace AvtoServis.Forms.Controls
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(219, 606);
+            btnCancel.Location = new Point(177, 606);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(120, 36);
             btnCancel.TabIndex = 18;
@@ -296,7 +296,7 @@ namespace AvtoServis.Forms.Controls
             btnSave.FlatStyle = FlatStyle.Flat;
             btnSave.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(401, 606);
+            btnSave.Location = new Point(408, 606);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(120, 36);
             btnSave.TabIndex = 19;
@@ -313,8 +313,9 @@ namespace AvtoServis.Forms.Controls
             panelError.Location = new Point(19, 539);
             panelError.Margin = new Padding(3, 4, 3, 4);
             panelError.Name = "panelError";
-            panelError.Size = new Size(559, 60);
+            panelError.Size = new Size(614, 60);
             panelError.TabIndex = 17;
+            panelError.Visible = false;
             // 
             // lblError
             // 
@@ -336,7 +337,7 @@ namespace AvtoServis.Forms.Controls
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
             CancelButton = btnCancel;
-            ClientSize = new Size(597, 654);
+            ClientSize = new Size(652, 654);
             Controls.Add(tableLayoutPanel);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -344,6 +345,7 @@ namespace AvtoServis.Forms.Controls
             Name = "PartsDialog";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Деталь";
+            Load += PartsDialog_Load;
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();

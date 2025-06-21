@@ -44,7 +44,6 @@ namespace AvtoService.ViewModels.Screens
         {
             try
             {
-                // Agar Username yoki Password bo‘sh bo‘lsa, xabar ko‘rsatish
                 if (string.IsNullOrWhiteSpace(Username))
                 {
                     ErrorMessage = "Пожалуйста, введите имя пользователя.";
@@ -59,6 +58,8 @@ namespace AvtoService.ViewModels.Screens
                 var user = _authService.Authenticate(Username, Password);
                 if (user != null)
                 {
+                    // Foydalanuvchi ma'lumotlarini CurrentUser'ga saqlash
+                    CurrentUser.Instance.SetUser(user);
                     ErrorMessage = "Успешный вход!";
                     OnLoginSuccess?.Invoke();
                 }

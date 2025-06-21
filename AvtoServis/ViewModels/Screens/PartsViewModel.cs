@@ -104,7 +104,7 @@ namespace AvtoServis.ViewModels.Screens
                 throw new Exception($"Ошибка при добавлении детали: {ex.Message}", ex);
             }
         }
-
+          
         public void UpdatePart(Part part)
         {
             try

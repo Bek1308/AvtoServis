@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="Database\Files\" />
-    <Folder Include="Forms\Common\" />
     <Folder Include="Resources\PartsPhoto\" />
   </ItemGroup>
 
