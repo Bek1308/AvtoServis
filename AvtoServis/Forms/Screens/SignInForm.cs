@@ -15,6 +15,8 @@ namespace AvtoServis.Forms.Screens
         public SignInForm()
         {
             InitializeComponent();
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            this.AutoScaleDimensions = new SizeF(96F, 96F);
             _viewModel = new SignInViewModel();
             _errorTimer = new Timer { Interval = 5000 }; // 5 soniya (5000 ms)
             _errorTimer.Tick += (s, e) =>

@@ -19,6 +19,7 @@ namespace AvtoServis.Forms.Screens
 {
     public partial class MainForm : Form
     {
+     
         private bool menuExpand = false; // Spr menyusi holati (standard menu)
         private bool button1MenuExpanded = false; // button1 ga tegishli menyular ochilganmi
         private int targetHeight = 52; // SprContainer uchun maqsadli balandlik
@@ -40,13 +41,18 @@ namespace AvtoServis.Forms.Screens
         {
             InitializeComponent();
             this.DoubleBuffered = true;
-
+            this.DoubleBuffered = true;
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            using (var g = this.CreateGraphics())
+            {
+                this.AutoScaleDimensions = new SizeF(g.DpiX, g.DpiY); // Haqiqiy DPI ni olish
+            }
             // Panellar uchun miltirashni oldini olish, agar null bo'lmasa
             if (ContentPanel != null) SetDoubleBuffered(ContentPanel);
             if (SprContainer != null) SetDoubleBuffered(SprContainer);
             if (sidebarContainer != null) SetDoubleBuffered(sidebarContainer);
 
-            menuTransition.Interval = 5;
+            menuTransition.Interval = 15;
             string connectionString = DatabaseConfig.ConnectionString;
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -78,6 +84,7 @@ namespace AvtoServis.Forms.Screens
                 return;
             }
         }
+        
 
         private void SetDoubleBuffered(Control control)
         {
@@ -450,5 +457,6 @@ namespace AvtoServis.Forms.Screens
         {
 
         }
+
     }
 }

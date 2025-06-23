@@ -33,7 +33,6 @@
             sidebarContainer = new FlowLayoutPanel();
             panel1 = new Panel();
             pnMain = new Panel();
-            btnMain = new Button();
             imageList1 = new ImageList(components);
             pnSell = new Panel();
             btnSell = new Button();
@@ -86,6 +85,7 @@
             flowLayoutPanel4 = new FlowLayoutPanel();
             panel2 = new Panel();
             ContentPanel = new CustomPanel();
+            btnMain = new Button();
             sidebarContainer.SuspendLayout();
             pnMain.SuspendLayout();
             pnSell.SuspendLayout();
@@ -146,23 +146,6 @@
             pnMain.Size = new Size(229, 43);
             pnMain.TabIndex = 1;
             pnMain.Paint += panel2_Paint;
-            // 
-            // btnMain
-            // 
-            btnMain.BackColor = Color.FromArgb(248, 248, 248);
-            btnMain.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            btnMain.ImageAlign = ContentAlignment.MiddleLeft;
-            btnMain.ImageIndex = 0;
-            btnMain.ImageList = imageList1;
-            btnMain.Location = new Point(-15, -12);
-            btnMain.Name = "btnMain";
-            btnMain.Padding = new Padding(25, 0, 0, 0);
-            btnMain.Size = new Size(265, 67);
-            btnMain.TabIndex = 0;
-            btnMain.Text = "            Главная";
-            btnMain.TextAlign = ContentAlignment.MiddleLeft;
-            btnMain.UseVisualStyleBackColor = false;
-            btnMain.MouseEnter += ApplyHoverEffect;
             // 
             // imageList1
             // 
@@ -840,6 +823,23 @@
             ContentPanel.TabIndex = 7;
             ContentPanel.Paint += ContentPanel_Paint;
             // 
+            // btnMain
+            // 
+            btnMain.BackColor = Color.FromArgb(248, 248, 248);
+            btnMain.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnMain.ImageAlign = ContentAlignment.MiddleLeft;
+            btnMain.ImageIndex = 0;
+            btnMain.ImageList = imageList1;
+            btnMain.Location = new Point(-15, -12);
+            btnMain.Name = "btnMain";
+            btnMain.Padding = new Padding(25, 0, 0, 0);
+            btnMain.Size = new Size(265, 67);
+            btnMain.TabIndex = 0;
+            btnMain.Text = "            Главная";
+            btnMain.TextAlign = ContentAlignment.MiddleLeft;
+            btnMain.UseVisualStyleBackColor = false;
+            btnMain.MouseEnter += ApplyHoverEffect;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -888,7 +888,6 @@
         #endregion
         private FlowLayoutPanel sidebarContainer;
         private Panel panel1;
-        private Button btnMain;
         private Panel pnMain;
         private ImageList imageList1;
         private Panel pnSell;
@@ -942,5 +941,6 @@
         private Button button9;
         private Panel panel19;
         private Button button10;
+        private Button btnMain;
     }
 }

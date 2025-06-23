@@ -89,3 +89,4 @@ C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Rele
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Release\net8.0-windows\AvtoServis.pdb
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Release\net8.0-windows\AvtoServis.genruntimeconfig.cache
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Release\net8.0-windows\ref\AvtoServis.dll
+C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Release\net8.0-windows\AvtoServis.Forms.PartsIncomeForm.resources

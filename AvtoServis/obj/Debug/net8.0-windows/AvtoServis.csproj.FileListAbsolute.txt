@@ -62,6 +62,7 @@ C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debu
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.Controls.TestControl.resources
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.Controls.CarModelDialog.resources
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.Controls.CarModelFilterDialog.resources
+C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.PartsIncomeForm.resources
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.Controls.PartDetailsDialog.resources
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.Controls.PartsDialog.resources
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.Controls.PartsFilterDialog.resources
@@ -89,4 +90,3 @@ C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debu
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.pdb
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.genruntimeconfig.cache
 C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\ref\AvtoServis.dll
-C:\Users\laptop\Desktop\Проекти\AvtoServis\AvtoServis\AvtoServis\obj\Debug\net8.0-windows\AvtoServis.Forms.PartsIncomeForm.resources
