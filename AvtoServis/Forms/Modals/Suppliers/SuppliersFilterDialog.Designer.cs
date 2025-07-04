@@ -15,115 +15,173 @@
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             tableLayoutPanel = new TableLayoutPanel();
-            lblName = new Label();
-            txtName = new TextBox();
-            lblError = new Label();
-            btnCancel = new Button();
+            titleLabel = new Label();
+            separator = new Label();
+            flowLayoutFilters = new FlowLayoutPanel();
+            btnReset = new Button();
             btnApply = new Button();
+            lblError = new Label();
+            btnAddFilter = new Button();
+            toolTip = new ToolTip(components);
             tableLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel
             // 
             tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 88F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.Controls.Add(lblName, 0, 0);
-            tableLayoutPanel.Controls.Add(txtName, 1, 0);
-            tableLayoutPanel.Controls.Add(lblError, 0, 1);
-            tableLayoutPanel.Controls.Add(btnCancel, 0, 2);
-            tableLayoutPanel.Controls.Add(btnApply, 1, 2);
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel.Controls.Add(titleLabel, 0, 0);
+            tableLayoutPanel.Controls.Add(separator, 0, 1);
+            tableLayoutPanel.Controls.Add(flowLayoutFilters, 0, 3);
+            tableLayoutPanel.Controls.Add(btnReset, 0, 5);
+            tableLayoutPanel.Controls.Add(btnApply, 1, 5);
+            tableLayoutPanel.Controls.Add(lblError, 0, 4);
+            tableLayoutPanel.Controls.Add(btnAddFilter, 0, 2);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);
-            tableLayoutPanel.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.Padding = new Padding(14, 12, 14, 12);
-            tableLayoutPanel.RowCount = 3;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
-            tableLayoutPanel.Size = new Size(380, 111);
+            tableLayoutPanel.Padding = new Padding(16);
+            tableLayoutPanel.RowCount = 6;
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 2F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+            tableLayoutPanel.Size = new Size(455, 560);
             tableLayoutPanel.TabIndex = 0;
+            tableLayoutPanel.Paint += tableLayoutPanel_Paint;
             // 
-            // lblName
+            // titleLabel
             // 
-            lblName.AutoSize = true;
-            lblName.Font = new Font("Segoe UI", 10F);
-            lblName.ForeColor = Color.FromArgb(33, 37, 41);
-            lblName.Location = new Point(17, 12);
-            lblName.Name = "lblName";
-            lblName.Size = new Size(51, 19);
-            lblName.TabIndex = 0;
-            lblName.Text = "Название";
+            titleLabel.AccessibleDescription = "Заголовок фильтров поставщиков";
+            titleLabel.AccessibleName = "Фильтры поставщиков";
+            titleLabel.Anchor = AnchorStyles.Left;
+            titleLabel.AutoSize = true;
+            tableLayoutPanel.SetColumnSpan(titleLabel, 2);
+            titleLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            titleLabel.ForeColor = Color.FromArgb(33, 37, 41);
+            titleLabel.Location = new Point(19, 17);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(287, 32);
+            titleLabel.TabIndex = 0;
+            titleLabel.Text = "Фильтры поставщиков";
             // 
-            // txtName
+            // separator
             // 
-            txtName.BorderStyle = BorderStyle.FixedSingle;
-            txtName.Font = new Font("Segoe UI", 10F);
-            txtName.Location = new Point(105, 14);
-            txtName.Margin = new Padding(3, 2, 3, 2);
-            txtName.Name = "txtName";
-            txtName.Size = new Size(176, 30);
-            txtName.TabIndex = 1;
+            separator.AccessibleDescription = "Разделительная линия";
+            separator.AccessibleName = "Разделитель";
+            separator.BackColor = Color.FromArgb(108, 117, 125);
+            tableLayoutPanel.SetColumnSpan(separator, 2);
+            separator.Location = new Point(19, 51);
+            separator.Name = "separator";
+            separator.Size = new Size(396, 2);
+            separator.TabIndex = 1;
             // 
-            // lblError
+            // flowLayoutFilters
             // 
-            lblError.AutoSize = true;
-            lblError.Font = new Font("Segoe UI", 10F);
-            lblError.ForeColor = Color.FromArgb(220, 53, 69);
-            lblError.Location = new Point(17, 42);
-            lblError.Name = "lblError";
-            lblError.Size = new Size(0, 19);
-            lblError.TabIndex = 2;
-            lblError.Visible = false;
+            flowLayoutFilters.AccessibleDescription = "Панель для добавления фильтров";
+            flowLayoutFilters.AccessibleName = "Фильтры";
+            flowLayoutFilters.AutoSize = true;
+            flowLayoutFilters.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel.SetColumnSpan(flowLayoutFilters, 2);
+            flowLayoutFilters.Location = new Point(19, 121);
+            flowLayoutFilters.Name = "flowLayoutFilters";
+            flowLayoutFilters.Size = new Size(0, 0);
+            flowLayoutFilters.TabIndex = 3;
             // 
-            // btnCancel
+            // btnReset
             // 
-            btnCancel.BackColor = Color.FromArgb(108, 117, 125);
-            btnCancel.DialogResult = DialogResult.Cancel;
-            btnCancel.FlatAppearance.BorderSize = 0;
-            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(130, 140, 150);
-            btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(17, 74);
-            btnCancel.Margin = new Padding(3, 2, 3, 2);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(82, 27);
-            btnCancel.TabIndex = 3;
-            btnCancel.Text = "Отмена";
-            btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += BtnCancel_Click;
+            btnReset.AccessibleDescription = "Сбрасывает все фильтры";
+            btnReset.AccessibleName = "Сбросить";
+            btnReset.AutoSize = true;
+            btnReset.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnReset.BackColor = Color.FromArgb(108, 117, 125);
+            btnReset.FlatAppearance.BorderSize = 0;
+            btnReset.FlatAppearance.MouseOverBackColor = Color.FromArgb(130, 140, 150);
+            btnReset.FlatStyle = FlatStyle.Flat;
+            btnReset.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnReset.ForeColor = Color.White;
+            btnReset.Location = new Point(19, 515);
+            btnReset.MinimumSize = new Size(100, 33);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(100, 33);
+            btnReset.TabIndex = 5;
+            btnReset.Text = "Сбросить";
+            btnReset.UseVisualStyleBackColor = false;
+            btnReset.Click += BtnReset_Click;
             // 
             // btnApply
             // 
+            btnApply.AccessibleDescription = "Применяет выбранные фильтры";
+            btnApply.AccessibleName = "Применить";
+            btnApply.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnApply.AutoSize = true;
+            btnApply.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             btnApply.BackColor = Color.FromArgb(40, 167, 69);
             btnApply.FlatAppearance.BorderSize = 0;
             btnApply.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 187, 89);
             btnApply.FlatStyle = FlatStyle.Flat;
             btnApply.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnApply.ForeColor = Color.White;
-            btnApply.Location = new Point(105, 74);
-            btnApply.Margin = new Padding(3, 2, 3, 2);
+            btnApply.Location = new Point(320, 515);
+            btnApply.MinimumSize = new Size(100, 33);
             btnApply.Name = "btnApply";
-            btnApply.Size = new Size(105, 27);
-            btnApply.TabIndex = 4;
+            btnApply.Size = new Size(116, 33);
+            btnApply.TabIndex = 6;
             btnApply.Text = "Применить";
             btnApply.UseVisualStyleBackColor = false;
             btnApply.Click += BtnApply_Click;
             // 
+            // lblError
+            // 
+            lblError.AccessibleDescription = "Отображает ошибки фильтрации";
+            lblError.AccessibleName = "Сообщение об ошибке";
+            lblError.AutoSize = true;
+            tableLayoutPanel.SetColumnSpan(lblError, 2);
+            lblError.Font = new Font("Segoe UI", 9F);
+            lblError.ForeColor = Color.FromArgb(220, 53, 69);
+            lblError.Location = new Point(19, 492);
+            lblError.Name = "lblError";
+            lblError.Size = new Size(0, 20);
+            lblError.TabIndex = 4;
+            lblError.Visible = false;
+            // 
+            // btnAddFilter
+            // 
+            btnAddFilter.AccessibleDescription = "Добавляет новый фильтр";
+            btnAddFilter.AccessibleName = "Добавить фильтр";
+            btnAddFilter.Anchor = AnchorStyles.Left;
+            btnAddFilter.AutoSize = true;
+            btnAddFilter.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAddFilter.BackColor = Color.FromArgb(25, 118, 210);
+            btnAddFilter.FlatAppearance.BorderSize = 0;
+            btnAddFilter.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnAddFilter.FlatStyle = FlatStyle.Flat;
+            btnAddFilter.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAddFilter.ForeColor = Color.White;
+            btnAddFilter.Location = new Point(19, 77);
+            btnAddFilter.Margin = new Padding(3, 20, 3, 3);
+            btnAddFilter.MinimumSize = new Size(100, 33);
+            btnAddFilter.Name = "btnAddFilter";
+            btnAddFilter.Size = new Size(101, 33);
+            btnAddFilter.TabIndex = 2;
+            btnAddFilter.Text = "Добавить";
+            btnAddFilter.UseVisualStyleBackColor = false;
+            btnAddFilter.Click += BtnAddFilter_Click;
+            // 
             // SuppliersFilterDialog
             // 
-            AcceptButton = btnApply;
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(9F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            CancelButton = btnCancel;
-            ClientSize = new Size(380, 111);
+            ClientSize = new Size(455, 560);
             Controls.Add(tableLayoutPanel);
+            Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "SuppliersFilterDialog";
@@ -134,11 +192,14 @@
             ResumeLayout(false);
         }
 
-        private TableLayoutPanel tableLayoutPanel;
-        private Label lblName;
-        private TextBox txtName;
-        private Label lblError;
-        private Button btnCancel;
-        private Button btnApply;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private System.Windows.Forms.Label titleLabel;
+        private System.Windows.Forms.Label separator;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutFilters;
+        private System.Windows.Forms.Label lblError;
+        private System.Windows.Forms.Button btnAddFilter;
+        private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

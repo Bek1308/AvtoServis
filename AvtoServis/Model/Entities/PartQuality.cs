@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AvtoServis.Model.Entities
+﻿namespace AvtoServis.Model.Entities
 {
     public class PartQuality
     {

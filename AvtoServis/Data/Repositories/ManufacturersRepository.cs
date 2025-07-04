@@ -1,9 +1,8 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
+
 
 namespace AvtoServis.Data.Repositories
 {
@@ -195,7 +194,7 @@ namespace AvtoServis.Data.Repositories
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand("SELECT ManufacturerID, Name FROM Manufacturers WHERE Name LIKE @SearchText", connection);
+                    var command = new SqlCommand("SELECT ManufacturerID, Name FROM Manufacturers WHERE Name LIKE @SearchText OR CAST(ManufacturerID AS NVARCHAR) LIKE @SearchText", connection);
                     command.Parameters.AddWithValue("@SearchText", $"%{searchText}%");
                     using (var reader = command.ExecuteReader())
                     {
@@ -222,12 +221,6 @@ namespace AvtoServis.Data.Repositories
                 throw new Exception("Неизвестная ошибка при поиске производителей.", ex);
             }
             return manufacturers;
-        }
-
-        public List<Manufacturer> FilterByPrice(decimal minPrice, decimal maxPrice)
-        {
-            // Narx yo'qligi sababli bu metod ishlatilmaydi, lekin interfeys talabi uchun bo'sh implementatsiya
-            throw new NotSupportedException("Фильтрация по цене не поддерживается для производителей.");
         }
     }
 }

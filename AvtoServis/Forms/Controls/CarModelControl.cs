@@ -1,72 +1,117 @@
-﻿
-using AvtoServis.Data.Interfaces.UserInterface;
-using AvtoServis.Model.Entities;
+﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
 {
-    public partial class CarModelControl : UserControl, IUserInterface
+    public partial class CarModelControl : UserControl
     {
-        private readonly CarModelsViewModel _viewModel;
+        private readonly CarModelViewModel _viewModel;
         private readonly ImageList _actionImageList;
         private List<CarModel> _dataSource;
         private System.Windows.Forms.Timer _searchTimer;
+        private readonly Dictionary<string, bool> _columnVisibility;
         private string _sortColumn = "Id";
         private SortOrder _sortOrder = SortOrder.Ascending;
 
-        public CarModelControl(CarModelsViewModel viewModel, ImageList actionImageList)
+        public CarModelControl(CarModelViewModel viewModel, ImageList actionImageList)
         {
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _actionImageList = actionImageList ?? throw new ArgumentNullException(nameof(actionImageList));
             _dataSource = new List<CarModel>();
+            _columnVisibility = new Dictionary<string, bool>
+            {
+                { "Id", true },
+                { "CarBrandName", true },
+                { "Model", true },
+                { "Year", true },
+                { "Actions", true }
+            };
             InitializeComponent();
             ConfigureColumns();
             EnhanceVisualStyles();
             InitializeSearch();
             OptimizeDataGridView();
             LoadData();
+            UpdateVisibleColumns();
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            SetToolTips();
+        }
+
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(tableLayoutPanel, "Основная панель управления моделями автомобилей");
+            toolTip.SetToolTip(titleLabel, "Заголовок раздела моделей автомобилей");
+            toolTip.SetToolTip(separator, "Разделительная линия");
+            toolTip.SetToolTip(searchBox, "Введите текст для поиска по видимым столбцам");
+            toolTip.SetToolTip(buttonPanel, "Панель с кнопками управления");
+            toolTip.SetToolTip(addButton, "Добавить новую модель автомобиля");
+            toolTip.SetToolTip(btnColumns, "Выбрать видимые столбцы таблицы");
+            toolTip.SetToolTip(btnOpenFilterDialog, "Открыть окно фильтров");
+            toolTip.SetToolTip(btnExport, "Экспортировать данные в Excel");
+            toolTip.SetToolTip(countLabel, "Количество отображаемых моделей");
+            toolTip.SetToolTip(dataGridView, "Таблица с данными о моделях автомобилей");
+        }
+
+        private void UpdateVisibleColumns()
+        {
+            _viewModel.VisibleColumns = _columnVisibility
+                .Where(kvp => kvp.Value && kvp.Key != "Actions")
+                .Select(kvp => kvp.Key)
+                .ToList();
         }
 
         private void ConfigureColumns()
         {
             dataGridView.Columns.Clear();
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            if (_columnVisibility["Id"])
             {
-                Name = "Id",
-                HeaderText = "ID",
-                ReadOnly = true,
-                Width = 80
-            });
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "Id",
+                    HeaderText = "ID",
+                    DataPropertyName = "Id",
+                    ReadOnly = true,
+                    Width = 80,
+                    DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleLeft }
+                });
+            }
+            if (_columnVisibility["CarBrandName"])
             {
-                Name = "CarBrandName",
-                HeaderText = "Марка",
-                DataPropertyName = "CarBrandName",
-                ReadOnly = true,
-                Width = 150
-            });
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "CarBrandName",
+                    HeaderText = "Марка",
+                    DataPropertyName = "CarBrandName",
+                    ReadOnly = true,
+                    Width = 150,
+                    DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleLeft }
+                });
+            }
+            if (_columnVisibility["Model"])
             {
-                Name = "Model",
-                HeaderText = "Модель",
-                DataPropertyName = "Model",
-                ReadOnly = true
-            });
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "Model",
+                    HeaderText = "Модель",
+                    DataPropertyName = "Model",
+                    ReadOnly = true,
+                    Width = 150,
+                    DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleLeft }
+                });
+            }
+            if (_columnVisibility["Year"])
             {
-                Name = "Year",
-                HeaderText = "Год",
-                DataPropertyName = "Year",
-                ReadOnly = true,
-                Width = 100
-            });
+                dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "Year",
+                    HeaderText = "Год",
+                    DataPropertyName = "Year",
+                    ReadOnly = true,
+                    Width = 100,
+                    DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleLeft }
+                });
+            }
             dataGridView.Columns.Add(new DataGridViewButtonColumn
             {
                 Name = "Actions",
@@ -74,23 +119,30 @@ namespace AvtoServis.Forms.Controls
                 Text = "...",
                 UseColumnTextForButtonValue = true,
                 FlatStyle = FlatStyle.Flat,
-                Width = 80
+                Width = 80,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleCenter,
+                    Padding = new Padding(0),
+                    Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+                }
             });
 
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView.AutoGenerateColumns = false;
+            UpdateVisibleColumns();
         }
 
         private void EnhanceVisualStyles()
         {
-            addButton.BackColor = Color.FromArgb(25, 118, 210);
-            addButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            addButton.BackColor = Color.FromArgb(40, 167, 69);
+            addButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 187, 89);
+            btnColumns.BackColor = Color.FromArgb(25, 118, 210);
+            btnColumns.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
             btnOpenFilterDialog.BackColor = Color.FromArgb(25, 118, 210);
             btnOpenFilterDialog.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
-            btnRefresh.BackColor = Color.FromArgb(108, 117, 125);
-            btnRefresh.FlatAppearance.MouseOverBackColor = Color.FromArgb(130, 140, 150);
-            btnExport.BackColor = Color.FromArgb(40, 167, 69);
-            btnExport.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 187, 89);
+            btnExport.BackColor = Color.FromArgb(25, 118, 210);
+            btnExport.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
 
             dataGridView.BackgroundColor = Color.White;
             dataGridView.EnableHeadersVisualStyles = false;
@@ -126,55 +178,186 @@ namespace AvtoServis.Forms.Controls
             ShowDialog(null);
         }
 
+        private void BtnColumns_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new Form
+            {
+                Text = "Выбор столбцов",
+                Size = new Size(300, 300),
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                BackColor = Color.FromArgb(245, 245, 245)
+            })
+            {
+                var checkedListBox = new CheckedListBox
+                {
+                    Location = new Point(10, 10),
+                    Size = new Size(260, 200),
+                    CheckOnClick = true,
+                    Font = new Font("Segoe UI", 10F),
+                    BorderStyle = BorderStyle.FixedSingle
+                };
+                foreach (var column in _columnVisibility)
+                {
+                    if (column.Key != "Actions")
+                    {
+                        checkedListBox.Items.Add(new { Name = column.Key, DisplayName = dataGridView.Columns[column.Key]?.HeaderText ?? column.Key }, column.Value);
+                    }
+                }
+                checkedListBox.DisplayMember = "DisplayName";
+                checkedListBox.ValueMember = "Name";
+
+                var btnOk = new Button
+                {
+                    Text = "ОК",
+                    Location = new Point(100, 220),
+                    Size = new Size(80, 30),
+                    BackColor = Color.FromArgb(40, 167, 69),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(60, 187, 89) },
+                    Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+                };
+                btnOk.Click += (s, ev) =>
+                {
+                    int visibleCount = checkedListBox.CheckedItems.Count;
+                    if (visibleCount == 0)
+                    {
+                        MessageBox.Show("Необходимо выбрать хотя бы один столбец!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    foreach (var column in _columnVisibility.Keys.ToList())
+                    {
+                        if (column != "Actions")
+                        {
+                            _columnVisibility[column] = false;
+                        }
+                    }
+                    foreach (var item in checkedListBox.CheckedItems)
+                    {
+                        var col = (dynamic)item;
+                        _columnVisibility[col.Name] = true;
+                    }
+                    ConfigureColumns();
+                    RefreshDataGridView();
+                    dialog.Close();
+                };
+
+                dialog.Controls.Add(checkedListBox);
+                dialog.Controls.Add(btnOk);
+                dialog.ShowDialog();
+            }
+        }
+
+        private void BtnOpenFilterDialog_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                UpdateVisibleColumns();
+                using (var dialog = new CarModelFilterDialog(_viewModel))
+                {
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        ApplyFilters(dialog.Filters);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex, "открытии фильтров");
+            }
+        }
+
+        private void BtnExport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                    saveFileDialog.FileName = $"CarModels_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        _viewModel.ExportToExcel(_dataSource, saveFileDialog.FileName, _columnVisibility);
+                        MessageBox.Show("Данные успешно экспортированы в Excel!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex, "экспорте данных в Excel");
+            }
+        }
+
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || e.ColumnIndex < 0 || dataGridView.Columns[e.ColumnIndex].Name != "Actions") return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
 
             int id = (int)dataGridView.Rows[e.RowIndex].Tag;
 
             try
             {
-                Size ActionIconSize = new(24, 24);
-                var menu = new ContextMenuStrip
+                if (dataGridView.Columns[e.ColumnIndex].Name == "Actions")
                 {
-                    ImageScalingSize = ActionIconSize,
-                    Renderer = new CustomToolStripRenderer()
-                };
-
-                var editItem = new ToolStripMenuItem
-                {
-                    Text = "Редактировать",
-                    Image = _actionImageList.Images[9],
-                    ImageAlign = ContentAlignment.MiddleLeft,
-                    TextImageRelation = TextImageRelation.ImageBeforeText,
-                    Size = new Size(0, 32),
-                    Tag = "Edit"
-                };
-                editItem.Click += (s, ev) => ShowDialog(id);
-                menu.Items.Add(editItem);
-
-                var deleteItem = new ToolStripMenuItem
-                {
-                    Text = "Удалить",
-                    Image = _actionImageList.Images[8],
-                    ImageAlign = ContentAlignment.MiddleLeft,
-                    TextImageRelation = TextImageRelation.ImageBeforeText,
-                    Size = new Size(0, 32),
-                    Tag = "Delete"
-                };
-                deleteItem.Click += (s, ev) =>
-                {
-                    using (var dialog = new CarModelDialog(_viewModel, id, isDeleteMode: true))
+                    Size ActionIconSize = new(24, 24);
+                    var menu = new ContextMenuStrip
                     {
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                        {
-                            LoadData();
-                        }
-                    }
-                };
-                menu.Items.Add(deleteItem);
+                        ImageScalingSize = ActionIconSize,
+                        Renderer = new CustomToolStripRenderer()
+                    };
 
-                menu.Show(dataGridView, dataGridView.PointToClient(Cursor.Position));
+                    var detailsItem = new ToolStripMenuItem
+                    {
+                        Text = "Подробнее",
+                        Image = _actionImageList.Images[10],
+                        ImageAlign = ContentAlignment.MiddleLeft,
+                        TextImageRelation = TextImageRelation.ImageBeforeText,
+                        Size = new Size(0, 32),
+                        Tag = "Details"
+                    };
+                    detailsItem.Click += (s, ev) =>
+                    {
+                        ShowDialog(id, true);
+                    };
+                    menu.Items.Add(detailsItem);
+
+                    var editItem = new ToolStripMenuItem
+                    {
+                        Text = "Редактировать",
+                        Image = _actionImageList.Images[9],
+                        ImageAlign = ContentAlignment.MiddleLeft,
+                        TextImageRelation = TextImageRelation.ImageBeforeText,
+                        Size = new Size(0, 32),
+                        Tag = "Edit"
+                    };
+                    editItem.Click += (s, ev) => ShowDialog(id);
+                    menu.Items.Add(editItem);
+
+                    var deleteItem = new ToolStripMenuItem
+                    {
+                        Text = "Удалить",
+                        Image = _actionImageList.Images[8],
+                        ImageAlign = ContentAlignment.MiddleLeft,
+                        TextImageRelation = TextImageRelation.ImageBeforeText,
+                        Size = new Size(0, 32),
+                        Tag = "Delete"
+                    };
+                    deleteItem.Click += (s, ev) =>
+                    {
+                        using (var dialog = new CarModelDialog(_viewModel, id, isDeleteMode: true))
+                        {
+                            if (dialog.ShowDialog() == DialogResult.OK)
+                            {
+                                LoadData();
+                            }
+                        }
+                    };
+                    menu.Items.Add(deleteItem);
+
+                    menu.Show(dataGridView, dataGridView.PointToClient(Cursor.Position));
+                }
             }
             catch (Exception ex)
             {
@@ -193,60 +376,15 @@ namespace AvtoServis.Forms.Controls
             RefreshDataGridView();
         }
 
-        private void BtnOpenFilterDialog_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (var dialog = new CarModelFilterDialog(_viewModel))
-                {
-                    if (dialog.ShowDialog() == DialogResult.OK)
-                    {
-                        ApplyFilters(dialog.MinYear, dialog.MaxYear, dialog.BrandId);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при открытии фильтров: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void BtnRefresh_Click(object sender, EventArgs e)
-        {
-            LoadData();
-        }
-
-        private void BtnExport_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (var saveFileDialog = new SaveFileDialog())
-                {
-                    saveFileDialog.Filter = "CSV файлы (*.csv)|*.csv";
-                    saveFileDialog.DefaultExt = "csv";
-                    saveFileDialog.FileName = $"МоделиАвто_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        ExportData(saveFileDialog.FileName);
-                        MessageBox.Show("Данные успешно экспортированы!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogAndShowError(ex, "экспорте");
-            }
-        }
-
         private void SearchTimer_Tick(object sender, EventArgs e)
         {
             _searchTimer.Stop();
-            PerformSearch(searchBox.Text.Trim());
+            PerformSearch();
         }
 
         private void SearchBox_TextChanged(object sender, EventArgs e)
         {
-            if (searchBox.Text != "Поиск...")
+            if (string.IsNullOrWhiteSpace(searchBox.Text) || searchBox.Text != "Поиск...")
             {
                 _searchTimer.Stop();
                 _searchTimer.Start();
@@ -258,7 +396,25 @@ namespace AvtoServis.Forms.Controls
             if (e.KeyCode == Keys.Enter)
             {
                 _searchTimer.Stop();
-                PerformSearch(searchBox.Text.Trim());
+                PerformSearch();
+            }
+        }
+
+        private void SearchBox_Enter(object sender, EventArgs e)
+        {
+            if (searchBox.Text == "Поиск...")
+            {
+                searchBox.Text = "";
+                searchBox.ForeColor = Color.Black;
+            }
+        }
+
+        private void SearchBox_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(searchBox.Text))
+            {
+                searchBox.Text = "Поиск...";
+                searchBox.ForeColor = Color.Gray;
             }
         }
 
@@ -277,17 +433,17 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
-        public void PerformSearch(string searchText)
+        private void PerformSearch()
         {
             try
             {
-                if (int.TryParse(searchText, out int year))
+                if (searchBox.Text == "Поиск..." || string.IsNullOrWhiteSpace(searchBox.Text))
                 {
-                    _dataSource = _viewModel.SearchByYear(year);
+                    _dataSource = _viewModel.LoadModels();
                 }
                 else
                 {
-                    _dataSource = _viewModel.SearchModels(searchText);
+                    _dataSource = _viewModel.SearchModels(searchBox.Text.Trim());
                 }
                 SortDataSource();
                 RefreshDataGridView();
@@ -298,11 +454,12 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
-        public void ApplyFilters(int? minYear, int? maxYear, int? brandId)
+        public void ApplyFilters(List<(string Column, string SearchText)> filters)
         {
             try
             {
-                _dataSource = _viewModel.FilterModels(minYear, maxYear, brandId);
+                _viewModel.Filters = filters;
+                _dataSource = _viewModel.LoadModels();
                 SortDataSource();
                 RefreshDataGridView();
             }
@@ -312,23 +469,11 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
-        public void ExportData(string filePath)
+        public void ShowDialog(int? id, bool isViewOnly = false)
         {
             try
             {
-                _viewModel.ExportToCsv(_dataSource, filePath);
-            }
-            catch (Exception ex)
-            {
-                LogAndShowError(ex, "экспорте данных");
-            }
-        }
-
-        public void ShowDialog(int? id)
-        {
-            try
-            {
-                using (var dialog = new CarModelDialog(_viewModel, id))
+                using (var dialog = new CarModelDialog(_viewModel, id, isViewOnly))
                 {
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
@@ -369,10 +514,17 @@ namespace AvtoServis.Forms.Controls
             {
                 var row = new DataGridViewRow();
                 row.CreateCells(dataGridView);
-                row.Cells[dataGridView.Columns["Id"].Index].Value = model.Id;
-                row.Cells[dataGridView.Columns["CarBrandName"].Index].Value = model.CarBrandName;
-                row.Cells[dataGridView.Columns["Model"].Index].Value = model.Model;
-                row.Cells[dataGridView.Columns["Year"].Index].Value = model.Year;
+                if (_columnVisibility["Id"])
+                    row.Cells[dataGridView.Columns["Id"]?.Index ?? 0].Value = model.Id;
+                if (_columnVisibility["CarBrandName"])
+                    row.Cells[dataGridView.Columns["CarBrandName"]?.Index ?? 0].Value = model.CarBrandName;
+                if (_columnVisibility["Model"])
+                    row.Cells[dataGridView.Columns["Model"]?.Index ?? 0].Value = model.Model;
+                if (_columnVisibility["Year"])
+                    row.Cells[dataGridView.Columns["Year"]?.Index ?? 0].Value = model.Year;
+                var actionCell = row.Cells[dataGridView.Columns["Actions"].Index];
+                actionCell.Value = "...";
+                actionCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 row.Tag = model.Id;
                 dataGridView.Rows.Add(row);
             }
@@ -382,14 +534,14 @@ namespace AvtoServis.Forms.Controls
 
         private void LogAndShowError(Exception ex, string operation)
         {
-            System.Diagnostics.Debug.WriteLine($"{operation} Ошибка: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            System.Diagnostics.Debug.WriteLine($"{operation} Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
             MessageBox.Show($"Произошла ошибка при {operation.ToLower()}: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private class CustomToolStripRenderer : ToolStripProfessionalRenderer
         {
             protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
-             {
+            {
                 var item = e.Item as ToolStripMenuItem;
                 if (item != null)
                 {
@@ -397,7 +549,9 @@ namespace AvtoServis.Forms.Controls
                     if (item.Tag?.ToString() == "Edit")
                         backgroundColor = item.Selected ? Color.FromArgb(50, 140, 230) : Color.FromArgb(25, 118, 210);
                     else if (item.Tag?.ToString() == "Delete")
-                        backgroundColor = item.Selected ? Color.FromArgb(255, 100, 100) : Color.FromArgb(220, 53, 69);
+                        backgroundColor = item.Selected ? Color.FromArgb(255, 77, 77) : Color.FromArgb(220, 53, 69);
+                    else if (item.Tag?.ToString() == "Details")
+                        backgroundColor = item.Selected ? Color.FromArgb(60, 187, 89) : Color.FromArgb(40, 167, 69);
 
                     using (var brush = new SolidBrush(backgroundColor))
                     {

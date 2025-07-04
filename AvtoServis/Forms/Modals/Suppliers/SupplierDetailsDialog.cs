@@ -1,62 +1,48 @@
 ﻿using AvtoServis.Model.Entities;
-using AvtoServis.ViewModels.Screens;
-using System;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
 {
     public partial class SupplierDetailsDialog : Form
     {
-        private readonly SuppliersViewModel _viewModel;
-        private readonly int _supplierId;
-        private Supplier _supplier;
+        private readonly Supplier _supplier;
 
-        public SupplierDetailsDialog(SuppliersViewModel viewModel, int supplierId)
+        public SupplierDetailsDialog(Supplier supplier)
         {
-            _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-            _supplierId = supplierId;
+            _supplier = supplier ?? throw new ArgumentNullException(nameof(supplier));
             InitializeComponent();
-            LoadSupplierDetails();
+            SetToolTips();
+            LoadData();
         }
 
-        private void LoadSupplierDetails()
+        private void SetToolTips()
         {
-            try
-            {
-                _supplier = _viewModel.LoadSuppliers().Find(s => s.SupplierID == _supplierId);
-                if (_supplier == null)
-                {
-                    MessageBox.Show("Поставщик не найден.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Close();
-                    return;
-                }
-
-                lblSupplierIDValue.Text = _supplier.SupplierID.ToString();
-                lblNameValue.Text = _supplier.Name;
-                lblContactPhoneValue.Text = _supplier.ContactPhone ?? "Нет данных";
-                lblEmailValue.Text = _supplier.Email ?? "Нет данных";
-                lblAddressValue.Text = _supplier.Address ?? "Нет данных";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при загрузке данных поставщика: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Diagnostics.Debug.WriteLine($"LoadSupplierDetails Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-                Close();
-            }
+            toolTip.SetToolTip(tableLayoutPanel, "Форма для просмотра деталей поставщика");
+            toolTip.SetToolTip(titleLabel, "Заголовок формы");
+            toolTip.SetToolTip(separator, "Разделительная линия");
+            toolTip.SetToolTip(lblName, "Название поставщика");
+            toolTip.SetToolTip(txtName, "Название поставщика");
+            toolTip.SetToolTip(lblContactPhone, "Контактный телефон");
+            toolTip.SetToolTip(txtContactPhone, "Контактный телефон");
+            toolTip.SetToolTip(lblEmail, "Электронная почта");
+            toolTip.SetToolTip(txtEmail, "Электронная почта");
+            toolTip.SetToolTip(lblAddress, "Адрес поставщика");
+            toolTip.SetToolTip(txtAddress, "Адрес поставщика");
+            toolTip.SetToolTip(btnOk, "Закрыть форму");
         }
 
-        private void BtnClose_Click(object sender, EventArgs e)
+        private void LoadData()
         {
+            txtName.Text = _supplier.Name;
+            txtContactPhone.Text = _supplier.ContactPhone;
+            txtEmail.Text = _supplier.Email;
+            txtAddress.Text = _supplier.Address;
+            Text = "Подробности о поставщике";
+        }
+
+        private void BtnOk_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
             Close();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                components?.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

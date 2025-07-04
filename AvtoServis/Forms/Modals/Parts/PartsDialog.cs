@@ -1,10 +1,5 @@
 ﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
 {
@@ -14,7 +9,6 @@ namespace AvtoServis.Forms.Controls
         private readonly int? _partId;
         private readonly bool _isDeleteMode;
         private Part _part;
-        private Label lblMessage;
         private System.Windows.Forms.Timer _errorTimer;
 
         public PartsDialog(PartsViewModel viewModel, int? partId, bool isDeleteMode = false)
@@ -25,8 +19,7 @@ namespace AvtoServis.Forms.Controls
             InitializeComponent();
             _errorTimer = new System.Windows.Forms.Timer { Interval = 3000 };
             _errorTimer.Tick += ErrorTimer_Tick;
-            lblError.Visible = false; // Panel har doim yashirin
-            btnSave.Enabled = true; // Tugma har doim faol
+            lblError.Visible = false;
             if (!_isDeleteMode)
             {
                 LoadPart();
@@ -35,6 +28,31 @@ namespace AvtoServis.Forms.Controls
             {
                 SetupDeleteModeUI();
             }
+            SetToolTips();
+        }
+
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(tableLayoutPanel, "Форма для добавления или редактирования детали");
+            toolTip.SetToolTip(lblBrand, "Выберите марку автомобиля");
+            toolTip.SetToolTip(cmbBrand, "Список доступных марок автомобилей");
+            toolTip.SetToolTip(lblCatalogNumber, "Введите каталожный номер детали");
+            toolTip.SetToolTip(txtCatalogNumber, "Каталожный номер детали (только латинские буквы и цифры)");
+            toolTip.SetToolTip(lblManufacturer, "Выберите производителя детали");
+            toolTip.SetToolTip(cmbManufacturer, "Список доступных производителей");
+            toolTip.SetToolTip(lblQuality, "Выберите качество детали");
+            toolTip.SetToolTip(cmbQuality, "Список доступных уровней качества");
+            toolTip.SetToolTip(lblPartName, "Введите название детали");
+            toolTip.SetToolTip(txtPartName, "Название детали");
+            toolTip.SetToolTip(lblCharacteristics, "Введите характеристики детали");
+            toolTip.SetToolTip(txtCharacteristics, "Характеристики детали (опционально)");
+            toolTip.SetToolTip(lblPhotoPath, "Выберите фотографию детали");
+            toolTip.SetToolTip(txtPhotoPath, "Путь к файлу фотографии");
+            toolTip.SetToolTip(btnBrowsePhoto, "Выбрать файл фотографии");
+            toolTip.SetToolTip(pictureBox, "Предпросмотр фотографии детали");
+            toolTip.SetToolTip(btnCancel, "Отменить изменения");
+            toolTip.SetToolTip(btnSave, _isDeleteMode ? "Подтвердить удаление детали" : "Сохранить изменения");
+            toolTip.SetToolTip(lblError, "Сообщение об ошибке");
         }
 
         private void LoadPart()
@@ -87,7 +105,7 @@ namespace AvtoServis.Forms.Controls
             this.ClientSize = new Size(434, 142);
             this.Text = "Подтверждение удаления";
 
-            lblMessage = new Label
+            var lblMessage = new Label
             {
                 AutoSize = true,
                 Text = "Вы хотите удалить эту деталь?",
@@ -118,68 +136,44 @@ namespace AvtoServis.Forms.Controls
             btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 100, 100);
         }
 
-        private void ValidateInputs()
+        private void BtnBrowsePhoto_Click(object sender, EventArgs e)
         {
-            if (_isDeleteMode) return;
-
-            lblError.Visible = false; // Har safar tekshiruvda panelni yashirish
-
-            if (cmbBrand.SelectedValue == null)
+            try
             {
-                ShowError("Пожалуйста, выберите марку автомобиля.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtCatalogNumber.Text))
-            {
-                ShowError("Пожалуйста, введите каталожный номер.");
-                return;
-            }
-
-            if (txtCatalogNumber.Text.Length > 50)
-            {
-                ShowError("Каталожный номер не должен превышать 50 символов.");
-                return;
-            }
-
-            if (!Regex.IsMatch(txtCatalogNumber.Text, @"^[a-zA-Z0-9]+$"))
-            {
-                ShowError("Каталожный номер должен содержать только латинские буквы и цифры.");
-                return;
-            }
-
-            if (cmbManufacturer.SelectedValue == null)
-            {
-                ShowError("Пожалуйста, выберите производителя.");
-                return;
-            }
-
-            if (cmbQuality.SelectedValue == null)
-            {
-                ShowError("Пожалуйста, выберите качество детали.");
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtPartName.Text))
-            {
-                ShowError("Пожалуйста, введите название детали.");
-                return;
-            }
-
-            if (txtPartName.Text.Length > 100)
-            {
-                ShowError("Название детали не должно превышать 100 символов.");
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(txtPhotoPath.Text))
-            {
-                string fullPath = Path.Combine(Application.StartupPath, txtPhotoPath.Text);
-                if (!File.Exists(fullPath))
+                using (var openFileDialog = new OpenFileDialog())
                 {
-                    ShowError("Указанный путь к фотографии недействителен.");
-                    return;
+                    openFileDialog.Filter = "Image files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        txtPhotoPath.Text = openFileDialog.FileName;
+                        UpdatePhotoPreview();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Ошибка при выборе фотографии: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"BtnBrowsePhoto_Click Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+        }
+
+        private void UpdatePhotoPreview()
+        {
+            try
+            {
+                pictureBox.Image = null;
+                if (!string.IsNullOrEmpty(txtPhotoPath.Text) && File.Exists(txtPhotoPath.Text))
+                {
+                    using (var img = Image.FromFile(txtPhotoPath.Text))
+                    {
+                        pictureBox.Image = new Bitmap(img, pictureBox.Size);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Ошибка при загрузке изображения: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"UpdatePhotoPreview Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
             }
         }
 
@@ -187,10 +181,6 @@ namespace AvtoServis.Forms.Controls
         {
             try
             {
-                // Yakuniy tekshiruvni amalga oshirish
-                ValidateInputs();
-                if (lblError.Visible) return; // Agar xatolik bo‘lsa, saqlashni to‘xtatish
-
                 if (_isDeleteMode)
                 {
                     _viewModel.DeletePart(_partId.Value);
@@ -205,7 +195,7 @@ namespace AvtoServis.Forms.Controls
                 _part.QualityID = (int)cmbQuality.SelectedValue;
                 _part.PartName = txtPartName.Text.Trim();
                 _part.Characteristics = txtCharacteristics.Text.Trim();
-                _part.PhotoPath = txtPhotoPath.Text.Trim();
+                _part.PhotoPath = txtPhotoPath.Text;
 
                 if (_partId == null)
                 {
@@ -213,7 +203,6 @@ namespace AvtoServis.Forms.Controls
                 }
                 else
                 {
-                    _part.PartID = _partId.Value;
                     _viewModel.UpdatePart(_part);
                 }
 
@@ -227,167 +216,24 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
-        private void BtnBrowsePhoto_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (var openFileDialog = new OpenFileDialog())
-                {
-                    openFileDialog.Filter = "Изображения (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|Все файлы (*.*)|*.*";
-                    openFileDialog.Title = "Выберите фотографию детали";
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string photoDir = Path.Combine(Application.StartupPath, "Resources", "PartsPhoto");
-                        if (!Directory.Exists(photoDir))
-                        {
-                            Directory.CreateDirectory(photoDir);
-                        }
-
-                        string fileName = Path.GetFileName(openFileDialog.FileName);
-                        string destPath = Path.Combine(photoDir, fileName);
-                        File.Copy(openFileDialog.FileName, destPath, true);
-
-                        txtPhotoPath.Text = Path.Combine("Resources", "PartsPhoto", fileName);
-                        UpdatePhotoPreview();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowError($"Ошибка при выборе фотографии: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"BtnBrowsePhoto_Click Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-            }
-        }
-
-        private void BtnManageQualities_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (var dialog = new PartsQualitiesDialog(_viewModel))
-                {
-                    dialog.ShowDialog();
-                    var qualities = _viewModel.LoadQualities();
-                    cmbQuality.DataSource = qualities;
-                    cmbQuality.DisplayMember = "Name";
-                    cmbQuality.ValueMember = "QualityID";
-                    if (_partId != null)
-                    {
-                        cmbQuality.SelectedValue = _part.QualityID;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowError($"Ошибка при управлении качествами: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"BtnManageQualities_Click Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-            }
-        }
-
-        private void UpdatePhotoPreview()
-        {
-            try
-            {
-                pictureBox.Image?.Dispose();
-                pictureBox.Image = null;
-                if (!string.IsNullOrEmpty(txtPhotoPath.Text))
-                {
-                    string fullPath = Path.Combine(Application.StartupPath, txtPhotoPath.Text);
-                    if (File.Exists(fullPath))
-                    {
-                        using (var stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
-                        {
-                            pictureBox.Image = Image.FromStream(stream);
-                        }
-                        pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowError($"Ошибка при загрузке изображения: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"UpdatePhotoPreview Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-            }
-        }
-
-        private void ShowError(string message)
-        {
-            lblError.Text = message;
-            lblError.Visible = true;
-            panelError.Visible = true;
-            _errorTimer.Start();
-        }
-
-        private void ErrorTimer_Tick(object sender, EventArgs e)
-        {
-            lblError.Visible = false;
-            panelError.Visible = false;
-            _errorTimer.Stop();
-        }
-
-        private void CmbBrand_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Faqat tugma holatini yangilash
-        }
-
-        private void TxtCatalogNumber_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtCatalogNumber.Text) && !Regex.IsMatch(txtCatalogNumber.Text, @"^[a-zA-Z0-9]+$"))
-            {
-                ShowError("Каталожный номер должен содержать только латинские буквы и цифры.");
-            }
-        }
-
-        private void CmbManufacturer_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Faqat tugma holatini yangilash
-        }
-
-        private void CmbQuality_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Faqat tugma holatini yangilash
-        }
-
-        private void TxtPartName_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtPartName.Text) && txtPartName.Text.Length > 100)
-            {
-                ShowError("Название детали не должно превышать 100 символов.");
-            }
-        }
-
-        private void TxtPhotoPath_TextChanged(object sender, EventArgs e)
-        {
-            UpdatePhotoPreview();
-            if (!string.IsNullOrEmpty(txtPhotoPath.Text))
-            {
-                string fullPath = Path.Combine(Application.StartupPath, txtPhotoPath.Text);
-                if (!File.Exists(fullPath))
-                {
-                    ShowError("Указанный путь к фотографии недействителен.");
-                }
-            }
-        }
-
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
         }
 
-        protected override void Dispose(bool disposing)
+        private void ErrorTimer_Tick(object sender, EventArgs e)
         {
-            if (disposing)
-            {
-                pictureBox.Image?.Dispose();
-                _errorTimer?.Dispose();
-                components?.Dispose();
-            }
-            base.Dispose(disposing);
+            lblError.Visible = false;
+            _errorTimer.Stop();
         }
 
-        private void PartsDialog_Load(object sender, EventArgs e)
+        private void ShowError(string message)
         {
-
+            lblError.Text = message;
+            lblError.Visible = true;
+            _errorTimer.Stop();
+            _errorTimer.Start();
         }
     }
 }

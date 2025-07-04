@@ -1,7 +1,5 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
@@ -160,7 +158,7 @@ namespace AvtoServis.Data.Repositories
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected == 0)
                         throw new Exception($"Поставщик с ID {entity.SupplierID} не найден.");
-                    Debug.WriteLine($"Update: Поставщик с ID {entity.SupplierID} обновлен.");
+                    Debug.WriteLine($"Update: Поставщик обновлен с ID {entity.SupplierID}.");
                 }
             }
             catch (SqlException ex)
@@ -185,13 +183,12 @@ namespace AvtoServis.Data.Repositories
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        @"DELETE FROM Suppliers WHERE SupplierID = @Id", connection);
+                    var command = new SqlCommand("DELETE FROM Suppliers WHERE SupplierID = @Id", connection);
                     command.Parameters.AddWithValue("@Id", id);
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected == 0)
                         throw new Exception($"Поставщик с ID {id} не найден.");
-                    Debug.WriteLine($"Delete: Поставщик с ID {id} удален.");
+                    Debug.WriteLine($"Delete: Поставщик удален с ID {id}.");
                 }
             }
             catch (SqlException ex)
@@ -208,10 +205,10 @@ namespace AvtoServis.Data.Repositories
 
         public List<Supplier> Search(string searchText)
         {
-            var suppliers = new List<Supplier>();
             if (string.IsNullOrWhiteSpace(searchText))
-                return GetAll();
+                throw new ArgumentException("Поисковый запрос не должен быть пустым.");
 
+            var suppliers = new List<Supplier>();
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
@@ -220,7 +217,10 @@ namespace AvtoServis.Data.Repositories
                     var command = new SqlCommand(
                         @"SELECT SupplierID, Name, ContactPhone, Email, Address
                           FROM Suppliers
-                          WHERE Name LIKE @SearchText OR ContactPhone LIKE @SearchText OR Email LIKE @SearchText OR Address LIKE @SearchText", connection);
+                          WHERE Name LIKE @SearchText
+                          OR ContactPhone LIKE @SearchText
+                          OR Email LIKE @SearchText
+                          OR Address LIKE @SearchText", connection);
                     command.Parameters.AddWithValue("@SearchText", $"%{searchText}%");
                     using (var reader = command.ExecuteReader())
                     {
@@ -237,12 +237,12 @@ namespace AvtoServis.Data.Repositories
                         }
                     }
                 }
-                Debug.WriteLine($"Search: Найдено {suppliers.Count} поставщиков по запросу '{searchText}'.");
+                Debug.WriteLine($"Search: Найдено {suppliers.Count} поставщиков для запроса '{searchText}'.");
             }
             catch (SqlException ex)
             {
                 Debug.WriteLine($"Search SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при поиске поставщиков.", ex);
+                throw new Exception("Ошибка при поиске.", ex);
             }
             catch (Exception ex)
             {

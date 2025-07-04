@@ -1,5 +1,4 @@
 ﻿using AvtoServis.Model.Entities;
-using System.Collections.Generic;
 
 namespace AvtoServis.Data.Interfaces
 {

@@ -1,9 +1,5 @@
 ﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
 {
@@ -18,10 +14,30 @@ namespace AvtoServis.Forms.Controls
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _partId = partId;
             InitializeComponent();
-            LoadPartDetails();
+            LoadPart();
+            SetToolTips();
         }
 
-        private void LoadPartDetails()
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(tableLayoutPanel, "Форма для просмотра деталей");
+            toolTip.SetToolTip(lblBrand, "Марка автомобиля");
+            toolTip.SetToolTip(txtBrand, "Название марки автомобиля");
+            toolTip.SetToolTip(lblCatalogNumber, "Каталожный номер детали");
+            toolTip.SetToolTip(txtCatalogNumber, "Каталожный номер детали");
+            toolTip.SetToolTip(lblManufacturer, "Производитель детали");
+            toolTip.SetToolTip(txtManufacturer, "Название производителя");
+            toolTip.SetToolTip(lblQuality, "Качество детали");
+            toolTip.SetToolTip(txtQuality, "Уровень качества детали");
+            toolTip.SetToolTip(lblPartName, "Название детали");
+            toolTip.SetToolTip(txtPartName, "Название детали");
+            toolTip.SetToolTip(lblCharacteristics, "Характеристики детали");
+            toolTip.SetToolTip(txtCharacteristics, "Характеристики детали");
+            toolTip.SetToolTip(pictureBox, "Дважды щелкните для увеличения изображения");
+            toolTip.SetToolTip(btnClose, "Закрыть окно");
+        }
+
+        private void LoadPart()
         {
             try
             {
@@ -33,20 +49,18 @@ namespace AvtoServis.Forms.Controls
                     return;
                 }
 
-                lblPartIDValue.Text = _part.PartID.ToString();
-                lblBrandValue.Text = _part.CarBrandName;
-                lblCatalogNumberValue.Text = _part.CatalogNumber;
-                lblManufacturerIDValue.Text = _part.ManufacturerID.ToString();
-                lblQualityValue.Text = _part.QualityName;
-                lblPartNameValue.Text = _part.PartName;
-                lblCharacteristicsValue.Text = _part.Characteristics ?? "Нет данных";
-                lblPhotoPathValue.Text = _part.PhotoPath ?? "Нет фотографии";
+                txtBrand.Text = _part.CarBrandName;
+                txtCatalogNumber.Text = _part.CatalogNumber;
+                txtManufacturer.Text = _part.ManufacturerName;
+                txtQuality.Text = _part.QualityName;
+                txtPartName.Text = _part.PartName;
+                txtCharacteristics.Text = _part.Characteristics;
                 UpdatePhotoPreview();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке деталей: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                System.Diagnostics.Debug.WriteLine($"LoadPartDetails Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                MessageBox.Show($"Ошибка при загрузке детали: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"LoadPart Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 Close();
             }
         }
@@ -55,15 +69,13 @@ namespace AvtoServis.Forms.Controls
         {
             try
             {
-                pictureBox.Image?.Dispose();
                 pictureBox.Image = null;
                 if (!string.IsNullOrEmpty(_part.PhotoPath) && File.Exists(_part.PhotoPath))
                 {
-                    using (var stream = new FileStream(_part.PhotoPath, FileMode.Open, FileAccess.Read))
+                    using (var img = Image.FromFile(_part.PhotoPath))
                     {
-                        pictureBox.Image = Image.FromStream(stream);
+                        pictureBox.Image = new Bitmap(img, pictureBox.Size);
                     }
-                    pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
                 }
             }
             catch (Exception ex)
@@ -73,19 +85,28 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
+        private void PictureBox_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(_part.PhotoPath) && File.Exists(_part.PhotoPath))
+                {
+                    using (var dialog = new FullImageDialog(_part.PhotoPath))
+                    {
+                        dialog.ShowDialog();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"PictureBox_DoubleClick Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+        }
+
         private void BtnClose_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                pictureBox.Image?.Dispose();
-                components?.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

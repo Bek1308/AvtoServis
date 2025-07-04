@@ -4,6 +4,9 @@
     <Compile Update="Forms\Common\CustomProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\CarBrandControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\Controls\CarModelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -11,6 +14,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Update="Forms\Controls\Incomes\IndexIncome.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\Controls\PartQualityControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Controls\PartsControl.cs">
@@ -25,10 +31,28 @@
     <Compile Update="Forms\Controls\SuppliersControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\Modals\CarBrand\CarBrandDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\CarBrand\CarBrandFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Modals\CarModel\CarModelDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\CarModel\CarModelFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Manufacturers\ManufacturerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Manufacturers\ManufacturerFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartQualities\PartQualityDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartQualities\PartQualityFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\PartsIncome\PartsIncomeForm.cs">
@@ -37,16 +61,13 @@
     <Compile Update="Forms\Modals\Parts\PartDetailsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Modals\Parts\PartsQualitiesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Forms\Modals\Parts\PartsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Parts\PartsFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Modals\Parts\QualityEditDialog.cs">
+    <Compile Update="Forms\Modals\Parts\FullImageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Services\FilterDialog.cs">
@@ -54,9 +75,6 @@
     </Compile>
     <Compile Update="Forms\Controls\ManufacturerControl.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="Forms\Modals\Manufacturers\ManufacturerDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Controls\ServiceControl.cs">
       <SubType>UserControl</SubType>
@@ -71,6 +89,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Stock\StockDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Stock\StockFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Suppliers\SupplierDetailsDialog.cs">

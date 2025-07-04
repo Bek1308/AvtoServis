@@ -1,9 +1,6 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
 using ClosedXML.Excel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace AvtoServis.ViewModels.Screens
 {

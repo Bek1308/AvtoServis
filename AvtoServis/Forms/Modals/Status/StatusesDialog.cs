@@ -1,9 +1,6 @@
 ﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
 using Timer = System.Windows.Forms.Timer;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
 {

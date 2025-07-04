@@ -1,7 +1,5 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 

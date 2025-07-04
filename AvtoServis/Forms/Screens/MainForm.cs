@@ -1,53 +1,37 @@
-﻿using AvtoServis.Data.Configuration;
-using AvtoServis.Data.Interfaces;
+﻿using AvtoServis.Data;
+using AvtoServis.Data.Configuration;
 using AvtoServis.Data.Repositories;
 using AvtoServis.Forms.Controls;
-using AvtoServis.Services.Core;
 using AvtoServis.ViewModels.Screens;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Screens
 {
     public partial class MainForm : Form
     {
-     
         private bool menuExpand = false; // Spr menyusi holati (standard menu)
         private bool button1MenuExpanded = false; // button1 ga tegishli menyular ochilganmi
         private int targetHeight = 52; // SprContainer uchun maqsadli balandlik
-        private const int TRIGGER_DISTANCE = 70; // Ishlatilmaydi, saqlanadi
-        private const int TOP_PANEL_HEIGHT = 50;
-        private const int STANDARD_MENU_HEIGHT = 360; // Standard menyuning balandligi
-        private const int EXTENDED_MENU_HEIGHT = 470; // button1 menyusi bilan balandlik
+        private const int STANDARD_MENU_HEIGHT = 430; // Standard menyuning balandligi
+        private const int EXTENDED_MENU_HEIGHT = 540; // button1 menyusi bilan balandlik
         private const int COLLAPSED_HEIGHT = 52; // Yig'ilgan holat balandligi
         private readonly ServicesViewModel _servicesViewModel;
         private readonly ManufacturersViewModel _manufactureViewModel;
-        private readonly CarModelsViewModel _carModelViewModel;
+        private readonly CarModelViewModel _carModelViewModel;
         private readonly PartsViewModel _partsViewModel;
+        private readonly PartQualitiesViewModel _partsQualitiesViewModel;
         private readonly SuppliersViewModel _suppliersViewModel;
         private readonly StockViewModel _stockViewModel;
         private readonly StatusesViewModel _statusesViewModel;
-
+        private readonly CarBrandViewModel _carBrandViewModel;
 
         public MainForm()
         {
             InitializeComponent();
             this.DoubleBuffered = true;
-            this.DoubleBuffered = true;
-            this.AutoScaleMode = AutoScaleMode.Dpi;
-            using (var g = this.CreateGraphics())
-            {
-                this.AutoScaleDimensions = new SizeF(g.DpiX, g.DpiY); // Haqiqiy DPI ni olish
-            }
-            // Panellar uchun miltirashni oldini olish, agar null bo'lmasa
+            this.AutoScaleMode = AutoScaleMode.None; // DPI moslashuvini o'chirish
+
+            // Panellar uchun miltirashni oldini olish
             if (ContentPanel != null) SetDoubleBuffered(ContentPanel);
             if (SprContainer != null) SetDoubleBuffered(SprContainer);
             if (sidebarContainer != null) SetDoubleBuffered(sidebarContainer);
@@ -65,17 +49,18 @@ namespace AvtoServis.Forms.Screens
             {
                 _servicesViewModel = new ServicesViewModel(new ServicesRepository(connectionString));
                 _manufactureViewModel = new ManufacturersViewModel(new ManufacturersRepository(connectionString));
-                _carModelViewModel = new CarModelsViewModel(new CarModelsRepository(connectionString), new CarBrandRepository(connectionString));
+                _carModelViewModel = new CarModelViewModel(new CarModelsRepository(connectionString), new CarBrandRepository(connectionString));
                 _partsViewModel = new PartsViewModel(
                     new PartsRepository(connectionString),
-                    new PartQualitiesRepository(connectionString),
                     new CarBrandRepository(connectionString),
-                    new ManufacturersRepository(connectionString) // Cast keraksiz, chunki ManufacturersRepository IManufacturersRepository ni implement qiladi
+                    new ManufacturersRepository(connectionString),
+                    new PartQualitiesRepository(connectionString)
                 );
                 _suppliersViewModel = new SuppliersViewModel(new SuppliersRepository(connectionString));
                 _stockViewModel = new StockViewModel(new StockRepository(connectionString));
                 _statusesViewModel = new StatusesViewModel(new StatusRepository(connectionString));
-
+                _partsQualitiesViewModel = new PartQualitiesViewModel(new PartQualitiesRepository(connectionString));
+                _carBrandViewModel = new CarBrandViewModel(new CarBrandRepository(connectionString));
             }
             catch (Exception ex)
             {
@@ -84,20 +69,17 @@ namespace AvtoServis.Forms.Screens
                 return;
             }
         }
-        
 
         private void SetDoubleBuffered(Control control)
         {
             if (control == null)
             {
-                return; // Skip if control is null
+                return;
             }
 
-            // Reflection orqali DoubleBuffered ni o‘rnatish
             PropertyInfo dbProp = typeof(Control).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance);
             dbProp?.SetValue(control, true);
 
-            // ControlStyles optimallashtirish
             MethodInfo setStyleMethod = typeof(Control).GetMethod("SetStyle", BindingFlags.NonPublic | BindingFlags.Instance);
             if (setStyleMethod != null)
             {
@@ -113,30 +95,30 @@ namespace AvtoServis.Forms.Screens
         {
             if (ContentPanel == null || userControl == null)
             {
-                return; // ContentPanel yoki userControl null bo'lsa, metodni o'tkazib yubor
+                return;
             }
 
             ContentPanel.SuspendLayout();
-            ContentPanel.Controls.Clear(); // Avvalgi kontentni tozalash
-            userControl.AutoSize = false; // AutoSize ni o‘chirish
-            userControl.MaximumSize = new Size(0, 0); // Cheklovlarni olib tashlash
+            ContentPanel.Controls.Clear();
+            userControl.AutoSize = false;
+            userControl.MaximumSize = new Size(0, 0);
             userControl.MinimumSize = new Size(0, 0);
-            userControl.Dock = DockStyle.Fill; // Panelni to‘ldirish
-            userControl.Size = ContentPanel.ClientSize; // O‘lchamni majburan moslashtirish
-            SetDoubleBuffered(userControl); // Miltirashni oldini olish
+            userControl.Dock = DockStyle.Fill;
+            userControl.Size = ContentPanel.ClientSize;
+            SetDoubleBuffered(userControl);
             ContentPanel.Controls.Add(userControl);
-            ContentPanel.BringToFront(); // ContentPanel ni oldinga chiqarish
-            ContentPanel.PerformLayout(); // Layout ni majburiy yangilash
+            ContentPanel.BringToFront();
+            ContentPanel.PerformLayout();
             ContentPanel.ResumeLayout(false);
         }
 
         private void menuTransition_Tick(object sender, EventArgs e)
         {
             this.SuspendLayout();
+            int step = 15; // Animatsiya qadami statik
             if (SprContainer.Height < targetHeight)
             {
-                // Expand: Increase height until target is reached
-                SprContainer.Height += 15;
+                SprContainer.Height += step;
                 if (SprContainer.Height >= targetHeight)
                 {
                     SprContainer.Height = targetHeight;
@@ -145,8 +127,7 @@ namespace AvtoServis.Forms.Screens
             }
             else if (SprContainer.Height > targetHeight)
             {
-                // Collapse: Decrease height until target is reached
-                SprContainer.Height -= 15;
+                SprContainer.Height -= step;
                 if (SprContainer.Height <= targetHeight)
                 {
                     SprContainer.Height = targetHeight;
@@ -154,13 +135,12 @@ namespace AvtoServis.Forms.Screens
                     if (targetHeight == COLLAPSED_HEIGHT)
                     {
                         menuExpand = false;
-                        button1MenuExpanded = false; // Reset when fully collapsed
+                        button1MenuExpanded = false;
                     }
                 }
             }
             else
             {
-                // Already at target height
                 menuTransition.Stop();
             }
             this.ResumeLayout(false);
@@ -172,14 +152,12 @@ namespace AvtoServis.Forms.Screens
             {
                 if (menuExpand || button1MenuExpanded)
                 {
-                    // Collapse to 52 pixels
                     targetHeight = COLLAPSED_HEIGHT;
                     menuExpand = false;
                     button1MenuExpanded = false;
                 }
                 else
                 {
-                    // Expand to standard menu (360 pixels)
                     targetHeight = STANDARD_MENU_HEIGHT;
                     menuExpand = true;
                     button1MenuExpanded = false;
@@ -190,7 +168,6 @@ namespace AvtoServis.Forms.Screens
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Hech qanday dizayn sozlamalari o‘zgartirilmaydi
         }
 
         public void ApplyHoverEffect(object sender, EventArgs e)
@@ -215,9 +192,8 @@ namespace AvtoServis.Forms.Screens
             }
         }
 
-        private void panel2_Paint(object sender, EventArgs e)
+        private void panel2_Paint(object sender, PaintEventArgs e)
         {
-            // Hozircha bo‘sh
         }
 
         private void btnMain_Click(object sender, EventArgs e)
@@ -227,13 +203,12 @@ namespace AvtoServis.Forms.Screens
                 var testControl = new TestControl();
                 if (testControl == null)
                 {
-                    return; // TestControl yaratilmagan bo'lsa, o'tkazib yubor
+                    return;
                 }
                 OpenUserControl(testControl);
             }
             catch (Exception)
             {
-                // Xatolikni yutib yubor, dastur to'xtamasligi uchun
             }
         }
 
@@ -241,20 +216,19 @@ namespace AvtoServis.Forms.Screens
         {
             if (_servicesViewModel == null || imageList1 == null)
             {
-                return; // Null bo'lsa, o'tkazib yubor
+                return;
             }
             try
             {
                 var serviceControl = new ServiceControl(_servicesViewModel, imageList1);
                 if (serviceControl == null)
                 {
-                    return; // ServiceControl yaratilmagan bo'lsa, o'tkazib yubor
+                    return;
                 }
                 OpenUserControl(serviceControl);
             }
             catch (Exception)
             {
-                // Xatolikni yutib yubor, dastur to'xtamasligi uchun
             }
         }
 
@@ -262,20 +236,19 @@ namespace AvtoServis.Forms.Screens
         {
             if (_manufactureViewModel == null || imageList1 == null)
             {
-                return; // Null bo'lsa, o'tkazib yubor
+                return;
             }
             try
             {
                 var manufacturerControl = new ManufacturerControl(_manufactureViewModel, imageList1);
                 if (manufacturerControl == null)
                 {
-                    return; // ManufacturerControl yaratilmagan bo'lsa, o'tkazib yubor
+                    return;
                 }
                 OpenUserControl(manufacturerControl);
             }
             catch (Exception)
             {
-                // Xatolikni yutib yubor, dastur to'xtamasligi uchun
             }
         }
 
@@ -289,20 +262,17 @@ namespace AvtoServis.Forms.Screens
             {
                 if (SprContainer.Height <= COLLAPSED_HEIGHT)
                 {
-                    // Collapsed state: Expand to full height including button1 items
                     targetHeight = EXTENDED_MENU_HEIGHT;
                     menuExpand = true;
                     button1MenuExpanded = true;
                 }
                 else if (SprContainer.Height == STANDARD_MENU_HEIGHT)
                 {
-                    // Standard menu open: Expand further for button1 items
                     targetHeight = EXTENDED_MENU_HEIGHT;
                     button1MenuExpanded = true;
                 }
                 else if (SprContainer.Height == EXTENDED_MENU_HEIGHT)
                 {
-                    // Fully expanded: Collapse to standard menu height
                     targetHeight = STANDARD_MENU_HEIGHT;
                     menuExpand = true;
                     button1MenuExpanded = false;
@@ -319,23 +289,41 @@ namespace AvtoServis.Forms.Screens
         {
             if (_carModelViewModel == null || imageList1 == null)
             {
-                return; // Null bo'lsa, o'tkazib yubor
+                return;
             }
             try
             {
                 var carModelControl = new CarModelControl(_carModelViewModel, imageList1);
                 if (carModelControl == null)
                 {
-                    return; // ServiceControl yaratilmagan bo'lsa, o'tkazib yubor
+                    return;
                 }
                 OpenUserControl(carModelControl);
             }
             catch (Exception)
             {
-                // Xatolikni yutib yubor, dastur to'xtamasligi uchun
             }
         }
 
+        private void btnCarBrand_Click(object sender, EventArgs e)
+        {
+            if (_carBrandViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var carBarndControl = new CarBrandControl(_carBrandViewModel, imageList1);
+                if (carBarndControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(carBarndControl);
+            }
+            catch (Exception)
+            {
+            }
+        }
         private void btnSpartQuality_Click(object sender, EventArgs e)
         {
             if (_partsViewModel == null || imageList1 == null)
@@ -381,9 +369,7 @@ namespace AvtoServis.Forms.Screens
             {
                 MessageBox.Show($"Ошибка при открытии SuppliersControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-
             }
-
         }
 
         private void btnSstock_Click(object sender, EventArgs e)
@@ -405,9 +391,7 @@ namespace AvtoServis.Forms.Screens
             {
                 MessageBox.Show($"Ошибка при открытии StockControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-
             }
-
         }
 
         private void btnSstatus_Click(object sender, EventArgs e)
@@ -429,9 +413,7 @@ namespace AvtoServis.Forms.Screens
             {
                 MessageBox.Show($"Ошибка при открытии StatusControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-
             }
-
         }
 
         private void btnIncome_Click(object sender, EventArgs e)
@@ -449,14 +431,33 @@ namespace AvtoServis.Forms.Screens
             {
                 MessageBox.Show($"Ошибка при открытии indexIncomeControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
-
             }
         }
 
         private void sidebarContainer_Paint(object sender, PaintEventArgs e)
         {
-
         }
 
+        private void btnPartQuality_Click(object sender, EventArgs e)
+        {
+            if (_partsQualitiesViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var partsQualityControl = new PartQualityControl(_partsQualitiesViewModel, imageList1);
+                if (partsQualityControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(partsQualityControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
@@ -37,17 +35,17 @@ namespace AvtoServis.Data.Repositories
                         }
                     }
                 }
-                Debug.WriteLine($"GetAll: Загружено {qualities.Count} качеств деталей.");
+                Debug.WriteLine($"GetAll: Loaded {qualities.Count} part qualities.");
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"GetAll SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка в базе данных.", ex);
+                Debug.WriteLine($"GetAll SQL Error: {ex.Message}");
+                throw new Exception("Ошибка базы данных при загрузке качеств запчастей.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetAll Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                Debug.WriteLine($"GetAll Error: {ex.Message}");
+                throw new Exception("Неизвестная ошибка при загрузке качеств запчастей.", ex);
             }
             return qualities;
         }
@@ -55,15 +53,15 @@ namespace AvtoServis.Data.Repositories
         public PartQuality GetById(int id)
         {
             if (id <= 0)
-                throw new ArgumentException("Некорректный ID.");
+                throw new ArgumentException("Некорректный ID качества запчасти.");
 
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand("SELECT QualityID, Name FROM PartQualities WHERE QualityID = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", id);
+                    var command = new SqlCommand("SELECT QualityID, Name FROM PartQualities WHERE QualityID = @QualityID", connection);
+                    command.Parameters.AddWithValue("@QualityID", id);
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -80,13 +78,13 @@ namespace AvtoServis.Data.Repositories
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"GetById SQL Ошибка: {ex.Message}");
-                throw new Exception($"Качество с ID {id} не найдено.", ex);
+                Debug.WriteLine($"GetById SQL Error: {ex.Message}");
+                throw new Exception($"Ошибка базы данных при загрузке качества запчасти с ID {id}.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetById Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                Debug.WriteLine($"GetById Error: {ex.Message}");
+                throw new Exception($"Неизвестная ошибка при загрузке качества запчасти с ID {id}.", ex);
             }
         }
 
@@ -101,22 +99,22 @@ namespace AvtoServis.Data.Repositories
                 {
                     connection.Open();
                     var command = new SqlCommand(
-                        @"INSERT INTO PartQualities (Name) VALUES (@Name); SELECT SCOPE_IDENTITY();", connection);
+                        "INSERT INTO PartQualities (Name) VALUES (@Name); SELECT SCOPE_IDENTITY();", connection);
                     command.Parameters.AddWithValue("@Name", entity.Name);
                     var newId = Convert.ToInt32(command.ExecuteScalar());
                     entity.QualityID = newId;
-                    Debug.WriteLine($"Add: Качество добавлено с ID {newId}.");
+                    Debug.WriteLine($"Add: Part quality added with ID {newId}.");
                 }
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Add SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при добавлении качества.", ex);
+                Debug.WriteLine($"Add SQL Error: {ex.Message}");
+                throw new Exception("Ошибка базы данных при добавлении качества запчасти.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Add Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                Debug.WriteLine($"Add Error: {ex.Message}");
+                throw new Exception("Неизвестная ошибка при добавлении качества запчасти.", ex);
             }
         }
 
@@ -125,7 +123,7 @@ namespace AvtoServis.Data.Repositories
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             if (entity.QualityID <= 0)
-                throw new ArgumentException("Некорректный ID.");
+                throw new ArgumentException("Некорректный ID качества запчасти.");
 
             try
             {
@@ -133,61 +131,61 @@ namespace AvtoServis.Data.Repositories
                 {
                     connection.Open();
                     var command = new SqlCommand(
-                        @"UPDATE PartQualities SET Name = @Name WHERE QualityID = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", entity.QualityID);
+                        "UPDATE PartQualities SET Name = @Name WHERE QualityID = @QualityID", connection);
+                    command.Parameters.AddWithValue("@QualityID", entity.QualityID);
                     command.Parameters.AddWithValue("@Name", entity.Name);
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected == 0)
-                        throw new Exception($"Качество с ID {entity.QualityID} не найдено.");
-                    Debug.WriteLine($"Update: Качество обновлено с ID {entity.QualityID}.");
+                        throw new Exception($"Качество запчасти с ID {entity.QualityID} не найдено.");
+                    Debug.WriteLine($"Update: Part quality updated with ID {entity.QualityID}.");
                 }
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Update SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при обновлении качества.", ex);
+                Debug.WriteLine($"Update SQL Error: {ex.Message}");
+                throw new Exception($"Ошибка базы данных при обновлении качества запчасти с ID {entity.QualityID}.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Update Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                Debug.WriteLine($"Update Error: {ex.Message}");
+                throw new Exception($"Неизвестная ошибка при обновлении качества запчасти с ID {entity.QualityID}.", ex);
             }
         }
 
         public void Delete(int id)
         {
             if (id <= 0)
-                throw new ArgumentException("Некорректный ID.");
+                throw new ArgumentException("Некорректный ID качества запчасти.");
 
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand("DELETE FROM PartQualities WHERE QualityID = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", id);
+                    var command = new SqlCommand("DELETE FROM PartQualities WHERE QualityID = @QualityID", connection);
+                    command.Parameters.AddWithValue("@QualityID", id);
                     int rowsAffected = command.ExecuteNonQuery();
                     if (rowsAffected == 0)
-                        throw new Exception($"Качество с ID {id} не найдено.");
-                    Debug.WriteLine($"Delete: Качество удалено с ID {id}.");
+                        throw new Exception($"Качество запчасти с ID {id} не найдено.");
+                    Debug.WriteLine($"Delete: Part quality deleted with ID {id}.");
                 }
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Delete SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при удалении качества.", ex);
+                Debug.WriteLine($"Delete SQL Error: {ex.Message}");
+                throw new Exception($"Ошибка базы данных при удалении качества запчасти с ID {id}.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Delete Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                Debug.WriteLine($"Delete Error: {ex.Message}");
+                throw new Exception($"Неизвестная ошибка при удалении качества запчасти с ID {id}.", ex);
             }
         }
 
         public List<PartQuality> Search(string searchText)
         {
             if (string.IsNullOrWhiteSpace(searchText))
-                throw new ArgumentException("Поисковый запрос не должен быть пустым.");
+                throw new ArgumentException("Поисковый запрос не может быть пустым.");
 
             var qualities = new List<PartQuality>();
             try
@@ -195,8 +193,7 @@ namespace AvtoServis.Data.Repositories
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        "SELECT QualityID, Name FROM PartQualities WHERE Name LIKE @SearchText", connection);
+                    var command = new SqlCommand("SELECT QualityID, Name FROM PartQualities WHERE Name LIKE @SearchText OR CAST(QualityID AS NVARCHAR) LIKE @SearchText", connection);
                     command.Parameters.AddWithValue("@SearchText", $"%{searchText}%");
                     using (var reader = command.ExecuteReader())
                     {
@@ -210,17 +207,17 @@ namespace AvtoServis.Data.Repositories
                         }
                     }
                 }
-                Debug.WriteLine($"Search: Найдено {qualities.Count} качеств для запроса '{searchText}'.");
+                Debug.WriteLine($"Search: Found {qualities.Count} part qualities for query '{searchText}'.");
             }
             catch (SqlException ex)
             {
-                Debug.WriteLine($"Search SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при поиске.", ex);
+                Debug.WriteLine($"Search SQL Error: {ex.Message}");
+                throw new Exception("Ошибка базы данных при поиске качеств запчастей.", ex);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Search Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                Debug.WriteLine($"Search Error: {ex.Message}");
+                throw new Exception("Неизвестная ошибка при поиске качеств запчастей.", ex);
             }
             return qualities;
         }

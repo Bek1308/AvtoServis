@@ -1,7 +1,5 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
@@ -26,9 +24,10 @@ namespace AvtoServis.Data.Repositories
                     connection.Open();
                     var command = new SqlCommand(
                         @"SELECT p.PartID, p.CarBrand_Id, cb.CarBrandName, p.CatalogNumber, p.ManufacturerID, 
-                                 p.QualityID, pq.Name AS QualityName, p.PartName, p.Characteristics, p.PhotoPath
+                                 m.Name AS ManufacturerName, p.QualityID, pq.Name AS QualityName, p.PartName, p.Characteristics, p.PhotoPath
                           FROM Parts p
                           INNER JOIN CarBrand cb ON p.CarBrand_Id = cb.Id
+                          INNER JOIN Manufacturers m ON p.ManufacturerID = m.ManufacturerID
                           INNER JOIN PartQualities pq ON p.QualityID = pq.QualityID", connection);
                     using (var reader = command.ExecuteReader())
                     {
@@ -41,11 +40,12 @@ namespace AvtoServis.Data.Repositories
                                 CarBrandName = reader.GetString(2),
                                 CatalogNumber = reader.GetString(3),
                                 ManufacturerID = reader.GetInt32(4),
-                                QualityID = reader.GetInt32(5),
-                                QualityName = reader.GetString(6),
-                                PartName = reader.GetString(7),
-                                Characteristics = reader.IsDBNull(8) ? null : reader.GetString(8),
-                                PhotoPath = reader.IsDBNull(9) ? null : reader.GetString(9)
+                                ManufacturerName = reader.GetString(5),
+                                QualityID = reader.GetInt32(6),
+                                QualityName = reader.GetString(7),
+                                PartName = reader.GetString(8),
+                                Characteristics = reader.IsDBNull(9) ? null : reader.GetString(9),
+                                PhotoPath = reader.IsDBNull(10) ? null : reader.GetString(10)
                             });
                         }
                     }
@@ -77,9 +77,10 @@ namespace AvtoServis.Data.Repositories
                     connection.Open();
                     var command = new SqlCommand(
                         @"SELECT p.PartID, p.CarBrand_Id, cb.CarBrandName, p.CatalogNumber, p.ManufacturerID, 
-                                 p.QualityID, pq.Name AS QualityName, p.PartName, p.Characteristics, p.PhotoPath
+                                 m.Name AS ManufacturerName, p.QualityID, pq.Name AS QualityName, p.PartName, p.Characteristics, p.PhotoPath
                           FROM Parts p
                           INNER JOIN CarBrand cb ON p.CarBrand_Id = cb.Id
+                          INNER JOIN Manufacturers m ON p.ManufacturerID = m.ManufacturerID
                           INNER JOIN PartQualities pq ON p.QualityID = pq.QualityID
                           WHERE p.PartID = @Id", connection);
                     command.Parameters.AddWithValue("@Id", id);
@@ -94,11 +95,12 @@ namespace AvtoServis.Data.Repositories
                                 CarBrandName = reader.GetString(2),
                                 CatalogNumber = reader.GetString(3),
                                 ManufacturerID = reader.GetInt32(4),
-                                QualityID = reader.GetInt32(5),
-                                QualityName = reader.GetString(6),
-                                PartName = reader.GetString(7),
-                                Characteristics = reader.IsDBNull(8) ? null : reader.GetString(8),
-                                PhotoPath = reader.IsDBNull(9) ? null : reader.GetString(9)
+                                ManufacturerName = reader.GetString(5),
+                                QualityID = reader.GetInt32(6),
+                                QualityName = reader.GetString(7),
+                                PartName = reader.GetString(8),
+                                Characteristics = reader.IsDBNull(9) ? null : reader.GetString(9),
+                                PhotoPath = reader.IsDBNull(10) ? null : reader.GetString(10)
                             };
                         }
                         return null;
@@ -239,13 +241,18 @@ namespace AvtoServis.Data.Repositories
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
+                    var conditions = new List<string>();
+
+
+                    string whereClause = conditions.Count > 0 ? "WHERE " + string.Join(" OR ", conditions) : "";
                     var command = new SqlCommand(
-                        @"SELECT p.PartID, p.CarBrand_Id, cb.CarBrandName, p.CatalogNumber, p.ManufacturerID, 
-                                 p.QualityID, pq.Name AS QualityName, p.PartName, p.Characteristics, p.PhotoPath
+                        $@"SELECT p.PartID, p.CarBrand_Id, cb.CarBrandName, p.CatalogNumber, p.ManufacturerID, 
+                                  m.Name AS ManufacturerName, p.QualityID, pq.Name AS QualityName, p.PartName, p.Characteristics, p.PhotoPath
                           FROM Parts p
                           INNER JOIN CarBrand cb ON p.CarBrand_Id = cb.Id
+                          INNER JOIN Manufacturers m ON p.ManufacturerID = m.ManufacturerID
                           INNER JOIN PartQualities pq ON p.QualityID = pq.QualityID
-                          WHERE p.CatalogNumber LIKE @SearchText OR p.PartName LIKE @SearchText", connection);
+                          {whereClause}", connection);
                     command.Parameters.AddWithValue("@SearchText", $"%{searchText}%");
                     using (var reader = command.ExecuteReader())
                     {
@@ -258,11 +265,12 @@ namespace AvtoServis.Data.Repositories
                                 CarBrandName = reader.GetString(2),
                                 CatalogNumber = reader.GetString(3),
                                 ManufacturerID = reader.GetInt32(4),
-                                QualityID = reader.GetInt32(5),
-                                QualityName = reader.GetString(6),
-                                PartName = reader.GetString(7),
-                                Characteristics = reader.IsDBNull(8) ? null : reader.GetString(8),
-                                PhotoPath = reader.IsDBNull(9) ? null : reader.GetString(9)
+                                ManufacturerName = reader.GetString(5),
+                                QualityID = reader.GetInt32(6),
+                                QualityName = reader.GetString(7),
+                                PartName = reader.GetString(8),
+                                Characteristics = reader.IsDBNull(9) ? null : reader.GetString(9),
+                                PhotoPath = reader.IsDBNull(10) ? null : reader.GetString(10)
                             });
                         }
                     }

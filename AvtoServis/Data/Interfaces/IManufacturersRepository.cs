@@ -1,11 +1,14 @@
 ﻿using AvtoServis.Model.Entities;
-using System.Collections.Generic;
 
 namespace AvtoServis.Data.Interfaces
 {
-    public interface IManufacturersRepository : IRepository<Manufacturer>
+    public interface IManufacturersRepository
     {
+        List<Manufacturer> GetAll();
+        Manufacturer GetById(int id);
+        void Add(Manufacturer entity);
+        void Update(Manufacturer entity);
+        void Delete(int id);
         List<Manufacturer> Search(string searchText);
-        List<Manufacturer> FilterByPrice(decimal minPrice, decimal maxPrice);
     }
 }

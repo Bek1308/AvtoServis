@@ -1,25 +1,29 @@
 ﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using System;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
 {
     public partial class CarModelDialog : Form
     {
-        private readonly CarModelsViewModel _viewModel;
+        private readonly CarModelViewModel _viewModel;
         private readonly int? _modelId;
         private readonly bool _isDeleteMode;
+        private readonly bool _isViewOnly;
         private CarModel _model;
-        private Label lblMessage;
+        private System.Windows.Forms.Timer _errorTimer;
 
-        public CarModelDialog(CarModelsViewModel viewModel, int? modelId, bool isDeleteMode = false)
+        public CarModelDialog(CarModelViewModel viewModel, int? modelId, bool isViewOnly = false, bool isDeleteMode = false)
         {
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _modelId = modelId;
             _isDeleteMode = isDeleteMode;
+            _isViewOnly = isViewOnly;
             InitializeComponent();
+            _errorTimer = new System.Windows.Forms.Timer { Interval = 3000 };
+            _errorTimer.Tick += ErrorTimer_Tick;
+            lblError.Visible = false;
+            SetToolTips();
             if (!_isDeleteMode)
             {
                 LoadModel();
@@ -28,6 +32,22 @@ namespace AvtoServis.Forms.Controls
             {
                 SetupDeleteModeUI();
             }
+        }
+
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(tableLayoutPanel, "Форма для добавления или редактирования модели автомобиля");
+            toolTip.SetToolTip(lblBrand, "Метка для выбора марки автомобиля");
+            toolTip.SetToolTip(cmbBrand, _isDeleteMode ? "Марка автомобиля" : "Выберите марку автомобиля");
+            toolTip.SetToolTip(lblModel, "Метка для ввода названия модели");
+            toolTip.SetToolTip(txtModel, "Введите название модели (латинские буквы, цифры, пробел, максимум 100 символов)");
+            toolTip.SetToolTip(lblYear, "Метка для ввода года выпуска");
+            toolTip.SetToolTip(txtYear, "Введите год выпуска (например, 2023)");
+            toolTip.SetToolTip(lblError, "Отображает ошибки или сообщения об операции");
+            toolTip.SetToolTip(btnCancel, _isDeleteMode ? "Отменить удаление" : "Закрыть без сохранения");
+            toolTip.SetToolTip(btnSave, _isDeleteMode ? "Подтвердить удаление" : "Сохранить изменения");
+            if (lblMessage != null)
+                toolTip.SetToolTip(lblMessage, "Подтверждение удаления модели");
         }
 
         private void LoadModel()
@@ -56,6 +76,17 @@ namespace AvtoServis.Forms.Controls
                 {
                     txtYear.Text = DateTime.Now.Year.ToString();
                 }
+
+                if (_isViewOnly)
+                {
+                    cmbBrand.Enabled = false;
+                    txtModel.Enabled = false;
+                    txtYear.Enabled = false;
+                    btnSave.Visible = false;
+                    btnCancel.Text = "Закрыть";
+                    Text = "Просмотр модели";
+                }
+
                 ValidateInputs();
             }
             catch (Exception ex)
@@ -67,23 +98,21 @@ namespace AvtoServis.Forms.Controls
 
         private void SetupDeleteModeUI()
         {
-            this.ClientSize = new System.Drawing.Size(434, 142);
+            this.ClientSize = new Size(434, 142);
             this.Text = "Подтверждение удаления";
 
-            // Dinamik UI elementlari
             lblMessage = new Label
             {
                 AutoSize = true,
                 Text = "Вы хотите удалить эту модель?",
-                Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold),
-                ForeColor = System.Drawing.Color.FromArgb(33, 37, 41),
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 37, 41),
                 Name = "lblMessage",
                 Anchor = AnchorStyles.Left,
                 AccessibleName = "Сообщение об удалении",
                 AccessibleDescription = "Подтверждение удаления модели"
             };
 
-            // TableLayoutPanel'ni tozalash va yangi elementlarni qo'shish
             tableLayoutPanel.Controls.Clear();
             tableLayoutPanel.RowCount = 2;
             tableLayoutPanel.RowStyles.Clear();
@@ -95,44 +124,22 @@ namespace AvtoServis.Forms.Controls
             tableLayoutPanel.Controls.Add(btnCancel, 0, 1);
             tableLayoutPanel.Controls.Add(btnSave, 1, 1);
 
-            // Tugmalarni sozlash
             btnCancel.Text = "Нет";
             btnSave.Text = "Да";
-            btnCancel.BackColor = System.Drawing.Color.FromArgb(25, 118, 210);
-            btnCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 140, 230);
-            btnSave.BackColor = System.Drawing.Color.FromArgb(220, 53, 69);
-            btnSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(255, 100, 100);
+            btnCancel.BackColor = Color.FromArgb(25, 118, 210);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnSave.BackColor = Color.FromArgb(220, 53, 69);
+            btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 77, 77);
         }
 
         private void ValidateInputs()
         {
-            if (_isDeleteMode) return;
+            if (_isDeleteMode || _isViewOnly) return;
 
             lblError.Visible = false;
             btnSave.Enabled = true;
 
-            if (chkAddBrand.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(cmbBrand.Text))
-                {
-                    ShowError("Пожалуйста, введите название марки.");
-                    btnSave.Enabled = false;
-                    return;
-                }
-                if (cmbBrand.Text.Length > 100)
-                {
-                    ShowError("Название марки не должно превышать 100 символов.");
-                    btnSave.Enabled = false;
-                    return;
-                }
-                if (!Regex.IsMatch(cmbBrand.Text, @"^[a-zA-Z0-9\s]+$"))
-                {
-                    ShowError("Название марки должно содержать только латинские буквы, цифры и пробелы.");
-                    btnSave.Enabled = false;
-                    return;
-                }
-            }
-            else if (cmbBrand.SelectedValue == null)
+            if (cmbBrand.SelectedValue == null)
             {
                 ShowError("Пожалуйста, выберите марку автомобиля.");
                 btnSave.Enabled = false;
@@ -169,10 +176,34 @@ namespace AvtoServis.Forms.Controls
 
             if (!int.TryParse(txtYear.Text, out int year) || year < 1900 || year > DateTime.Now.Year + 1)
             {
-                ShowError($"Год не должен быть больше {DateTime.Now.Year + 1} или меньше 1900.");
+                ShowError($"Год должен быть числом между 1900 и {DateTime.Now.Year + 1}.");
                 btnSave.Enabled = false;
                 return;
             }
+        }
+
+        private void txtModel_TextChanged(object sender, EventArgs e)
+        {
+            ValidateInputs();
+        }
+
+        private void txtYear_TextChanged(object sender, EventArgs e)
+        {
+            ValidateInputs();
+        }
+
+        private void txtYear_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
@@ -187,19 +218,14 @@ namespace AvtoServis.Forms.Controls
                     return;
                 }
 
-                int carBrandId;
-                if (chkAddBrand.Checked)
+                if (_isViewOnly)
                 {
-                    var newBrand = new CarBrand { CarBrandName = cmbBrand.Text.Trim() };
-                    _viewModel.AddBrand(newBrand);
-                    carBrandId = newBrand.Id;
-                }
-                else
-                {
-                    carBrandId = (int)cmbBrand.SelectedValue;
+                    DialogResult = DialogResult.OK;
+                    Close();
+                    return;
                 }
 
-                _model.CarBrandId = carBrandId;
+                _model.CarBrandId = (int)cmbBrand.SelectedValue;
                 _model.Model = txtModel.Text.Trim();
                 _model.Year = int.Parse(txtYear.Text);
 
@@ -209,7 +235,6 @@ namespace AvtoServis.Forms.Controls
                 }
                 else
                 {
-                    _model.Id = _modelId.Value;
                     _viewModel.UpdateModel(_model);
                 }
 
@@ -223,39 +248,18 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
+        private void ErrorTimer_Tick(object sender, EventArgs e)
+        {
+            lblError.Visible = false;
+            _errorTimer.Stop();
+        }
+
         private void ShowError(string message)
         {
             lblError.Text = message;
             lblError.Visible = true;
-        }
-
-        private void txtModel_TextChanged(object sender, EventArgs e)
-        {
-            ValidateInputs();
-        }
-
-        private void txtYear_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar))
-                e.Handled = true;
-        }
-
-        private void txtYear_TextChanged(object sender, EventArgs e)
-        {
-            ValidateInputs();
-        }
-
-        private void chkAddBrand_CheckedChanged(object sender, EventArgs e)
-        {
-            if (_isDeleteMode) return;
-            cmbBrand.DropDownStyle = chkAddBrand.Checked ? ComboBoxStyle.DropDown : ComboBoxStyle.DropDownList;
-            if (chkAddBrand.Checked) cmbBrand.Text = "";
-            ValidateInputs();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            Close();
+            _errorTimer.Stop();
+            _errorTimer.Start();
         }
     }
 }

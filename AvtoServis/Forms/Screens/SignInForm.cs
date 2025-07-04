@@ -1,8 +1,4 @@
-﻿using System;
-using System.Drawing; // Color uchun
-using System.Windows.Forms;
-using AvtoService.ViewModels.Screens;
-using AvtoServis.Forms.Screens;
+﻿using AvtoService.ViewModels.Screens;
 using Timer = System.Windows.Forms.Timer;
 
 namespace AvtoServis.Forms.Screens

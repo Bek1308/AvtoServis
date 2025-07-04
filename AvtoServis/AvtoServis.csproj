@@ -18,7 +18,7 @@
     <PackageReference Include="Catel.MVVM" Version="6.0.7" />
     <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="ClosedXML.Parser" Version="2.0.0" />
-    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+    <PackageReference Include="EleCho.MvvmToolkit" Version="8.0.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>

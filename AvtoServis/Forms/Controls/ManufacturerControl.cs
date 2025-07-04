@@ -1,11 +1,13 @@
-﻿using AvtoServis.Model.Entities;
+﻿using AvtoServis.Forms.Modals.Manufacturers;
+using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using AvtoServis.Forms.Modals.Manufacturers;
 
 namespace AvtoServis.Forms.Controls
 {
@@ -15,43 +17,82 @@ namespace AvtoServis.Forms.Controls
         private readonly ImageList _actionImageList;
         private List<Manufacturer> dataSource;
         private System.Windows.Forms.Timer _searchTimer;
+        private readonly Dictionary<string, bool> _columnVisibility;
+        private string _sortColumn = "Nomer";
+        private SortOrder _sortOrder = SortOrder.Ascending;
 
         public ManufacturerControl(ManufacturersViewModel viewModel, ImageList actionImageList)
         {
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _actionImageList = actionImageList ?? throw new ArgumentNullException(nameof(actionImageList));
             dataSource = new List<Manufacturer>();
+            _columnVisibility = new Dictionary<string, bool>
+            {
+                { "Nomer", true },
+                { "Name", true },
+                { "Actions", true }
+            };
             InitializeComponent();
             ConfigureColumns();
             EnhanceVisualStyles();
             InitializeSearch();
             OptimizeDataGridView();
             LoadData();
+            UpdateVisibleColumns();
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            this.MinimumSize = new Size(600, 400);
+            SetToolTips();
+        }
 
-            addButton.Click += (s, e) => ShowManufacturerDialog(null);
-            dataGridView.CellClick += DataGridView_CellClick;
-            btnOpenFilterDialog.Click += BtnOpenFilterDialog_Click;
-            btnRefresh.Click += (s, e) => LoadData();
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(tableLayoutPanel, "Основная панель управления производителями");
+            toolTip.SetToolTip(titleLabel, "Заголовок раздела производителей");
+            toolTip.SetToolTip(separator, "Разделительная линия");
+            toolTip.SetToolTip(searchBox, "Введите текст для поиска по всем видимым столбцам");
+            toolTip.SetToolTip(buttonPanel, "Панель с кнопками управления");
+            toolTip.SetToolTip(addButton, "Добавить нового производителя");
+            toolTip.SetToolTip(btnColumns, "Выбрать видимые столбцы таблицы");
+            toolTip.SetToolTip(btnOpenFilterDialog, "Открыть окно фильтров");
+            toolTip.SetToolTip(btnExport, "Экспортировать данные в Excel");
+            toolTip.SetToolTip(countLabel, "Количество отображаемых производителей");
+            toolTip.SetToolTip(dataGridView, "Таблица с данными о производителях");
+        }
+
+        private void UpdateVisibleColumns()
+        {
+            _viewModel.VisibleColumns = _columnVisibility
+                .Where(kvp => kvp.Value && kvp.Key != "Actions")
+                .Select(kvp => kvp.Key)
+                .ToList();
         }
 
         private void ConfigureColumns()
         {
             dataGridView.Columns.Clear();
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+            if (_columnVisibility["Nomer"])
             {
-                Name = "Nomer",
-                HeaderText = "Номер",
-                ReadOnly = true,
-                Width = 80
-            });
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "Nomer",
+                    HeaderText = "Номер",
+                    DataPropertyName = "ManufacturerID",
+                    ReadOnly = true,
+                    Width = 80,
+                    DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleLeft }
+                });
+            }
+            if (_columnVisibility["Name"])
             {
-                Name = "Name",
-                HeaderText = "Название производителя",
-                DataPropertyName = "Name",
-                ReadOnly = true
-            });
+                dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    Name = "Name",
+                    HeaderText = "Название производителя",
+                    DataPropertyName = "Name",
+                    ReadOnly = true,
+                    DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleLeft }
+                });
+            }
             dataGridView.Columns.Add(new DataGridViewButtonColumn
             {
                 Name = "Actions",
@@ -59,21 +100,30 @@ namespace AvtoServis.Forms.Controls
                 Text = "...",
                 UseColumnTextForButtonValue = true,
                 FlatStyle = FlatStyle.Flat,
-                Width = 80
+                Width = 80,
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleCenter,
+                    Padding = new Padding(0),
+                    Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+                }
             });
 
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView.AutoGenerateColumns = false;
+            UpdateVisibleColumns();
         }
 
         private void EnhanceVisualStyles()
         {
-            addButton.BackColor = Color.FromArgb(25, 118, 210);
-            addButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            addButton.BackColor = Color.FromArgb(40, 167, 69);
+            addButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 187, 89);
+            btnColumns.BackColor = Color.FromArgb(25, 118, 210);
+            btnColumns.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
             btnOpenFilterDialog.BackColor = Color.FromArgb(25, 118, 210);
             btnOpenFilterDialog.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
-            btnRefresh.BackColor = Color.FromArgb(108, 117, 125);
-            btnRefresh.FlatAppearance.MouseOverBackColor = Color.FromArgb(130, 140, 150);
+            btnExport.BackColor = Color.FromArgb(25, 118, 210);
+            btnExport.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
 
             dataGridView.BackgroundColor = Color.White;
             dataGridView.EnableHeadersVisualStyles = false;
@@ -88,27 +138,9 @@ namespace AvtoServis.Forms.Controls
         private void InitializeSearch()
         {
             _searchTimer = new System.Windows.Forms.Timer { Interval = 300 };
-            _searchTimer.Tick += (s, e) =>
-            {
-                _searchTimer.Stop();
-                PerformSearch();
-            };
-            searchBox.TextChanged += (s, e) =>
-            {
-                if (searchBox.Text != "Поиск...")
-                {
-                    _searchTimer.Stop();
-                    _searchTimer.Start();
-                }
-            };
-            searchBox.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    _searchTimer.Stop();
-                    PerformSearch();
-                }
-            };
+            _searchTimer.Tick += SearchTimer_Tick;
+            searchBox.TextChanged += SearchBox_TextChanged;
+            searchBox.KeyDown += SearchBox_KeyDown;
         }
 
         private void OptimizeDataGridView()
@@ -122,67 +154,122 @@ namespace AvtoServis.Forms.Controls
             );
         }
 
-        private void BtnOpenFilterDialog_Click(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            ShowManufacturerDialog(null);
+        }
+
+        private void BtnExport_Click(object sender, EventArgs e)
         {
             try
             {
-                using (var dialog = new FilterDialog())
+                using (var saveFileDialog = new SaveFileDialog())
                 {
-                    if (dialog.ShowDialog() == DialogResult.OK)
+                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                    saveFileDialog.FileName = $"Manufacturers_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        dataSource = _viewModel.FilterManufacturers(dialog.SortAlphabetically);
-                        RefreshDataGridView();
+                        _viewModel.ExportToExcel(dataSource, saveFileDialog.FileName, _columnVisibility);
+                        MessageBox.Show("Данные успешно экспортированы в Excel!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка открытия фильтров: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogAndShowError(ex, "экспорте данных в Excel");
             }
         }
 
-        public void LoadData()
+        private void BtnColumns_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new Form
+            {
+                Text = "Выбор столбцов",
+                Size = new Size(300, 200),
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                BackColor = Color.FromArgb(245, 245, 245)
+            })
+            {
+                var checkedListBox = new CheckedListBox
+                {
+                    Location = new Point(10, 10),
+                    Size = new Size(260, 100),
+                    CheckOnClick = true,
+                    Font = new Font("Segoe UI", 10F),
+                    BorderStyle = BorderStyle.FixedSingle
+                };
+                foreach (var column in _columnVisibility)
+                {
+                    if (column.Key != "Actions")
+                    {
+                        checkedListBox.Items.Add(new { Name = column.Key, DisplayName = dataGridView.Columns[column.Key]?.HeaderText ?? column.Key }, column.Value);
+                    }
+                }
+                checkedListBox.DisplayMember = "DisplayName";
+                checkedListBox.ValueMember = "Name";
+
+                var btnOk = new Button
+                {
+                    Text = "ОК",
+                    Location = new Point(100, 120),
+                    Size = new Size(80, 30),
+                    BackColor = Color.FromArgb(40, 167, 69),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(60, 187, 89) },
+                    Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+                };
+                btnOk.Click += (s, ev) =>
+                {
+                    int visibleCount = checkedListBox.CheckedItems.Count;
+                    if (visibleCount == 0)
+                    {
+                        MessageBox.Show("Необходимо выбрать хотя бы один столбец!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    foreach (var column in _columnVisibility.Keys.ToList())
+                    {
+                        if (column != "Actions")
+                        {
+                            _columnVisibility[column] = false;
+                        }
+                    }
+                    foreach (var item in checkedListBox.CheckedItems)
+                    {
+                        var col = (dynamic)item;
+                        _columnVisibility[col.Name] = true;
+                    }
+                    ConfigureColumns();
+                    RefreshDataGridView();
+                    dialog.Close();
+                };
+
+                dialog.Controls.Add(checkedListBox);
+                dialog.Controls.Add(btnOk);
+                dialog.ShowDialog();
+            }
+        }
+
+        private void BtnOpenFilterDialog_Click(object sender, EventArgs e)
         {
             try
             {
-                dataSource = _viewModel.LoadManufacturers();
-                RefreshDataGridView();
-                System.Diagnostics.Debug.WriteLine($"LoadData: DataGridView refreshed with {dataSource.Count} rows.");
+                UpdateVisibleColumns();
+                using (var dialog = new ManufacturerFilterDialog(_viewModel))
+                {
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        ApplyFilters(dialog.Filters);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                LogAndShowError(ex, "загрузке данных");
+                LogAndShowError(ex, "открытии фильтров");
             }
-        }
-
-        private void PerformSearch()
-        {
-            try
-            {
-                dataSource = _viewModel.SearchManufacturers(searchBox.Text.Trim());
-                RefreshDataGridView();
-            }
-            catch (Exception ex)
-            {
-                LogAndShowError(ex, "поиске");
-            }
-        }
-
-        private void RefreshDataGridView()
-        {
-            dataGridView.DataSource = null;
-            dataGridView.Rows.Clear();
-            foreach (var manufacturer in dataSource)
-            {
-                var row = new DataGridViewRow();
-                row.CreateCells(dataGridView);
-                row.Cells[dataGridView.Columns["Nomer"].Index].Value = manufacturer.ManufacturerID;
-                row.Cells[dataGridView.Columns["Name"].Index].Value = manufacturer.Name;
-                row.Tag = manufacturer.ManufacturerID;
-                dataGridView.Rows.Add(row);
-            }
-            countLabel.Text = $"Производителей: {dataSource.Count}";
-            dataGridView.Refresh();
         }
 
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -241,6 +328,145 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
+        private void DataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            var column = dataGridView.Columns[e.ColumnIndex].Name;
+            if (column == "Actions") return;
+
+            _sortOrder = _sortColumn == column && _sortOrder == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            _sortColumn = column;
+            SortDataSource();
+            RefreshDataGridView();
+        }
+
+        private void SearchTimer_Tick(object sender, EventArgs e)
+        {
+            _searchTimer.Stop();
+            PerformSearch();
+        }
+
+        private void SearchBox_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(searchBox.Text) || searchBox.Text != "Поиск...")
+            {
+                _searchTimer.Stop();
+                _searchTimer.Start();
+            }
+        }
+
+        private void SearchBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                _searchTimer.Stop();
+                PerformSearch();
+            }
+        }
+
+        private void SearchBox_Enter(object sender, EventArgs e)
+        {
+            if (searchBox.Text == "Поиск...")
+            {
+                searchBox.Text = "";
+                searchBox.ForeColor = Color.Black;
+            }
+        }
+
+        private void SearchBox_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(searchBox.Text))
+            {
+                searchBox.Text = "Поиск...";
+                searchBox.ForeColor = Color.Gray;
+            }
+        }
+
+        public void LoadData()
+        {
+            try
+            {
+                dataSource = _viewModel.LoadManufacturers();
+                SortDataSource();
+                RefreshDataGridView();
+                System.Diagnostics.Debug.WriteLine($"LoadData: DataGridView refreshed with {dataSource.Count} rows.");
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex, "загрузке данных");
+            }
+        }
+
+        private void PerformSearch()
+        {
+            try
+            {
+                if (searchBox.Text == "Поиск..." || string.IsNullOrWhiteSpace(searchBox.Text))
+                {
+                    dataSource = _viewModel.LoadManufacturers();
+                }
+                else
+                {
+                    dataSource = _viewModel.SearchManufacturers(searchBox.Text.Trim());
+                }
+                SortDataSource();
+                RefreshDataGridView();
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex, "поиске");
+            }
+        }
+
+        public void ApplyFilters(List<(string Column, string SearchText)> filters)
+        {
+            try
+            {
+                _viewModel.Filters = filters;
+                dataSource = _viewModel.LoadManufacturers();
+                SortDataSource();
+                RefreshDataGridView();
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex, "применении фильтров");
+            }
+        }
+
+        private void SortDataSource()
+        {
+            switch (_sortColumn)
+            {
+                case "Nomer":
+                    dataSource.Sort((x, y) => _sortOrder == SortOrder.Ascending ? x.ManufacturerID.CompareTo(y.ManufacturerID) : y.ManufacturerID.CompareTo(x.ManufacturerID));
+                    break;
+                case "Name":
+                    dataSource.Sort((x, y) => _sortOrder == SortOrder.Ascending ? string.Compare(x.Name, y.Name) : string.Compare(y.Name, x.Name));
+                    break;
+            }
+        }
+
+        private void RefreshDataGridView()
+        {
+            dataGridView.DataSource = null;
+            dataGridView.Rows.Clear();
+            foreach (var manufacturer in dataSource)
+            {
+                var row = new DataGridViewRow();
+                row.CreateCells(dataGridView);
+                if (_columnVisibility["Nomer"])
+                    row.Cells[dataGridView.Columns["Nomer"]?.Index ?? 0].Value = manufacturer.ManufacturerID;
+                if (_columnVisibility["Name"])
+                    row.Cells[dataGridView.Columns["Name"]?.Index ?? 0].Value = manufacturer.Name;
+                var actionCell = row.Cells[dataGridView.Columns["Actions"].Index];
+                actionCell.Value = "...";
+                actionCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                row.Tag = manufacturer.ManufacturerID;
+                dataGridView.Rows.Add(row);
+            }
+            countLabel.Text = $"Производителей: {dataSource.Count}";
+            dataGridView.Refresh();
+        }
+
         private void ShowManufacturerDialog(int? id)
         {
             try
@@ -276,7 +502,7 @@ namespace AvtoServis.Forms.Controls
                     if (item.Tag?.ToString() == "Edit")
                         backgroundColor = item.Selected ? Color.FromArgb(50, 140, 230) : Color.FromArgb(25, 118, 210);
                     else if (item.Tag?.ToString() == "Delete")
-                        backgroundColor = item.Selected ? Color.FromArgb(255, 100, 100) : Color.FromArgb(220, 53, 69);
+                        backgroundColor = item.Selected ? Color.FromArgb(255, 77, 77) : Color.FromArgb(220, 53, 69);
 
                     using (var brush = new SolidBrush(backgroundColor))
                     {
@@ -289,114 +515,6 @@ namespace AvtoServis.Forms.Controls
             {
                 e.TextColor = e.Item.Selected ? Color.Black : Color.White;
                 base.OnRenderItemText(e);
-            }
-        }
-
-        private class FilterDialog : Form
-        {
-            public bool SortAlphabetically { get; private set; }
-
-            private TableLayoutPanel tableLayoutPanel;
-            private CheckBox chkSortAlphabetically;
-            private Button btnApply;
-            private Button btnCancel;
-
-            public FilterDialog()
-            {
-                InitializeComponent();
-                AddToolTips();
-            }
-
-            private void InitializeComponent()
-            {
-                Text = "Фильтры";
-                FormBorderStyle = FormBorderStyle.FixedDialog;
-                MaximizeBox = false;
-                MinimizeBox = false;
-                StartPosition = FormStartPosition.CenterParent;
-                Size = new Size(400, 180);
-                BackColor = Color.FromArgb(245, 245, 245);
-                Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-
-                tableLayoutPanel = new TableLayoutPanel
-                {
-                    ColumnCount = 4,
-                    RowCount = 3,
-                    Dock = DockStyle.Fill,
-                    Padding = new Padding(16),
-                    AutoSize = true
-                };
-                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-                tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-
-                chkSortAlphabetically = new CheckBox
-                {
-                    Text = "Сортировать по алфавиту",
-                    AutoSize = true,
-                    Anchor = AnchorStyles.Left,
-                    AccessibleName = "Сортировка по алфавиту",
-                    AccessibleDescription = "Сортировать производителей по названию в алфавитном порядке"
-                };
-                tableLayoutPanel.Controls.Add(chkSortAlphabetically, 0, 0);
-                tableLayoutPanel.SetColumnSpan(chkSortAlphabetically, 2);
-
-                btnApply = new Button
-                {
-                    Text = "Применить",
-                    Size = new Size(100, 28),
-                    BackColor = Color.FromArgb(25, 118, 210),
-                    ForeColor = Color.White,
-                    FlatStyle = FlatStyle.Flat,
-                    FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(50, 140, 230) },
-                    Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                    AccessibleName = "Применить фильтр",
-                    AccessibleDescription = "Применяет фильтр сортировки"
-                };
-                btnApply.Click += BtnApply_Click;
-                tableLayoutPanel.Controls.Add(btnApply, 2, 2);
-
-                btnCancel = new Button
-                {
-                    Text = "Отмена",
-                    Size = new Size(100, 28),
-                    BackColor = Color.FromArgb(108, 117, 125),
-                    ForeColor = Color.White,
-                    FlatStyle = FlatStyle.Flat,
-                    FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(130, 140, 150) },
-                    Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                    AccessibleName = "Отменить",
-                    AccessibleDescription = "Закрывает окно без применения фильтров"
-                };
-                btnCancel.Click += (s, e) => Close();
-                tableLayoutPanel.Controls.Add(btnCancel, 1, 2);
-
-                Controls.Add(tableLayoutPanel);
-            }
-
-            private void AddToolTips()
-            {
-                var toolTip = new ToolTip();
-                toolTip.SetToolTip(chkSortAlphabetically, "Сортировать производителей по названию в алфавитном порядке");
-                toolTip.SetToolTip(btnApply, "Применить выбранные фильтры");
-                toolTip.SetToolTip(btnCancel, "Закрыть без применения фильтров");
-            }
-
-            private void BtnApply_Click(object sender, EventArgs e)
-            {
-                try
-                {
-                    SortAlphabetically = chkSortAlphabetically.Checked;
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка применения фильтра: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
         }
     }

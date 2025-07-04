@@ -1,8 +1,8 @@
 ﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using Timer = System.Windows.Forms.Timer;
 using System;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
@@ -12,21 +12,22 @@ namespace AvtoServis.Forms.Controls
         private readonly StockViewModel _viewModel;
         private readonly int? _stockId;
         private readonly bool _isDeleteMode;
+        private readonly bool _isViewOnly;
         private Stock _stock;
-        private Label lblMessage;
         private System.Windows.Forms.Timer _errorTimer;
 
-        public StockDialog(StockViewModel viewModel, int? stockId, bool isDeleteMode = false)
+        public StockDialog(StockViewModel viewModel, int? stockId, bool isViewOnly = false, bool isDeleteMode = false)
         {
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _stockId = stockId;
             _isDeleteMode = isDeleteMode;
+            _isViewOnly = isViewOnly;
             InitializeComponent();
-            _errorTimer = new Timer { Interval = 3000 };
+            _errorTimer = new System.Windows.Forms.Timer { Interval = 3000 };
             _errorTimer.Tick += ErrorTimer_Tick;
             lblError.Visible = false;
-            btnSave.Enabled = true;
-            if (!isDeleteMode)
+            SetToolTips();
+            if (!_isDeleteMode)
             {
                 LoadStock();
             }
@@ -36,21 +37,41 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(tableLayoutPanel, "Форма для добавления или редактирования склада");
+            toolTip.SetToolTip(lblStockName, "Метка для ввода названия склада");
+            toolTip.SetToolTip(txtStockName, _isDeleteMode ? "Название склада" : "Введите название склада (латинские буквы, цифры, пробел, максимум 100 символов)");
+            toolTip.SetToolTip(lblError, "Отображает ошибки или сообщения об операции");
+            toolTip.SetToolTip(btnCancel, _isDeleteMode ? "Отменить удаление" : "Закрыть без сохранения");
+            toolTip.SetToolTip(btnSave, _isDeleteMode ? "Подтвердить удаление" : "Сохранить изменения");
+            if (lblMessage != null)
+                toolTip.SetToolTip(lblMessage, "Подтверждение удаления склада");
+        }
+
         private void LoadStock()
         {
             try
             {
-                _stock = _stockId == null ? new Stock() : _viewModel.LoadStock().Find(s => s.StockID == _stockId);
+                _stock = _stockId == null ? new Stock() : _viewModel.LoadStocks().Find(s => s.StockID == _stockId);
                 if (_stock == null && _stockId != null)
                 {
                     ShowError("Склад не найден.");
+                    btnSave.Enabled = false;
                     return;
                 }
 
-                if (_stockId != null)
+                txtStockName.Text = _stock?.Name;
+
+                if (_isViewOnly)
                 {
-                    txtName.Text = _stock.Name;
+                    txtStockName.Enabled = false;
+                    btnSave.Visible = false;
+                    btnCancel.Text = "Закрыть";
+                    Text = "Просмотр склада";
                 }
+
+                ValidateInputs();
             }
             catch (Exception ex)
             {
@@ -92,35 +113,53 @@ namespace AvtoServis.Forms.Controls
             btnCancel.BackColor = Color.FromArgb(25, 118, 210);
             btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
             btnSave.BackColor = Color.FromArgb(220, 53, 69);
-            btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 100, 100);
+            btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 77, 77);
         }
 
         private void ValidateInputs()
         {
-            if (_isDeleteMode) return;
+            if (_isDeleteMode || _isViewOnly) return;
 
             lblError.Visible = false;
+            btnSave.Enabled = true;
 
-            if (string.IsNullOrWhiteSpace(txtName.Text))
+            if (string.IsNullOrWhiteSpace(txtStockName.Text))
             {
                 ShowError("Пожалуйста, введите название склада.");
+                btnSave.Enabled = false;
                 return;
             }
 
-            if (txtName.Text.Length > 100)
+            if (txtStockName.Text.Length > 100)
             {
                 ShowError("Название склада не должно превышать 100 символов.");
+                btnSave.Enabled = false;
                 return;
             }
+
+            if (!Regex.IsMatch(txtStockName.Text, @"^[a-zA-Z0-9\s]+$"))
+            {
+                ShowError("Название склада должно содержать только латинские буквы, цифры и пробелы.");
+                btnSave.Enabled = false;
+                return;
+            }
+        }
+
+        private void txtStockName_TextChanged(object sender, EventArgs e)
+        {
+            ValidateInputs();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                ValidateInputs();
-                if (lblError.Visible) return;
-
                 if (_isDeleteMode)
                 {
                     _viewModel.DeleteStock(_stockId.Value);
@@ -129,7 +168,14 @@ namespace AvtoServis.Forms.Controls
                     return;
                 }
 
-                _stock.Name = txtName.Text.Trim();
+                if (_isViewOnly)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                    return;
+                }
+
+                _stock.Name = txtStockName.Text.Trim();
 
                 if (_stockId == null)
                 {
@@ -137,7 +183,6 @@ namespace AvtoServis.Forms.Controls
                 }
                 else
                 {
-                    _stock.StockID = _stockId.Value;
                     _viewModel.UpdateStock(_stock);
                 }
 
@@ -151,43 +196,18 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void ErrorTimer_Tick(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            lblError.Visible = false;
+            _errorTimer.Stop();
         }
 
         private void ShowError(string message)
         {
             lblError.Text = message;
             lblError.Visible = true;
-            panelError.Visible = true;
-            _errorTimer.Start();
-        }
-
-        private void ErrorTimer_Tick(object sender, EventArgs e)
-        {
-            lblError.Visible = false;
-            panelError.Visible = false;
             _errorTimer.Stop();
-        }
-
-        private void TxtName_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtName.Text) && txtName.Text.Length > 100)
-            {
-                ShowError("Название склада не должно превышать 100 символов.");
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _errorTimer?.Dispose();
-                components?.Dispose();
-            }
-            base.Dispose(disposing);
+            _errorTimer.Start();
         }
     }
 }

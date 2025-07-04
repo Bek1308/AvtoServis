@@ -4,221 +4,243 @@
     {
         private System.ComponentModel.IContainer components = null;
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            toolTip = new ToolTip(components);
             tableLayoutPanel = new TableLayoutPanel();
-            lblTitle = new Label();
-            lblSupplierID = new Label();
-            lblSupplierIDValue = new Label();
+            titleLabel = new Label();
+            separator = new Panel();
             lblName = new Label();
-            lblNameValue = new Label();
+            txtName = new TextBox();
             lblContactPhone = new Label();
-            lblContactPhoneValue = new Label();
+            txtContactPhone = new TextBox();
             lblEmail = new Label();
-            lblEmailValue = new Label();
+            txtEmail = new TextBox();
             lblAddress = new Label();
-            lblAddressValue = new Label();
-            btnClose = new Button();
+            txtAddress = new TextBox();
+            buttonPanel = new FlowLayoutPanel();
+            btnOk = new Button();
             tableLayoutPanel.SuspendLayout();
+            buttonPanel.SuspendLayout();
             SuspendLayout();
+            // 
+            // toolTip
+            // 
+            toolTip.AutoPopDelay = 5000;
+            toolTip.InitialDelay = 1000;
+            toolTip.ReshowDelay = 500;
+            toolTip.ShowAlways = true;
             // 
             // tableLayoutPanel
             // 
+            tableLayoutPanel.BackColor = Color.FromArgb(245, 245, 245);
             tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 131F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.Controls.Add(lblTitle, 0, 0);
-            tableLayoutPanel.Controls.Add(lblSupplierID, 0, 1);
-            tableLayoutPanel.Controls.Add(lblSupplierIDValue, 1, 1);
+            tableLayoutPanel.Controls.Add(titleLabel, 0, 0);
+            tableLayoutPanel.Controls.Add(separator, 0, 1);
             tableLayoutPanel.Controls.Add(lblName, 0, 2);
-            tableLayoutPanel.Controls.Add(lblNameValue, 1, 2);
+            tableLayoutPanel.Controls.Add(txtName, 1, 2);
             tableLayoutPanel.Controls.Add(lblContactPhone, 0, 3);
-            tableLayoutPanel.Controls.Add(lblContactPhoneValue, 1, 3);
+            tableLayoutPanel.Controls.Add(txtContactPhone, 1, 3);
             tableLayoutPanel.Controls.Add(lblEmail, 0, 4);
-            tableLayoutPanel.Controls.Add(lblEmailValue, 1, 4);
+            tableLayoutPanel.Controls.Add(txtEmail, 1, 4);
             tableLayoutPanel.Controls.Add(lblAddress, 0, 5);
-            tableLayoutPanel.Controls.Add(lblAddressValue, 1, 5);
-            tableLayoutPanel.Controls.Add(btnClose, 1, 6);
+            tableLayoutPanel.Controls.Add(txtAddress, 1, 5);
+            tableLayoutPanel.Controls.Add(buttonPanel, 0, 6);
+            tableLayoutPanel.SetColumnSpan(titleLabel, 2);
+            tableLayoutPanel.SetColumnSpan(separator, 2);
+            tableLayoutPanel.SetColumnSpan(buttonPanel, 2);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);
-            tableLayoutPanel.Margin = new Padding(3, 2, 3, 2);
             tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.Padding = new Padding(14, 12, 14, 12);
+            tableLayoutPanel.Padding = new Padding(16);
             tableLayoutPanel.RowCount = 7;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 2F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
-            tableLayoutPanel.Size = new Size(555, 260);
+            tableLayoutPanel.Size = new Size(434, 268);
             tableLayoutPanel.TabIndex = 0;
             // 
-            // lblTitle
+            // titleLabel
             // 
-            lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.FromArgb(33, 37, 41);
-            lblTitle.Location = new Point(17, 12);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(97, 38);
-            lblTitle.TabIndex = 0;
-            lblTitle.Text = "Детали поставщика";
+            titleLabel.AutoSize = true;
+            titleLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            titleLabel.ForeColor = Color.FromArgb(33, 37, 41);
+            titleLabel.Location = new Point(19, 16);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(200, 32);
+            titleLabel.TabIndex = 0;
+            titleLabel.Text = "Подробности о поставщике";
             // 
-            // lblSupplierID
+            // separator
             // 
-            lblSupplierID.AutoSize = true;
-            lblSupplierID.Font = new Font("Segoe UI", 10F);
-            lblSupplierID.ForeColor = Color.FromArgb(33, 37, 41);
-            lblSupplierID.Location = new Point(17, 50);
-            lblSupplierID.Name = "lblSupplierID";
-            lblSupplierID.Size = new Size(23, 19);
-            lblSupplierID.TabIndex = 1;
-            lblSupplierID.Text = "ID";
-            // 
-            // lblSupplierIDValue
-            // 
-            lblSupplierIDValue.AutoSize = true;
-            lblSupplierIDValue.Font = new Font("Segoe UI", 10F);
-            lblSupplierIDValue.ForeColor = Color.FromArgb(33, 37, 41);
-            lblSupplierIDValue.Location = new Point(148, 50);
-            lblSupplierIDValue.Name = "lblSupplierIDValue";
-            lblSupplierIDValue.Size = new Size(0, 19);
-            lblSupplierIDValue.TabIndex = 2;
+            separator.BackColor = Color.FromArgb(180, 180, 180);
+            separator.Dock = DockStyle.Fill;
+            separator.Location = new Point(19, 56);
+            separator.Margin = new Padding(3, 0, 3, 0);
+            separator.Name = "separator";
+            separator.Size = new Size(396, 2);
+            separator.TabIndex = 1;
             // 
             // lblName
             // 
             lblName.AutoSize = true;
             lblName.Font = new Font("Segoe UI", 10F);
             lblName.ForeColor = Color.FromArgb(33, 37, 41);
-            lblName.Location = new Point(17, 80);
+            lblName.Location = new Point(19, 58);
             lblName.Name = "lblName";
-            lblName.Size = new Size(51, 19);
-            lblName.TabIndex = 3;
+            lblName.Size = new Size(70, 23);
+            lblName.TabIndex = 2;
             lblName.Text = "Название";
             // 
-            // lblNameValue
+            // txtName
             // 
-            lblNameValue.AutoSize = true;
-            lblNameValue.Font = new Font("Segoe UI", 10F);
-            lblNameValue.ForeColor = Color.FromArgb(33, 37, 41);
-            lblNameValue.Location = new Point(148, 80);
-            lblNameValue.Name = "lblNameValue";
-            lblNameValue.Size = new Size(0, 19);
-            lblNameValue.TabIndex = 4;
+            txtName.BorderStyle = BorderStyle.FixedSingle;
+            txtName.Font = new Font("Segoe UI", 10F);
+            txtName.Location = new Point(139, 61);
+            txtName.Name = "txtName";
+            txtName.ReadOnly = true;
+            txtName.Size = new Size(260, 30);
+            txtName.TabIndex = 3;
             // 
             // lblContactPhone
             // 
             lblContactPhone.AutoSize = true;
             lblContactPhone.Font = new Font("Segoe UI", 10F);
             lblContactPhone.ForeColor = Color.FromArgb(33, 37, 41);
-            lblContactPhone.Location = new Point(17, 110);
+            lblContactPhone.Location = new Point(19, 98);
             lblContactPhone.Name = "lblContactPhone";
-            lblContactPhone.Size = new Size(92, 30);
-            lblContactPhone.TabIndex = 5;
+            lblContactPhone.Size = new Size(114, 23);
+            lblContactPhone.TabIndex = 4;
             lblContactPhone.Text = "Контактный телефон";
             // 
-            // lblContactPhoneValue
+            // txtContactPhone
             // 
-            lblContactPhoneValue.AutoSize = true;
-            lblContactPhoneValue.Font = new Font("Segoe UI", 10F);
-            lblContactPhoneValue.ForeColor = Color.FromArgb(33, 37, 41);
-            lblContactPhoneValue.Location = new Point(148, 110);
-            lblContactPhoneValue.Name = "lblContactPhoneValue";
-            lblContactPhoneValue.Size = new Size(0, 19);
-            lblContactPhoneValue.TabIndex = 6;
+            txtContactPhone.BorderStyle = BorderStyle.FixedSingle;
+            txtContactPhone.Font = new Font("Segoe UI", 10F);
+            txtContactPhone.Location = new Point(139, 101);
+            txtContactPhone.Name = "txtContactPhone";
+            txtContactPhone.ReadOnly = true;
+            txtContactPhone.Size = new Size(260, 30);
+            txtContactPhone.TabIndex = 5;
             // 
             // lblEmail
             // 
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 10F);
             lblEmail.ForeColor = Color.FromArgb(33, 37, 41);
-            lblEmail.Location = new Point(17, 140);
+            lblEmail.Location = new Point(19, 138);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(107, 19);
-            lblEmail.TabIndex = 7;
-            lblEmail.Text = "Электронная почта";
+            lblEmail.Size = new Size(82, 23);
+            lblEmail.TabIndex = 6;
+            lblEmail.Text = "Эл. почта";
             // 
-            // lblEmailValue
+            // txtEmail
             // 
-            lblEmailValue.AutoSize = true;
-            lblEmailValue.Font = new Font("Segoe UI", 10F);
-            lblEmailValue.ForeColor = Color.FromArgb(33, 37, 41);
-            lblEmailValue.Location = new Point(148, 140);
-            lblEmailValue.Name = "lblEmailValue";
-            lblEmailValue.Size = new Size(0, 19);
-            lblEmailValue.TabIndex = 8;
+            txtEmail.BorderStyle = BorderStyle.FixedSingle;
+            txtEmail.Font = new Font("Segoe UI", 10F);
+            txtEmail.Location = new Point(139, 141);
+            txtEmail.Name = "txtEmail";
+            txtEmail.ReadOnly = true;
+            txtEmail.Size = new Size(260, 30);
+            txtEmail.TabIndex = 7;
             // 
             // lblAddress
             // 
             lblAddress.AutoSize = true;
             lblAddress.Font = new Font("Segoe UI", 10F);
             lblAddress.ForeColor = Color.FromArgb(33, 37, 41);
-            lblAddress.Location = new Point(17, 170);
+            lblAddress.Location = new Point(19, 178);
             lblAddress.Name = "lblAddress";
-            lblAddress.Size = new Size(66, 19);
-            lblAddress.TabIndex = 9;
+            lblAddress.Size = new Size(54, 23);
+            lblAddress.TabIndex = 8;
             lblAddress.Text = "Адрес";
             // 
-            // lblAddressValue
+            // txtAddress
             // 
-            lblAddressValue.Font = new Font("Segoe UI", 10F);
-            lblAddressValue.ForeColor = Color.FromArgb(33, 37, 41);
-            lblAddressValue.Location = new Point(148, 170);
-            lblAddressValue.Name = "lblAddressValue";
-            lblAddressValue.Size = new Size(262, 58);
-            lblAddressValue.TabIndex = 10;
+            txtAddress.BorderStyle = BorderStyle.FixedSingle;
+            txtAddress.Font = new Font("Segoe UI", 10F);
+            txtAddress.Location = new Point(139, 181);
+            txtAddress.Name = "txtAddress";
+            txtAddress.ReadOnly = true;
+            txtAddress.Size = new Size(260, 30);
+            txtAddress.TabIndex = 9;
             // 
-            // btnClose
+            // buttonPanel
             // 
-            btnClose.BackColor = Color.FromArgb(108, 117, 125);
-            btnClose.FlatAppearance.BorderSize = 0;
-            btnClose.FlatAppearance.MouseOverBackColor = Color.FromArgb(130, 140, 150);
-            btnClose.FlatStyle = FlatStyle.Flat;
-            btnClose.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnClose.ForeColor = Color.White;
-            btnClose.Location = new Point(148, 209);
-            btnClose.Margin = new Padding(3, 2, 3, 2);
-            btnClose.Name = "btnClose";
-            btnClose.Size = new Size(105, 27);
-            btnClose.TabIndex = 11;
-            btnClose.Text = "Закрыть";
-            btnClose.UseVisualStyleBackColor = false;
-            btnClose.Click += BtnClose_Click;
+            buttonPanel.Controls.Add(btnOk);
+            buttonPanel.Dock = DockStyle.Right;
+            buttonPanel.Location = new Point(19, 221);
+            buttonPanel.Name = "buttonPanel";
+            buttonPanel.Size = new Size(396, 42);
+            buttonPanel.TabIndex = 10;
+            // 
+            // btnOk
+            // 
+            btnOk.BackColor = Color.FromArgb(40, 167, 69);
+            btnOk.DialogResult = DialogResult.OK;
+            btnOk.FlatAppearance.BorderSize = 0;
+            btnOk.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 187, 89);
+            btnOk.FlatStyle = FlatStyle.Flat;
+            btnOk.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnOk.ForeColor = Color.White;
+            btnOk.Location = new Point(3, 3);
+            btnOk.Name = "btnOk";
+            btnOk.Size = new Size(100, 34);
+            btnOk.TabIndex = 0;
+            btnOk.Text = "ОК";
+            btnOk.UseVisualStyleBackColor = false;
+            btnOk.Click += BtnOk_Click;
             // 
             // SupplierDetailsDialog
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AcceptButton = btnOk;
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            CancelButton = btnClose;
-            ClientSize = new Size(555, 260);
+            CancelButton = btnOk;
+            ClientSize = new Size(434, 268);
             Controls.Add(tableLayoutPanel);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "SupplierDetailsDialog";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Информация о поставщике";
+            Text = "Подробности о поставщике";
             tableLayoutPanel.ResumeLayout(false);
             tableLayoutPanel.PerformLayout();
+            buttonPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         private TableLayoutPanel tableLayoutPanel;
-        private Label lblTitle;
-        private Label lblSupplierID;
-        private Label lblSupplierIDValue;
+        private Label titleLabel;
+        private Panel separator;
         private Label lblName;
-        private Label lblNameValue;
+        private TextBox txtName;
         private Label lblContactPhone;
-        private Label lblContactPhoneValue;
+        private TextBox txtContactPhone;
         private Label lblEmail;
-        private Label lblEmailValue;
+        private TextBox txtEmail;
         private Label lblAddress;
-        private Label lblAddressValue;
-        private Button btnClose;
+        private TextBox txtAddress;
+        private FlowLayoutPanel buttonPanel;
+        private Button btnOk;
+        private ToolTip toolTip;
     }
 }

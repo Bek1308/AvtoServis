@@ -16,150 +16,253 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            toolTip = new ToolTip(components);
             tableLayoutPanel = new TableLayoutPanel();
             titleLabel = new Label();
-            addButton = new Button();
+            separator = new Panel();
             searchBox = new TextBox();
-            countLabel = new Label();
-            dataGridView = new DataGridView();
+            buttonPanel = new FlowLayoutPanel();
             btnOpenFilterDialog = new Button();
-            btnRefresh = new Button();
-
+            btnColumns = new Button();
+            btnExport = new Button();
+            addButton = new Button();
+            dataGridView = new DataGridView();
+            countLabel = new Label();
             tableLayoutPanel.SuspendLayout();
+            buttonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
-
+            // 
+            // toolTip
+            // 
+            toolTip.AutoPopDelay = 5000;
+            toolTip.InitialDelay = 1000;
+            toolTip.ReshowDelay = 500;
+            toolTip.ShowAlways = true;
+            // 
             // tableLayoutPanel
-            tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.RowCount = 4;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.Dock = DockStyle.Fill;
-            tableLayoutPanel.Padding = new Padding(16);
+            // 
             tableLayoutPanel.BackColor = Color.FromArgb(245, 245, 245);
-
-            // titleLabel
-            titleLabel.Text = "Список производителей";
-            titleLabel.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            titleLabel.ForeColor = Color.FromArgb(33, 37, 41);
-            titleLabel.AutoSize = true;
-            titleLabel.Anchor = AnchorStyles.Left;
-            titleLabel.AccessibleName = "Список производителей";
-            titleLabel.AccessibleDescription = "Заголовок списка производителей";
+            tableLayoutPanel.ColumnCount = 2;
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 39.94083F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60.05917F));
             tableLayoutPanel.Controls.Add(titleLabel, 0, 0);
-
-            // addButton
-            addButton.Text = "Новая";
-            addButton.Size = new Size(120, 36);
-            addButton.BackColor = Color.FromArgb(25, 118, 210);
-            addButton.ForeColor = Color.White;
-            addButton.FlatStyle = FlatStyle.Flat;
-            addButton.FlatAppearance.BorderSize = 0;
-            addButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
-            addButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            addButton.Anchor = AnchorStyles.Right;
-            addButton.AccessibleName = "Добавить производителя";
-            addButton.AccessibleDescription = "Открывает форму для добавления нового производителя";
-            tableLayoutPanel.Controls.Add(addButton, 1, 0);
-
+            tableLayoutPanel.Controls.Add(separator, 0, 1);
+            tableLayoutPanel.Controls.Add(searchBox, 0, 2);
+            tableLayoutPanel.Controls.Add(buttonPanel, 1, 2);
+            tableLayoutPanel.Controls.Add(dataGridView, 0, 3);
+            tableLayoutPanel.Controls.Add(countLabel, 0, 4);
+            tableLayoutPanel.Dock = DockStyle.Fill;
+            tableLayoutPanel.Location = new Point(0, 0);
+            tableLayoutPanel.Name = "tableLayoutPanel";
+            tableLayoutPanel.Padding = new Padding(16);
+            tableLayoutPanel.RowCount = 5;
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 2F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
+            tableLayoutPanel.Size = new Size(1046, 600);
+            tableLayoutPanel.TabIndex = 0;
+            // 
+            // titleLabel
+            // 
+            titleLabel.AutoSize = true;
+            tableLayoutPanel.SetColumnSpan(titleLabel, 2);
+            titleLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            titleLabel.ForeColor = Color.FromArgb(33, 37, 41);
+            titleLabel.Location = new Point(19, 16);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(201, 32);
+            titleLabel.TabIndex = 0;
+            titleLabel.Text = "Производители";
+            // 
+            // separator
+            // 
+            separator.BackColor = Color.FromArgb(180, 180, 180);
+            tableLayoutPanel.SetColumnSpan(separator, 2);
+            separator.Dock = DockStyle.Fill;
+            separator.Location = new Point(19, 56);
+            separator.Margin = new Padding(3, 0, 3, 0);
+            separator.Name = "separator";
+            separator.Size = new Size(1008, 2);
+            separator.TabIndex = 1;
+            // 
             // searchBox
-            searchBox.Text = "Поиск...";
-            searchBox.ForeColor = Color.FromArgb(108, 117, 125);
-            searchBox.Size = new Size(250, 32);
-            searchBox.Font = new Font("Segoe UI", 10F, GraphicsUnit.Point);
+            // 
             searchBox.BorderStyle = BorderStyle.FixedSingle;
-            searchBox.GotFocus += (s, e) => { if (searchBox.Text == "Поиск...") { searchBox.Text = ""; searchBox.ForeColor = Color.Black; } };
-            searchBox.LostFocus += (s, e) => { if (string.IsNullOrEmpty(searchBox.Text)) { searchBox.Text = "Поиск..."; searchBox.ForeColor = Color.FromArgb(108, 117, 125); } };
-            searchBox.Anchor = AnchorStyles.Left;
-            searchBox.AccessibleName = "Поиск производителей";
-            searchBox.AccessibleDescription = "Введите название производителя для поиска";
-            tableLayoutPanel.Controls.Add(searchBox, 0, 1);
-
-            // countLabel
-            countLabel.Text = "Производителей: 0";
-            countLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            countLabel.ForeColor = Color.FromArgb(33, 37, 41);
-            countLabel.AutoSize = true;
-            countLabel.Anchor = AnchorStyles.Left;
-            countLabel.AccessibleName = "Количество производителей";
-            countLabel.AccessibleDescription = "Отображает общее количество производителей";
-            tableLayoutPanel.Controls.Add(countLabel, 1, 1);
-
+            searchBox.Font = new Font("Segoe UI", 10F);
+            searchBox.ForeColor = Color.Gray;
+            searchBox.Location = new Point(19, 73);
+            searchBox.Margin = new Padding(3, 15, 3, 3);
+            searchBox.Name = "searchBox";
+            searchBox.Size = new Size(238, 30);
+            searchBox.TabIndex = 2;
+            searchBox.Text = "Поиск...";
+            searchBox.Enter += SearchBox_Enter;
+            searchBox.Leave += SearchBox_Leave;
+            // 
+            // buttonPanel
+            // 
+            buttonPanel.Controls.Add(btnExport);
+            buttonPanel.Controls.Add(btnOpenFilterDialog);
+            buttonPanel.Controls.Add(btnColumns);
+            buttonPanel.Controls.Add(addButton);
+            buttonPanel.Dock = DockStyle.Right;
+            buttonPanel.Location = new Point(600, 73);
+            buttonPanel.Margin = new Padding(3, 15, 3, 3);
+            buttonPanel.Name = "buttonPanel";
+            buttonPanel.Size = new Size(427, 42);
+            buttonPanel.TabIndex = 3;
+            // 
             // btnOpenFilterDialog
-            btnOpenFilterDialog.Text = "Фильтры";
-            btnOpenFilterDialog.Size = new Size(100, 28);
+            // 
             btnOpenFilterDialog.BackColor = Color.FromArgb(25, 118, 210);
-            btnOpenFilterDialog.ForeColor = Color.White;
-            btnOpenFilterDialog.FlatStyle = FlatStyle.Flat;
             btnOpenFilterDialog.FlatAppearance.BorderSize = 0;
             btnOpenFilterDialog.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
-            btnOpenFilterDialog.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            btnOpenFilterDialog.Anchor = AnchorStyles.Left;
-            btnOpenFilterDialog.AccessibleName = "Открыть фильтры";
-            btnOpenFilterDialog.AccessibleDescription = "Открывает окно для фильтрации производителей";
-            tableLayoutPanel.Controls.Add(btnOpenFilterDialog, 0, 2);
-
-            // btnRefresh
-            btnRefresh.Text = "Обновить";
-            btnRefresh.Size = new Size(100, 28);
-            btnRefresh.BackColor = Color.FromArgb(108, 117, 125);
-            btnRefresh.ForeColor = Color.White;
-            btnRefresh.FlatStyle = FlatStyle.Flat;
-            btnRefresh.FlatAppearance.BorderSize = 0;
-            btnRefresh.FlatAppearance.MouseOverBackColor = Color.FromArgb(130, 140, 150);
-            btnRefresh.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            btnRefresh.Anchor = AnchorStyles.Left;
-            btnRefresh.AccessibleName = "Обновить данные";
-            btnRefresh.AccessibleDescription = "Перезагружает список производителей";
-            tableLayoutPanel.Controls.Add(btnRefresh, 1, 2);
-
+            btnOpenFilterDialog.FlatStyle = FlatStyle.Flat;
+            btnOpenFilterDialog.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnOpenFilterDialog.ForeColor = Color.White;
+            btnOpenFilterDialog.Location = new Point(109, 3);
+            btnOpenFilterDialog.Name = "btnOpenFilterDialog";
+            btnOpenFilterDialog.Size = new Size(100, 34);
+            btnOpenFilterDialog.TabIndex = 1;
+            btnOpenFilterDialog.Text = "Фильтры";
+            btnOpenFilterDialog.UseVisualStyleBackColor = false;
+            btnOpenFilterDialog.Click += BtnOpenFilterDialog_Click;
+            // 
+            // btnColumns
+            // 
+            btnColumns.BackColor = Color.FromArgb(25, 118, 210);
+            btnColumns.FlatAppearance.BorderSize = 0;
+            btnColumns.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnColumns.FlatStyle = FlatStyle.Flat;
+            btnColumns.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnColumns.ForeColor = Color.White;
+            btnColumns.Location = new Point(215, 3);
+            btnColumns.Name = "btnColumns";
+            btnColumns.Size = new Size(100, 34);
+            btnColumns.TabIndex = 2;
+            btnColumns.Text = "Столбцы";
+            btnColumns.UseVisualStyleBackColor = false;
+            btnColumns.Click += BtnColumns_Click;
+            // 
+            // btnExport
+            // 
+            btnExport.BackColor = Color.FromArgb(25, 118, 210);
+            btnExport.FlatAppearance.BorderSize = 0;
+            btnExport.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnExport.FlatStyle = FlatStyle.Flat;
+            btnExport.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnExport.ForeColor = Color.White;
+            btnExport.Location = new Point(3, 3);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(100, 34);
+            btnExport.TabIndex = 3;
+            btnExport.Text = "Экспорт";
+            btnExport.UseVisualStyleBackColor = false;
+            btnExport.Click += BtnExport_Click;
+            // 
+            // addButton
+            // 
+            addButton.BackColor = Color.FromArgb(40, 167, 69);
+            addButton.FlatAppearance.BorderSize = 0;
+            addButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 187, 89);
+            addButton.FlatStyle = FlatStyle.Flat;
+            addButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            addButton.ForeColor = Color.White;
+            addButton.Location = new Point(321, 3);
+            addButton.Name = "addButton";
+            addButton.Size = new Size(100, 34);
+            addButton.TabIndex = 0;
+            addButton.Text = "Добавить";
+            addButton.UseVisualStyleBackColor = false;
+            addButton.Click += AddButton_Click;
+            // 
             // dataGridView
+            // 
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(250, 250, 250);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle1.ForeColor = Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(200, 220, 255);
+            dataGridViewCellStyle1.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
+            dataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView.BackgroundColor = Color.White;
             dataGridView.BorderStyle = BorderStyle.None;
-            dataGridView.RowHeadersVisible = false;
-            dataGridView.AllowUserToAddRows = false;
-            dataGridView.ReadOnly = true;
-            dataGridView.Dock = DockStyle.Fill;
-            dataGridView.EnableHeadersVisualStyles = false;
-            dataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(240, 243, 245);
-            dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(33, 37, 41);
-            dataGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridView.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridView.DefaultCellStyle.ForeColor = Color.FromArgb(33, 37, 41);
-            dataGridView.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 220, 255);
-            dataGridView.DefaultCellStyle.SelectionForeColor = Color.Black;
-            dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(250, 250, 250);
-            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView.AutoGenerateColumns = false;
-            dataGridView.AccessibleName = "Таблица производителей";
-            dataGridView.AccessibleDescription = "Отображает список производителей с возможностью редактирования и удаления";
-            tableLayoutPanel.Controls.Add(dataGridView, 0, 3);
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(240, 243, 245);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle2.ForeColor = Color.FromArgb(33, 37, 41);
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(200, 220, 255);
+            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             tableLayoutPanel.SetColumnSpan(dataGridView, 2);
-
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.White;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(200, 220, 255);
+            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dataGridView.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.Location = new Point(19, 121);
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.RowHeadersVisible = false;
+            dataGridView.RowHeadersWidth = 51;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dataGridView.Size = new Size(1008, 417);
+            dataGridView.TabIndex = 5;
+            dataGridView.CellClick += DataGridView_CellClick;
+            dataGridView.ColumnHeaderMouseClick += DataGridView_ColumnHeaderMouseClick;
+            // 
+            // countLabel
+            // 
+            countLabel.AutoSize = true;
+            countLabel.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            countLabel.ForeColor = Color.FromArgb(33, 37, 41);
+            countLabel.Location = new Point(19, 555);
+            countLabel.Margin = new Padding(3, 15, 3, 0);
+            countLabel.Name = "countLabel";
+            countLabel.Size = new Size(192, 25);
+            countLabel.TabIndex = 4;
+            countLabel.Text = "Производителей: 0";
+            // 
             // ManufacturerControl
+            // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(245, 245, 245);
             Controls.Add(tableLayoutPanel);
-            MinimumSize = new Size(400, 300);
-            Size = new Size(800, 600);
             Name = "ManufacturerControl";
+            Size = new Size(1046, 600);
             tableLayoutPanel.ResumeLayout(false);
+            tableLayoutPanel.PerformLayout();
+            buttonPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             ResumeLayout(false);
         }
 
         private TableLayoutPanel tableLayoutPanel;
         private Label titleLabel;
-        private Button addButton;
+        private Panel separator;
         private TextBox searchBox;
+        private FlowLayoutPanel buttonPanel;
+        private Button addButton;
+        private Button btnColumns;
+        private Button btnOpenFilterDialog;
+        private Button btnExport;
         private Label countLabel;
         private DataGridView dataGridView;
-        private Button btnOpenFilterDialog;
-        private Button btnRefresh;
+        private ToolTip toolTip;
     }
 }

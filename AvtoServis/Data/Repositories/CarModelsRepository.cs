@@ -1,11 +1,8 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 
-namespace AvtoServis.Data.Repositories
+namespace AvtoServis.Data
 {
     public class CarModelsRepository : ICarModelsRepository
     {
@@ -24,10 +21,11 @@ namespace AvtoServis.Data.Repositories
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        @"SELECT cm.Id, cm.CarBrandId, cm.Model, cm.Year, cb.CarBrandName 
-                          FROM CarModels cm 
-                          INNER JOIN CarBrand cb ON cm.CarBrandId = cb.Id", connection);
+                    var query = @"
+                        SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
+                        FROM CarModels cm
+                        JOIN CarBrand cb ON cm.CarBrandId = cb.Id";
+                    using (var command = new SqlCommand(query, connection))
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -35,310 +33,222 @@ namespace AvtoServis.Data.Repositories
                             models.Add(new CarModel
                             {
                                 Id = reader.GetInt32(0),
-                                CarBrandId = reader.GetInt32(1),
-                                Model = reader.GetString(2),
-                                Year = reader.GetInt32(3),
+                                Model = reader.GetString(1),
+                                Year = reader.GetInt32(2),
+                                CarBrandId = reader.GetInt32(3),
                                 CarBrandName = reader.GetString(4)
                             });
                         }
                     }
                 }
-                Debug.WriteLine($"GetAll: Загружено {models.Count} моделей автомобилей.");
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"GetAll SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка в базе данных.", ex);
+                System.Diagnostics.Debug.WriteLine($"GetAll: Retrieved {models.Count} car models.");
+                return models;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetAll Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                System.Diagnostics.Debug.WriteLine($"GetAll Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw new Exception("Ошибка при получении списка моделей.", ex);
             }
-            return models;
         }
 
-        public CarModel GetById(int id)
+        public void Add(CarModel model)
         {
-            if (id <= 0)
-                throw new ArgumentException("Некорректный ID.");
-
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        @"SELECT cm.Id, cm.CarBrandId, cm.Model, cm.Year, cb.CarBrandName 
-                          FROM CarModels cm 
-                          INNER JOIN CarBrand cb ON cm.CarBrandId = cb.Id 
-                          WHERE cm.Id = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    var query = "INSERT INTO CarModels (Model, Year, CarBrandId) VALUES (@Model, @Year, @CarBrandId); SELECT SCOPE_IDENTITY();";
+                    using (var command = new SqlCommand(query, connection))
                     {
-                        if (reader.Read())
-                        {
-                            return new CarModel
-                            {
-                                Id = reader.GetInt32(0),
-                                CarBrandId = reader.GetInt32(1),
-                                Model = reader.GetString(2),
-                                Year = reader.GetInt32(3),
-                                CarBrandName = reader.GetString(4)
-                            };
-                        }
-                        return null;
+                        command.Parameters.AddWithValue("@Model", model.Model);
+                        command.Parameters.AddWithValue("@Year", model.Year);
+                        command.Parameters.AddWithValue("@CarBrandId", model.CarBrandId);
+                        model.Id = Convert.ToInt32(command.ExecuteScalar());
                     }
                 }
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"GetById SQL Ошибка: {ex.Message}");
-                throw new Exception($"Модель с ID {id} не найдена.", ex);
+                System.Diagnostics.Debug.WriteLine($"Add: Added car model '{model.Model}' with ID {model.Id}.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetById Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
-        }
-
-        public void Add(CarModel entity)
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var command = new SqlCommand(
-                        @"INSERT INTO CarModels (CarBrandId, Model, Year) 
-                          VALUES (@CarBrandId, @Model, @Year); 
-                          SELECT SCOPE_IDENTITY();", connection);
-                    command.Parameters.AddWithValue("@CarBrandId", entity.CarBrandId);
-                    command.Parameters.AddWithValue("@Model", entity.Model);
-                    command.Parameters.AddWithValue("@Year", entity.Year);
-                    var newId = Convert.ToInt32(command.ExecuteScalar());
-                    entity.Id = newId;
-                    Debug.WriteLine($"Add: Модель автомобиля добавлена с ID {newId}.");
-                }
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"Add SQL Ошибка: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Add Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 throw new Exception("Ошибка при добавлении модели.", ex);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Add Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
         }
 
-        public void Update(CarModel entity)
+        public void Update(CarModel model)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            if (entity.Id <= 0)
-                throw new ArgumentException("Некорректный ID.");
-
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        @"UPDATE CarModels 
-                          SET CarBrandId = @CarBrandId, Model = @Model, Year = @Year 
-                          WHERE Id = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", entity.Id);
-                    command.Parameters.AddWithValue("@CarBrandId", entity.CarBrandId);
-                    command.Parameters.AddWithValue("@Model", entity.Model);
-                    command.Parameters.AddWithValue("@Year", entity.Year);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    if (rowsAffected == 0)
-                        throw new Exception($"Модель с ID {entity.Id} не найдена.");
-                    Debug.WriteLine($"Update: Модель автомобиля обновлена с ID {entity.Id}.");
+                    var query = "UPDATE CarModels SET Model = @Model, Year = @Year, CarBrandId = @CarBrandId WHERE Id = @Id";
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", model.Id);
+                        command.Parameters.AddWithValue("@Model", model.Model);
+                        command.Parameters.AddWithValue("@Year", model.Year);
+                        command.Parameters.AddWithValue("@CarBrandId", model.CarBrandId);
+                        command.ExecuteNonQuery();
+                    }
                 }
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"Update SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при обновлении модели.", ex);
+                System.Diagnostics.Debug.WriteLine($"Update: Updated car model '{model.Model}' with ID {model.Id}.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Update Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                System.Diagnostics.Debug.WriteLine($"Update Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw new Exception("Ошибка при обновлении модели.", ex);
             }
         }
 
         public void Delete(int id)
         {
-            if (id <= 0)
-                throw new ArgumentException("Некорректный ID.");
-
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        "DELETE FROM CarModels WHERE Id = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", id);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    if (rowsAffected == 0)
-                        throw new Exception($"Модель с ID {id} не найдена.");
-                    Debug.WriteLine($"Delete: Модель автомобиля удалена с ID {id}.");
+                    var query = "DELETE FROM CarModels WHERE Id = @Id";
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+                        command.ExecuteNonQuery();
+                    }
                 }
+                System.Diagnostics.Debug.WriteLine($"Delete: Deleted car model with ID {id}.");
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"Delete SQL Ошибка: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Delete Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 throw new Exception("Ошибка при удалении модели.", ex);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Delete Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
         }
 
-        public List<CarModel> SearchByModel(string searchText)
-        {
-            if (string.IsNullOrWhiteSpace(searchText))
-                throw new ArgumentException("Поисковый запрос не должен быть пустым.");
+        //public List<CarModel> SearchByModel(string model)
+        //{
+        //    var models = new List<CarModel>();
+        //    try
+        //    {
+        //        using (var connection = new SqlConnection(_connectionString))
+        //        {
+        //            connection.Open();
+        //            var query = @"
+        //                SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
+        //                FROM CarModels cm
+        //                JOIN CarBrands cb ON cm.CarBrandId = cb.Id
+        //                WHERE cm.Model LIKE @Model";
+        //            using (var command = new SqlCommand(query, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@Model", $"%{model}%");
+        //                using (var reader = command.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        models.Add(new CarModel
+        //                        {
+        //                            Id = reader.GetInt32(0),
+        //                            Model = reader.GetString(1),
+        //                            Year = reader.GetInt32(2),
+        //                            CarBrandId = reader.GetInt32(3),
+        //                            CarBrandName = reader.GetString(4)
+        //                        });
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        System.Diagnostics.Debug.WriteLine($"SearchByModel: Found {models.Count} models matching '{model}'.");
+        //        return models;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine($"SearchByModel Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+        //        throw new Exception("Ошибка при поиске моделей.", ex);
+        //    }
+        //}
 
-            var models = new List<CarModel>();
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var command = new SqlCommand(
-                        @"SELECT cm.Id, cm.CarBrandId, cm.Model, cm.Year, cb.CarBrandName 
-                          FROM CarModels cm 
-                          INNER JOIN CarBrand cb ON cm.CarBrandId = cb.Id 
-                          WHERE cm.Model LIKE @SearchText", connection);
-                    command.Parameters.AddWithValue("@SearchText", $"%{searchText}%");
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            models.Add(new CarModel
-                            {
-                                Id = reader.GetInt32(0),
-                                CarBrandId = reader.GetInt32(1),
-                                Model = reader.GetString(2),
-                                Year = reader.GetInt32(3),
-                                CarBrandName = reader.GetString(4)
-                            });
-                        }
-                    }
-                }
-                Debug.WriteLine($"SearchByModel: Найдено {models.Count} моделей для запроса '{searchText}'.");
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"SearchByModel SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при поиске.", ex);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"SearchByModel Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
-            return models;
-        }
+        //public List<CarModel> SearchByYear(int year)
+        //{
+        //    var models = new List<CarModel>();
+        //    try
+        //    {
+        //        using (var connection = new SqlConnection(_connectionString))
+        //        {
+        //            connection.Open();
+        //            var query = @"
+        //                SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
+        //                FROM CarModels cm
+        //                JOIN CarBrands cb ON cm.CarBrandId = cb.Id
+        //                WHERE cm.Year = @Year";
+        //            using (var command = new SqlCommand(query, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@Year", year);
+        //                using (var reader = command.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        models.Add(new CarModel
+        //                        {
+        //                            Id = reader.GetInt32(0),
+        //                            Model = reader.GetString(1),
+        //                            Year = reader.GetInt32(2),
+        //                            CarBrandId = reader.GetInt32(3),
+        //                            CarBrandName = reader.GetString(4)
+        //                        });
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        System.Diagnostics.Debug.WriteLine($"SearchByYear: Found {models.Count} models for year {year}.");
+        //        return models;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine($"SearchByYear Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+        //        throw new Exception("Ошибка при поиске моделей по году.", ex);
+        //    }
+        //}
 
-        public List<CarModel> SearchByYear(int year)
-        {
-            var models = new List<CarModel>();
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var command = new SqlCommand(
-                        @"SELECT cm.Id, cm.CarBrandId, cm.Model, cm.Year, cb.CarBrandName 
-                          FROM CarModels cm 
-                          INNER JOIN CarBrand cb ON cm.CarBrandId = cb.Id 
-                          WHERE cm.Year = @Year", connection);
-                    command.Parameters.AddWithValue("@Year", year);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            models.Add(new CarModel
-                            {
-                                Id = reader.GetInt32(0),
-                                CarBrandId = reader.GetInt32(1),
-                                Model = reader.GetString(2),
-                                Year = reader.GetInt32(3),
-                                CarBrandName = reader.GetString(4)
-                            });
-                        }
-                    }
-                }
-                Debug.WriteLine($"SearchByYear: Найдено {models.Count} моделей для года {year}.");
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"SearchByYear SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при поиске по году.", ex);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"SearchByYear Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
-            return models;
-        }
-
-        public List<CarModel> FilterByBrand(int brandId)
-        {
-            var models = new List<CarModel>();
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var command = new SqlCommand(
-                        @"SELECT cm.Id, cm.CarBrandId, cm.Model, cm.Year, cb.CarBrandName 
-                          FROM CarModels cm 
-                          INNER JOIN CarBrand cb ON cm.CarBrandId = cb.Id 
-                          WHERE cm.CarBrandId = @BrandId", connection);
-                    command.Parameters.AddWithValue("@BrandId", brandId);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            models.Add(new CarModel
-                            {
-                                Id = reader.GetInt32(0),
-                                CarBrandId = reader.GetInt32(1),
-                                Model = reader.GetString(2),
-                                Year = reader.GetInt32(3),
-                                CarBrandName = reader.GetString(4)
-                            });
-                        }
-                    }
-                }
-                Debug.WriteLine($"FilterByBrand: Найдено {models.Count} моделей для марки ID {brandId}.");
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"FilterByBrand SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при фильтрации по марке.", ex);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"FilterByBrand Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
-            return models;
-        }
+        //public List<CarModel> FilterByBrand(int brandId)
+        //{
+        //    var models = new List<CarModel>();
+        //    try
+        //    {
+        //        using (var connection = new SqlConnection(_connectionString))
+        //        {
+        //            connection.Open();
+        //            var query = @"
+        //                SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
+        //                FROM CarModels cm
+        //                JOIN CarBrands cb ON cm.CarBrandId = cb.Id
+        //                WHERE cm.CarBrandId = @CarBrandId";
+        //            using (var command = new SqlCommand(query, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@CarBrandId", brandId);
+        //                using (var reader = command.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        models.Add(new CarModel
+        //                        {
+        //                            Id = reader.GetInt32(0),
+        //                            Model = reader.GetString(1),
+        //                            Year = reader.GetInt32(2),
+        //                            CarBrandId = reader.GetInt32(3),
+        //                            CarBrandName = reader.GetString(4)
+        //                        });
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        System.Diagnostics.Debug.WriteLine($"FilterByBrand: Found {models.Count} models for brand ID {brandId}.");
+        //        return models;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine($"FilterByBrand Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+        //        throw new Exception("Ошибка при фильтрации моделей по марке.", ex);
+        //    }
+        //}
     }
 }

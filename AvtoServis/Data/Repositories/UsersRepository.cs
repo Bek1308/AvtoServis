@@ -1,5 +1,5 @@
-﻿using AvtoServis.Model.Entities;
-using AvtoServis.Data.Configuration;
+﻿using AvtoServis.Data.Configuration;
+using AvtoServis.Model.Entities;
 using System.Data.SqlClient;
 
 namespace AvtoServis.Data.Repositories

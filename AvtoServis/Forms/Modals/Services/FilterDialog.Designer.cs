@@ -15,212 +15,190 @@
 
         private void InitializeComponent()
         {
-            flowLayoutPanel = new FlowLayoutPanel();
-            panelMinPrice = new Panel();
-            lblMinPrice = new Label();
-            txtPriceMin = new TextBox();
-            panelMaxPrice = new Panel();
-            lblMaxPrice = new Label();
-            txtPriceMax = new TextBox();
-            panelHighPrice = new Panel();
-            chkHighPrice = new CheckBox();
-            panelButtons = new Panel();
+            components = new System.ComponentModel.Container();
+            tableLayoutPanel = new TableLayoutPanel();
+            titleLabel = new Label();
+            separator = new Label();
+            flowLayoutFilters = new FlowLayoutPanel();
+            btnReset = new Button();
             btnApply = new Button();
-            btnCancel = new Button();
-            flowLayoutPanel.SuspendLayout();
-            panelMinPrice.SuspendLayout();
-            panelMaxPrice.SuspendLayout();
-            panelHighPrice.SuspendLayout();
-            panelButtons.SuspendLayout();
+            lblError = new Label();
+            btnAddFilter = new Button();
+            toolTip = new ToolTip(components);
+            tableLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // flowLayoutPanel
+            // tableLayoutPanel
             // 
-            flowLayoutPanel.AutoSize = true;
-            flowLayoutPanel.BackColor = Color.FromArgb(245, 245, 245);
-            flowLayoutPanel.Controls.Add(panelMinPrice);
-            flowLayoutPanel.Controls.Add(panelMaxPrice);
-            flowLayoutPanel.Controls.Add(panelHighPrice);
-            flowLayoutPanel.Controls.Add(panelButtons);
-            flowLayoutPanel.Dock = DockStyle.Fill;
-            flowLayoutPanel.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel.Location = new Point(0, 0);
-            flowLayoutPanel.Name = "flowLayoutPanel";
-            flowLayoutPanel.Padding = new Padding(16);
-            flowLayoutPanel.Size = new Size(428, 226);
-            flowLayoutPanel.TabIndex = 0;
+            tableLayoutPanel.ColumnCount = 2;
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel.Controls.Add(titleLabel, 0, 0);
+            tableLayoutPanel.Controls.Add(separator, 0, 1);
+            tableLayoutPanel.Controls.Add(flowLayoutFilters, 0, 3);
+            tableLayoutPanel.Controls.Add(btnReset, 0, 5);
+            tableLayoutPanel.Controls.Add(btnApply, 1, 5);
+            tableLayoutPanel.Controls.Add(lblError, 0, 4);
+            tableLayoutPanel.Controls.Add(btnAddFilter, 0, 2);
+            tableLayoutPanel.Dock = DockStyle.Fill;
+            tableLayoutPanel.Location = new Point(0, 0);
+            tableLayoutPanel.Name = "tableLayoutPanel";
+            tableLayoutPanel.Padding = new Padding(16);
+            tableLayoutPanel.RowCount = 6;
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 35F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 2F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle());
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 31F));
+            tableLayoutPanel.Size = new Size(455, 560);
+            tableLayoutPanel.TabIndex = 0;
             // 
-            // panelMinPrice
+            // titleLabel
             // 
-            panelMinPrice.AutoSize = true;
-            panelMinPrice.Controls.Add(lblMinPrice);
-            panelMinPrice.Controls.Add(txtPriceMin);
-            panelMinPrice.Location = new Point(19, 19);
-            panelMinPrice.Name = "panelMinPrice";
-            panelMinPrice.Size = new Size(193, 40);
-            panelMinPrice.TabIndex = 0;
+            titleLabel.AccessibleDescription = "Заголовок фильтров услуг";
+            titleLabel.AccessibleName = "Фильтры услуг";
+            titleLabel.Anchor = AnchorStyles.Left;
+            titleLabel.AutoSize = true;
+            tableLayoutPanel.SetColumnSpan(titleLabel, 2);
+            titleLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            titleLabel.ForeColor = Color.FromArgb(33, 37, 41);
+            titleLabel.Location = new Point(19, 17);
+            titleLabel.Name = "titleLabel";
+            titleLabel.Size = new Size(190, 32);
+            titleLabel.TabIndex = 0;
+            titleLabel.Text = "Фильтры услуг";
             // 
-            // lblMinPrice
+            // separator
             // 
-            lblMinPrice.AccessibleDescription = "Метка для поля минимальной цены";
-            lblMinPrice.AccessibleName = "Минимальная цена";
-            lblMinPrice.AutoSize = true;
-            lblMinPrice.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblMinPrice.ForeColor = Color.FromArgb(33, 37, 41);
-            lblMinPrice.Location = new Point(0, 10);
-            lblMinPrice.Name = "lblMinPrice";
-            lblMinPrice.Size = new Size(90, 23);
-            lblMinPrice.TabIndex = 0;
-            lblMinPrice.Text = "Min Price:";
+            separator.AccessibleDescription = "Разделительная линия";
+            separator.AccessibleName = "Разделитель";
+            separator.BackColor = Color.FromArgb(108, 117, 125);
+            tableLayoutPanel.SetColumnSpan(separator, 2);
+            separator.Location = new Point(19, 51);
+            separator.Name = "separator";
+            separator.Size = new Size(396, 2);
+            separator.TabIndex = 1;
             // 
-            // txtPriceMin
+            // flowLayoutFilters
             // 
-            txtPriceMin.AccessibleDescription = "Введите минимальную цену для фильтрации";
-            txtPriceMin.AccessibleName = "Поле минимальной цены";
-            txtPriceMin.BorderStyle = BorderStyle.FixedSingle;
-            txtPriceMin.Location = new Point(100, 7);
-            txtPriceMin.Name = "txtPriceMin";
-            txtPriceMin.Size = new Size(90, 30);
-            txtPriceMin.TabIndex = 1;
-            txtPriceMin.KeyPress += TxtPriceMin_KeyPress;
+            flowLayoutFilters.AccessibleDescription = "Панель для добавления фильтров";
+            flowLayoutFilters.AccessibleName = "Фильтры";
+            flowLayoutFilters.AutoSize = true;
+            flowLayoutFilters.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            tableLayoutPanel.SetColumnSpan(flowLayoutFilters, 2);
+            flowLayoutFilters.Location = new Point(19, 121);
+            flowLayoutFilters.Name = "flowLayoutFilters";
+            flowLayoutFilters.Size = new Size(0, 0);
+            flowLayoutFilters.TabIndex = 3;
             // 
-            // panelMaxPrice
+            // btnReset
             // 
-            panelMaxPrice.AutoSize = true;
-            panelMaxPrice.Controls.Add(lblMaxPrice);
-            panelMaxPrice.Controls.Add(txtPriceMax);
-            panelMaxPrice.Location = new Point(19, 65);
-            panelMaxPrice.Name = "panelMaxPrice";
-            panelMaxPrice.Size = new Size(193, 40);
-            panelMaxPrice.TabIndex = 1;
-            // 
-            // lblMaxPrice
-            // 
-            lblMaxPrice.AccessibleDescription = "Метка для поля максимальной цены";
-            lblMaxPrice.AccessibleName = "Максимальная цена";
-            lblMaxPrice.AutoSize = true;
-            lblMaxPrice.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblMaxPrice.ForeColor = Color.FromArgb(33, 37, 41);
-            lblMaxPrice.Location = new Point(0, 10);
-            lblMaxPrice.Name = "lblMaxPrice";
-            lblMaxPrice.Size = new Size(93, 23);
-            lblMaxPrice.TabIndex = 0;
-            lblMaxPrice.Text = "Max Price:";
-            // 
-            // txtPriceMax
-            // 
-            txtPriceMax.AccessibleDescription = "Введите максимальную цену для фильтрации";
-            txtPriceMax.AccessibleName = "Поле максимальной цены";
-            txtPriceMax.BorderStyle = BorderStyle.FixedSingle;
-            txtPriceMax.Location = new Point(100, 7);
-            txtPriceMax.Name = "txtPriceMax";
-            txtPriceMax.Size = new Size(90, 30);
-            txtPriceMax.TabIndex = 1;
-            txtPriceMax.KeyPress += TxtPriceMax_KeyPress;
-            // 
-            // panelHighPrice
-            // 
-            panelHighPrice.AutoSize = true;
-            panelHighPrice.Controls.Add(chkHighPrice);
-            panelHighPrice.Location = new Point(19, 111);
-            panelHighPrice.Name = "panelHighPrice";
-            panelHighPrice.Size = new Size(151, 40);
-            panelHighPrice.TabIndex = 2;
-            // 
-            // chkHighPrice
-            // 
-            chkHighPrice.AccessibleDescription = "Фильтр для услуг с высокой ценой";
-            chkHighPrice.AccessibleName = "Высокая цена";
-            chkHighPrice.AutoSize = true;
-            chkHighPrice.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            chkHighPrice.Location = new Point(0, 10);
-            chkHighPrice.Name = "chkHighPrice";
-            chkHighPrice.Size = new Size(148, 27);
-            chkHighPrice.TabIndex = 0;
-            chkHighPrice.Text = "Высокая цена";
-            // 
-            // panelButtons
-            // 
-            panelButtons.AutoSize = true;
-            panelButtons.Controls.Add(btnApply);
-            panelButtons.Controls.Add(btnCancel);
-            panelButtons.Location = new Point(19, 157);
-            panelButtons.Name = "panelButtons";
-            panelButtons.Size = new Size(363, 43);
-            panelButtons.TabIndex = 3;
+            btnReset.AccessibleDescription = "Сбрасывает все фильтры";
+            btnReset.AccessibleName = "Сбросить";
+            btnReset.AutoSize = true;
+            btnReset.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnReset.BackColor = Color.FromArgb(108, 117, 125);
+            btnReset.FlatAppearance.BorderSize = 0;
+            btnReset.FlatAppearance.MouseOverBackColor = Color.FromArgb(130, 140, 150);
+            btnReset.FlatStyle = FlatStyle.Flat;
+            btnReset.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnReset.ForeColor = Color.White;
+            btnReset.Location = new Point(19, 516);
+            btnReset.MinimumSize = new Size(100, 33);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(100, 33);
+            btnReset.TabIndex = 5;
+            btnReset.Text = "Сбросить";
+            btnReset.UseVisualStyleBackColor = false;
+            btnReset.Click += BtnReset_Click;
             // 
             // btnApply
             // 
-            btnApply.AccessibleDescription = "Применяет фильтр по ценам";
-            btnApply.AccessibleName = "Применить фильтр";
-            btnApply.BackColor = Color.FromArgb(25, 118, 210);
+            btnApply.AccessibleDescription = "Применяет выбранные фильтры";
+            btnApply.AccessibleName = "Применить";
+            btnApply.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnApply.AutoSize = true;
+            btnApply.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnApply.BackColor = Color.FromArgb(40, 167, 69);
             btnApply.FlatAppearance.BorderSize = 0;
-            btnApply.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnApply.FlatAppearance.MouseOverBackColor = Color.FromArgb(60, 187, 89);
             btnApply.FlatStyle = FlatStyle.Flat;
             btnApply.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnApply.ForeColor = Color.White;
-            btnApply.Location = new Point(150, 6);
+            btnApply.Location = new Point(320, 516);
+            btnApply.MinimumSize = new Size(100, 33);
             btnApply.Name = "btnApply";
-            btnApply.Size = new Size(100, 34);
-            btnApply.TabIndex = 0;
+            btnApply.Size = new Size(116, 33);
+            btnApply.TabIndex = 6;
             btnApply.Text = "Применить";
             btnApply.UseVisualStyleBackColor = false;
             btnApply.Click += BtnApply_Click;
             // 
-            // btnCancel
+            // lblError
             // 
-            btnCancel.AccessibleDescription = "Закрывает окно без применения фильтров";
-            btnCancel.AccessibleName = "Отменить";
-            btnCancel.BackColor = Color.FromArgb(220, 53, 69);
-            btnCancel.FlatAppearance.BorderSize = 0;
-            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 100, 100);
-            btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(260, 6);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(100, 34);
-            btnCancel.TabIndex = 1;
-            btnCancel.Text = "Отмена";
-            btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += BtnCancel_Click;
+            lblError.AccessibleDescription = "Отображает ошибки фильтрации";
+            lblError.AccessibleName = "Сообщение об ошибке";
+            lblError.AutoSize = true;
+            tableLayoutPanel.SetColumnSpan(lblError, 2);
+            lblError.Font = new Font("Segoe UI", 9F);
+            lblError.ForeColor = Color.FromArgb(220, 53, 69);
+            lblError.Location = new Point(19, 493);
+            lblError.Name = "lblError";
+            lblError.Size = new Size(0, 20);
+            lblError.TabIndex = 4;
+            lblError.Visible = false;
+            // 
+            // btnAddFilter
+            // 
+            btnAddFilter.AccessibleDescription = "Добавляет новый фильтр";
+            btnAddFilter.AccessibleName = "Добавить фильтр";
+            btnAddFilter.Anchor = AnchorStyles.Left;
+            btnAddFilter.AutoSize = true;
+            btnAddFilter.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnAddFilter.BackColor = Color.FromArgb(25, 118, 210);
+            btnAddFilter.FlatAppearance.BorderSize = 0;
+            btnAddFilter.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnAddFilter.FlatStyle = FlatStyle.Flat;
+            btnAddFilter.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnAddFilter.ForeColor = Color.White;
+            btnAddFilter.Location = new Point(19, 77);
+            btnAddFilter.Margin = new Padding(3, 20, 3, 3);
+            btnAddFilter.MinimumSize = new Size(100, 33);
+            btnAddFilter.Name = "btnAddFilter";
+            btnAddFilter.Size = new Size(101, 33);
+            btnAddFilter.TabIndex = 2;
+            btnAddFilter.Text = "Добавить";
+            btnAddFilter.UseVisualStyleBackColor = false;
+            btnAddFilter.Click += BtnAddFilter_Click;
             // 
             // FilterDialog
             // 
+            AutoScaleDimensions = new SizeF(9F, 23F);
+            AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(245, 245, 245);
-            ClientSize = new Size(428, 226);
-            Controls.Add(flowLayoutPanel);
+            ClientSize = new Size(455, 560);
+            Controls.Add(tableLayoutPanel);
             Font = new Font("Segoe UI", 10F);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FilterDialog";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Фильтры";
-            flowLayoutPanel.ResumeLayout(false);
-            flowLayoutPanel.PerformLayout();
-            panelMinPrice.ResumeLayout(false);
-            panelMinPrice.PerformLayout();
-            panelMaxPrice.ResumeLayout(false);
-            panelMaxPrice.PerformLayout();
-            panelHighPrice.ResumeLayout(false);
-            panelHighPrice.PerformLayout();
-            panelButtons.ResumeLayout(false);
+            Text = "Фильтры услуг";
+            tableLayoutPanel.ResumeLayout(false);
+            tableLayoutPanel.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
-        private FlowLayoutPanel flowLayoutPanel;
-        private TextBox txtPriceMin;
-        private TextBox txtPriceMax;
-        private CheckBox chkHighPrice;
-        private Button btnApply;
-        private Button btnCancel;
-        private Panel panelMinPrice;
-        private Label lblMinPrice;
-        private Panel panelMaxPrice;
-        private Label lblMaxPrice;
-        private Panel panelHighPrice;
-        private Panel panelButtons;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private System.Windows.Forms.Label titleLabel;
+        private System.Windows.Forms.Label separator;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutFilters;
+        private System.Windows.Forms.Label lblError;
+        private System.Windows.Forms.Button btnAddFilter;
+        private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

@@ -1,11 +1,8 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 
-namespace AvtoServis.Data.Repositories
+namespace AvtoServis.Data
 {
     public class CarBrandRepository : ICarBrandRepository
     {
@@ -24,7 +21,8 @@ namespace AvtoServis.Data.Repositories
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand("SELECT Id, CarBrandName FROM CarBrand", connection);
+                    var query = "SELECT Id, CarBrandName FROM CarBrand";
+                    using (var command = new SqlCommand(query, connection))
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -37,192 +35,119 @@ namespace AvtoServis.Data.Repositories
                         }
                     }
                 }
-                Debug.WriteLine($"GetAll: Загружено {brands.Count} марок автомобилей.");
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"GetAll SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка в базе данных.", ex);
+                System.Diagnostics.Debug.WriteLine($"GetAll: Retrieved {brands.Count} car brands.");
+                return brands;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetAll Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                System.Diagnostics.Debug.WriteLine($"GetAll Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw new Exception("Ошибка при получении списка марок.", ex);
             }
-            return brands;
         }
 
-        public CarBrand GetById(int id)
+        public void Add(CarBrand brand)
         {
-            if (id <= 0)
-                throw new ArgumentException("Некорректный ID.");
-
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand("SELECT Id, CarBrandName FROM CarBrand WHERE Id = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    var query = "INSERT INTO CarBrands (CarBrandName) VALUES (@CarBrandName); SELECT SCOPE_IDENTITY();";
+                    using (var command = new SqlCommand(query, connection))
                     {
-                        if (reader.Read())
-                        {
-                            return new CarBrand
-                            {
-                                Id = reader.GetInt32(0),
-                                CarBrandName = reader.GetString(1)
-                            };
-                        }
-                        return null;
+                        command.Parameters.AddWithValue("@CarBrandName", brand.CarBrandName);
+                        brand.Id = Convert.ToInt32(command.ExecuteScalar());
                     }
                 }
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"GetById SQL Ошибка: {ex.Message}");
-                throw new Exception($"Марка с ID {id} не найдена.", ex);
+                System.Diagnostics.Debug.WriteLine($"Add: Added car brand '{brand.CarBrandName}' with ID {brand.Id}.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetById Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
-        }
-
-        public void Add(CarBrand entity)
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var command = new SqlCommand(
-                        @"INSERT INTO CarBrand (CarBrandName) VALUES (@CarBrandName); SELECT SCOPE_IDENTITY();", connection);
-                    command.Parameters.AddWithValue("@CarBrandName", entity.CarBrandName);
-                    var newId = Convert.ToInt32(command.ExecuteScalar());
-                    entity.Id = newId;
-                    Debug.WriteLine($"Add: Марка автомобиля добавлена с ID {newId}.");
-                }
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"Add SQL Ошибка: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Add Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 throw new Exception("Ошибка при добавлении марки.", ex);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Add Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
-            }
         }
 
-        public void Update(CarBrand entity)
+        public void Update(CarBrand brand)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            if (entity.Id <= 0)
-                throw new ArgumentException("Некорректный ID.");
-
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        @"UPDATE CarBrand SET CarBrandName = @CarBrandName WHERE Id = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", entity.Id);
-                    command.Parameters.AddWithValue("@CarBrandName", entity.CarBrandName);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    if (rowsAffected == 0)
-                        throw new Exception($"Марка с ID {entity.Id} не найдена.");
-                    Debug.WriteLine($"Update: Марка автомобиля обновлена с ID {entity.Id}.");
+                    var query = "UPDATE CarBrands SET CarBrandName = @CarBrandName WHERE Id = @Id";
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", brand.Id);
+                        command.Parameters.AddWithValue("@CarBrandName", brand.CarBrandName);
+                        command.ExecuteNonQuery();
+                    }
                 }
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"Update SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при обновлении марки.", ex);
+                System.Diagnostics.Debug.WriteLine($"Update: Updated car brand '{brand.CarBrandName}' with ID {brand.Id}.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Update Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                System.Diagnostics.Debug.WriteLine($"Update Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw new Exception("Ошибка при обновлении марки.", ex);
             }
         }
 
         public void Delete(int id)
         {
-            if (id <= 0)
-                throw new ArgumentException("Некорректный ID.");
-
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand("DELETE FROM CarBrand WHERE Id = @Id", connection);
-                    command.Parameters.AddWithValue("@Id", id);
-                    int rowsAffected = command.ExecuteNonQuery();
-                    if (rowsAffected == 0)
-                        throw new Exception($"Марка с ID {id} не найдена.");
-                    Debug.WriteLine($"Delete: Марка автомобиля удалена с ID {id}.");
+                    var query = "DELETE FROM CarBrands WHERE Id = @Id";
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+                        command.ExecuteNonQuery();
+                    }
                 }
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"Delete SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при удалении марки.", ex);
+                System.Diagnostics.Debug.WriteLine($"Delete: Deleted car brand with ID {id}.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Delete Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                System.Diagnostics.Debug.WriteLine($"Delete Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw new Exception("Ошибка при удалении марки.", ex);
             }
         }
 
-        public List<CarBrand> Search(string searchText)
+        public List<CarBrand> SearchByName(string name)
         {
-            if (string.IsNullOrWhiteSpace(searchText))
-                throw new ArgumentException("Поисковый запрос не должен быть пустым.");
-
             var brands = new List<CarBrand>();
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    var command = new SqlCommand(
-                        "SELECT Id, CarBrandName FROM CarBrand WHERE CarBrandName LIKE @SearchText", connection);
-                    command.Parameters.AddWithValue("@SearchText", $"%{searchText}%");
-                    using (var reader = command.ExecuteReader())
+                    var query = "SELECT Id, CarBrandName FROM CarBrands WHERE CarBrandName LIKE @Name";
+                    using (var command = new SqlCommand(query, connection))
                     {
-                        while (reader.Read())
+                        command.Parameters.AddWithValue("@Name", $"%{name}%");
+                        using (var reader = command.ExecuteReader())
                         {
-                            brands.Add(new CarBrand
+                            while (reader.Read())
                             {
-                                Id = reader.GetInt32(0),
-                                CarBrandName = reader.GetString(1)
-                            });
+                                brands.Add(new CarBrand
+                                {
+                                    Id = reader.GetInt32(0),
+                                    CarBrandName = reader.GetString(1)
+                                });
+                            }
                         }
                     }
                 }
-                Debug.WriteLine($"Search: Найдено {brands.Count} марок для запроса '{searchText}'.");
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"Search SQL Ошибка: {ex.Message}");
-                throw new Exception("Ошибка при поиске.", ex);
+                System.Diagnostics.Debug.WriteLine($"SearchByName: Found {brands.Count} brands matching '{name}'.");
+                return brands;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Search Ошибка: {ex.Message}");
-                throw new Exception("Произошла неизвестная ошибка.", ex);
+                System.Diagnostics.Debug.WriteLine($"SearchByName Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw new Exception("Ошибка при поиске марок.", ex);
             }
-            return brands;
         }
     }
 }

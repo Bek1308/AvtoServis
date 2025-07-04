@@ -1,13 +1,11 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
 namespace AvtoServis.Data.Repositories
 {
-    public class ServicesRepository : IRepository<Service>
+    public class ServicesRepository : IServicesRepository
     {
         private readonly string _connectionString;
 
@@ -229,46 +227,46 @@ namespace AvtoServis.Data.Repositories
             return services;
         }
 
-        public List<Service> FilterByPrice(decimal minPrice, decimal maxPrice)
-        {
-            if (minPrice < 0 || maxPrice < minPrice)
-                throw new ArgumentException("Некорректный диапазон цен.");
+        //public List<Service> FilterByPrice(decimal minPrice, decimal maxPrice)
+        //{
+        //    if (minPrice < 0 || maxPrice < minPrice)
+        //        throw new ArgumentException("Некорректный диапазон цен.");
 
-            var services = new List<Service>();
-            try
-            {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    var command = new SqlCommand("SELECT ServiceID, Name, Price FROM Services WHERE Price BETWEEN @MinPrice AND @MaxPrice", connection);
-                    command.Parameters.AddWithValue("@MinPrice", minPrice);
-                    command.Parameters.AddWithValue("@MaxPrice", maxPrice);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            services.Add(new Service
-                            {
-                                ServiceID = reader.GetInt32(0),
-                                Name = reader.GetString(1),
-                                Price = reader.GetDecimal(2)
-                            });
-                        }
-                    }
-                }
-                Debug.WriteLine($"FilterByPrice: Found {services.Count} services between {minPrice} and {maxPrice}.");
-            }
-            catch (SqlException ex)
-            {
-                Debug.WriteLine($"FilterByPrice SQL Error: {ex.Message}");
-                throw new Exception("Ошибка базы данных при фильтрации услуг по цене.", ex);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"FilterByPrice Error: {ex.Message}");
-                throw new Exception("Неизвестная ошибка при фильтрации услуг по цене.", ex);
-            }
-            return services;
-        }
+        //    var services = new List<Service>();
+        //    try
+        //    {
+        //        using (var connection = new SqlConnection(_connectionString))
+        //        {
+        //            connection.Open();
+        //            var command = new SqlCommand("SELECT ServiceID, Name, Price FROM Services WHERE Price BETWEEN @MinPrice AND @MaxPrice", connection);
+        //            command.Parameters.AddWithValue("@MinPrice", minPrice);
+        //            command.Parameters.AddWithValue("@MaxPrice", maxPrice);
+        //            using (var reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    services.Add(new Service
+        //                    {
+        //                        ServiceID = reader.GetInt32(0),
+        //                        Name = reader.GetString(1),
+        //                        Price = reader.GetDecimal(2)
+        //                    });
+        //                }
+        //            }
+        //        }
+        //        Debug.WriteLine($"FilterByPrice: Found {services.Count} services between {minPrice} and {maxPrice}.");
+        //    }
+        //    catch (SqlException ex)
+        //    {
+        //        Debug.WriteLine($"FilterByPrice SQL Error: {ex.Message}");
+        //        throw new Exception("Ошибка базы данных при фильтрации услуг по цене.", ex);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"FilterByPrice Error: {ex.Message}");
+        //        throw new Exception("Неизвестная ошибка при фильтрации услуг по цене.", ex);
+        //    }
+        //    return services;
+        //}
     }
 }

@@ -1,133 +1,40 @@
 ﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
+using System.Text.RegularExpressions;
 
 namespace AvtoServis.Forms.Modals.Manufacturers
 {
-    public class ManufacturerDialog : Form
+    public partial class ManufacturerDialog : Form
     {
         private readonly ManufacturersViewModel _viewModel;
         private readonly int? _manufacturerId;
         private readonly bool _isDeleteMode;
-        private TableLayoutPanel tableLayoutPanel;
-        private Label lblName;
-        private TextBox txtName;
-        private Button btnSave;
-        private Button btnCancel;
+        private Manufacturer _manufacturer;
+        private System.Windows.Forms.Timer _errorTimer;
 
-        public ManufacturerDialog(ManufacturersViewModel viewModel, int? manufacturerId = null, bool isDeleteMode = false)
+        public ManufacturerDialog(ManufacturersViewModel viewModel, int? manufacturerId, bool isDeleteMode = false)
         {
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _manufacturerId = manufacturerId;
             _isDeleteMode = isDeleteMode;
             InitializeComponent();
-            InitializeData();
-        }
-
-        private void InitializeComponent()
-        {
-            Text = _isDeleteMode ? "Удаление производителя" : _manufacturerId.HasValue ? "Редактирование производителя" : "Добавление производителя";
-            FormBorderStyle = FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            StartPosition = FormStartPosition.CenterParent;
-            Size = new Size(400, _isDeleteMode ? 180 : 220);
-            BackColor = Color.FromArgb(245, 245, 245);
-            Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-
-            tableLayoutPanel = new TableLayoutPanel
-            {
-                ColumnCount = 2,
-                RowCount = _isDeleteMode ? 2 : 3,
-                Dock = DockStyle.Fill,
-                Padding = new Padding(16),
-                AutoSize = true
-            };
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            _errorTimer = new System.Windows.Forms.Timer { Interval = 3000 };
+            _errorTimer.Tick += ErrorTimer_Tick;
+            lblError.Visible = false;
+            panelError.Visible = false;
             if (!_isDeleteMode)
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-
-            if (_isDeleteMode)
             {
-                lblName = new Label
-                {
-                    Text = "Вы уверены?",
-                    AutoSize = true,
-                    Anchor = AnchorStyles.Left,
-                    ForeColor = Color.FromArgb(33, 37, 41),
-                    AccessibleName = "Подтверждение удаления",
-                    AccessibleDescription = "Подтверждение удаления производителя"
-                };
-                tableLayoutPanel.Controls.Add(lblName, 0, 0);
-                tableLayoutPanel.SetColumnSpan(lblName, 2);
+                LoadManufacturer();
             }
             else
             {
-                lblName = new Label
-                {
-                    Text = "Название:",
-                    AutoSize = true,
-                    Anchor = AnchorStyles.Left,
-                    ForeColor = Color.FromArgb(33, 37, 41),
-                    AccessibleName = "Название производителя",
-                    AccessibleDescription = "Метка для поля ввода названия производителя"
-                };
-                tableLayoutPanel.Controls.Add(lblName, 0, 0);
-
-                txtName = new TextBox
-                {
-                    Size = new Size(200, 27),
-                    BorderStyle = BorderStyle.FixedSingle,
-                    AccessibleName = "Поле названия производителя",
-                    AccessibleDescription = "Введите название производителя"
-                };
-                tableLayoutPanel.Controls.Add(txtName, 1, 0);
+                SetupDeleteModeUI();
             }
-
-            btnSave = new Button
-            {
-                Text = _isDeleteMode ? "Удалить" : "Сохранить",
-                Size = new Size(100, 28),
-                BackColor = _isDeleteMode ? Color.FromArgb(220, 53, 69) : Color.FromArgb(25, 118, 210),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                FlatAppearance = { BorderSize = 0, MouseOverBackColor = _isDeleteMode ? Color.FromArgb(255, 100, 100) : Color.FromArgb(50, 140, 230) },
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                AccessibleName = _isDeleteMode ? "Удалить производителя" : "Сохранить производителя",
-                AccessibleDescription = _isDeleteMode ? "Подтверждает удаление производителя" : "Сохраняет данные производителя"
-            };
-            btnSave.Click += BtnSave_Click;
-            tableLayoutPanel.Controls.Add(btnSave, 1, _isDeleteMode ? 1 : 2);
-
-            btnCancel = new Button
-            {
-                Text = "Отмена",
-                Size = new Size(100, 28),
-                BackColor = Color.FromArgb(108, 117, 125),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(130, 140, 150) },
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                AccessibleName = "Отменить",
-                AccessibleDescription = "Закрывает окно без сохранения изменений"
-            };
-            btnCancel.Click += (s, e) => Close();
-            tableLayoutPanel.Controls.Add(btnCancel, 0, _isDeleteMode ? 1 : 2);
-
-            Controls.Add(tableLayoutPanel);
-
-            AddToolTips();
+            SetToolTips();
         }
 
-        private void AddToolTips()
+        private void SetToolTips()
         {
-            var toolTip = new ToolTip();
             if (!_isDeleteMode)
             {
                 toolTip.SetToolTip(txtName, "Введите название производителя");
@@ -136,22 +43,77 @@ namespace AvtoServis.Forms.Modals.Manufacturers
             toolTip.SetToolTip(btnCancel, "Закрыть без сохранения изменений");
         }
 
-        private void InitializeData()
+        private void LoadManufacturer()
         {
-            if (_isDeleteMode || !_manufacturerId.HasValue)
-                return;
-
             try
             {
-                var manufacturer = _viewModel.LoadManufacturers().Find(m => m.ManufacturerID == _manufacturerId);
-                if (manufacturer == null)
-                    throw new Exception("Производитель не найден.");
-                txtName.Text = manufacturer.Name;
+                _manufacturer = _manufacturerId == null ? new Manufacturer() : _viewModel.LoadManufacturer(_manufacturerId.Value);
+                if (_manufacturer == null && _manufacturerId != null)
+                {
+                    ShowError("Производитель не найден.");
+                    return;
+                }
+
+                if (_manufacturerId != null)
+                {
+                    txtName.Text = _manufacturer.Name;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
+                ShowError($"Ошибка при загрузке производителя: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"LoadManufacturer Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+        }
+
+        private void SetupDeleteModeUI()
+        {
+            this.ClientSize = new Size(400, 142);
+            this.Text = "Подтверждение удаления";
+
+            lblName.Text = "Вы хотите удалить этого производителя?";
+            tableLayoutPanel.Controls.Clear();
+            tableLayoutPanel.RowCount = 2;
+            tableLayoutPanel.RowStyles.Clear();
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+
+            tableLayoutPanel.Controls.Add(lblName, 0, 0);
+            tableLayoutPanel.SetColumnSpan(lblName, 2);
+            tableLayoutPanel.Controls.Add(btnCancel, 0, 1);
+            tableLayoutPanel.Controls.Add(btnSave, 1, 1);
+
+            btnCancel.Text = "Нет";
+            btnSave.Text = "Да";
+            btnCancel.BackColor = Color.FromArgb(25, 118, 210);
+            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnSave.BackColor = Color.FromArgb(220, 53, 69);
+            btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 100, 100);
+        }
+
+        private void ValidateInputs()
+        {
+            if (_isDeleteMode) return;
+
+            lblError.Visible = false;
+            panelError.Visible = false;
+
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                ShowError("Пожалуйста, введите название производителя.");
+                return;
+            }
+
+            if (txtName.Text.Length > 100)
+            {
+                ShowError("Название производителя не должно превышать 100 символов.");
+                return;
+            }
+
+            if (!Regex.IsMatch(txtName.Text, @"^[а-яА-Яa-zA-Z0-9\s]+$"))
+            {
+                ShowError("Название производителя должно содержать только буквы (русские или латинские), цифры и пробелы.");
+                return;
             }
         }
 
@@ -159,6 +121,9 @@ namespace AvtoServis.Forms.Modals.Manufacturers
         {
             try
             {
+                ValidateInputs();
+                if (lblError.Visible) return;
+
                 if (_isDeleteMode)
                 {
                     _viewModel.DeleteManufacturer(_manufacturerId.Value);
@@ -167,23 +132,58 @@ namespace AvtoServis.Forms.Modals.Manufacturers
                     return;
                 }
 
-                var manufacturer = new Manufacturer
-                {
-                    ManufacturerID = _manufacturerId ?? 0,
-                    Name = txtName.Text.Trim()
-                };
+                _manufacturer.Name = txtName.Text.Trim();
 
-                if (_manufacturerId.HasValue)
-                    _viewModel.UpdateManufacturer(manufacturer);
+                if (_manufacturerId == null)
+                {
+                    _viewModel.AddManufacturer(_manufacturer);
+                }
                 else
-                    _viewModel.AddManufacturer(manufacturer);
+                {
+                    _manufacturer.ManufacturerID = _manufacturerId.Value;
+                    _viewModel.UpdateManufacturer(_manufacturer);
+                }
 
                 DialogResult = DialogResult.OK;
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError($"Ошибка при сохранении: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"BtnSave_Click Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+            }
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void ShowError(string message)
+        {
+            lblError.Text = message;
+            lblError.Visible = true;
+            panelError.Visible = true;
+            _errorTimer.Start();
+        }
+
+        private void ErrorTimer_Tick(object sender, EventArgs e)
+        {
+            lblError.Visible = false;
+            panelError.Visible = false;
+            _errorTimer.Stop();
+        }
+
+        private void TxtName_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtName.Text) && txtName.Text.Length > 100)
+            {
+                ShowError("Название производителя не должно превышать 100 символов.");
+            }
+            else if (!string.IsNullOrWhiteSpace(txtName.Text) && !Regex.IsMatch(txtName.Text, @"^[а-яА-Яa-zA-Z0-9\s]+$"))
+            {
+                ShowError("Название производителя должно содержать только буквы (русские или латинские), цифры и пробелы.");
             }
         }
     }

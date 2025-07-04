@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AvtoServis.Model.Entities
+﻿namespace AvtoServis.Model.Entities
 {
     public class Part
     {
@@ -9,6 +7,7 @@ namespace AvtoServis.Model.Entities
         public string CarBrandName { get; set; }
         public string CatalogNumber { get; set; }
         public int ManufacturerID { get; set; }
+        public string ManufacturerName { get; set; }
         public int QualityID { get; set; }
         public string QualityName { get; set; }
         public string PartName { get; set; }

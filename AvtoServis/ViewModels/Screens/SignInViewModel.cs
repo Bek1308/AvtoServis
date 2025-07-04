@@ -1,44 +1,39 @@
 ﻿using AvtoServis.Services.Core;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using EleCho.MvvmToolkit.ComponentModel;
+using EleCho.MvvmToolkit.Input;
 using System;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AvtoService.ViewModels.Screens
 {
-    public class SignInViewModel : ViewModelBase
+    public partial class SignInViewModel : ObservableObject
     {
         private readonly AuthenticationService _authService;
-        private string _username;
-        private string _password;
-        private string _errorMessage;
-
-        public event Action OnLoginSuccess;
 
         public SignInViewModel()
         {
             _authService = new AuthenticationService();
             SignInCommand = new RelayCommand(ExecuteSignIn, CanExecuteSignIn);
+
+            // Initialize non-nullable fields to default values
+            Username = string.Empty;
+            Password = string.Empty;
+            ErrorMessage = string.Empty;
+            OnLoginSuccess = () => { }; // Assign a default no-op delegate
         }
 
-        public string Username
-        {
-            get => _username;
-            set => Set(ref _username, value);
-        }
+        [ObservableProperty]
+        private string username;
 
-        public string Password
-        {
-            get => _password;
-            set => Set(ref _password, value);
-        }
+        [ObservableProperty]
+        private string password;
 
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set => Set(ref _errorMessage, value);
-        }
+        [ObservableProperty]
+        private string errorMessage;
 
-        public RelayCommand SignInCommand { get; }
+        public event Action OnLoginSuccess;
+
+        public IRelayCommand SignInCommand { get; }
 
         private void ExecuteSignIn()
         {
@@ -58,7 +53,6 @@ namespace AvtoService.ViewModels.Screens
                 var user = _authService.Authenticate(Username, Password);
                 if (user != null)
                 {
-                    // Foydalanuvchi ma'lumotlarini CurrentUser'ga saqlash
                     CurrentUser.Instance.SetUser(user);
                     ErrorMessage = "Успешный вход!";
                     OnLoginSuccess?.Invoke();
@@ -66,14 +60,9 @@ namespace AvtoService.ViewModels.Screens
                 else
                 {
                     var existingUser = _authService.GetUserByUsername(Username);
-                    if (existingUser == null)
-                    {
-                        ErrorMessage = "Неверное имя пользователя.";
-                    }
-                    else
-                    {
-                        ErrorMessage = "Неверный пароль.";
-                    }
+                    ErrorMessage = existingUser == null
+                        ? "Неверное имя пользователя."
+                        : "Неверный пароль.";
                 }
             }
             catch (Exception ex)

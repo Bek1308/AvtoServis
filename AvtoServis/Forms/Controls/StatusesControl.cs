@@ -1,11 +1,7 @@
 ﻿using AvtoServis.Data.Interfaces;
 using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace AvtoServis.Forms.Controls
 {

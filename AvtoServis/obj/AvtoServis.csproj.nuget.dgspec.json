@@ -68,9 +68,9 @@
               "target": "Package",
               "version": "[2.0.0, )"
             },
-            "MvvmLightLibs": {
+            "EleCho.MvvmToolkit": {
               "target": "Package",
-              "version": "[5.4.1.1, )"
+              "version": "[8.0.0, )"
             },
             "Portable.BouncyCastle": {
               "target": "Package",
