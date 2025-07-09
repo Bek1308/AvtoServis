@@ -25,9 +25,9 @@
             separator = new Panel();
             searchBox = new TextBox();
             buttonPanel = new FlowLayoutPanel();
+            btnExport = new Button();
             btnOpenFilterDialog = new Button();
             btnColumns = new Button();
-            btnExport = new Button();
             addButton = new Button();
             dataGridView = new DataGridView();
             countLabel = new Label();
@@ -112,11 +112,27 @@
             buttonPanel.Controls.Add(btnColumns);
             buttonPanel.Controls.Add(addButton);
             buttonPanel.Dock = DockStyle.Right;
-            buttonPanel.Location = new Point(600, 73);
+            buttonPanel.Location = new Point(589, 73);
             buttonPanel.Margin = new Padding(3, 15, 3, 3);
             buttonPanel.Name = "buttonPanel";
-            buttonPanel.Size = new Size(427, 42);
+            buttonPanel.Size = new Size(438, 42);
             buttonPanel.TabIndex = 3;
+            // 
+            // btnExport
+            // 
+            btnExport.BackColor = Color.FromArgb(25, 118, 210);
+            btnExport.FlatAppearance.BorderSize = 0;
+            btnExport.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
+            btnExport.FlatStyle = FlatStyle.Flat;
+            btnExport.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnExport.ForeColor = Color.White;
+            btnExport.Location = new Point(3, 3);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(100, 34);
+            btnExport.TabIndex = 3;
+            btnExport.Text = "Экспорт";
+            btnExport.UseVisualStyleBackColor = false;
+            btnExport.Click += BtnExport_Click;
             // 
             // btnOpenFilterDialog
             // 
@@ -149,22 +165,6 @@
             btnColumns.Text = "Столбцы";
             btnColumns.UseVisualStyleBackColor = false;
             btnColumns.Click += BtnColumns_Click;
-            // 
-            // btnExport
-            // 
-            btnExport.BackColor = Color.FromArgb(25, 118, 210);
-            btnExport.FlatAppearance.BorderSize = 0;
-            btnExport.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
-            btnExport.FlatStyle = FlatStyle.Flat;
-            btnExport.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnExport.ForeColor = Color.White;
-            btnExport.Location = new Point(3, 3);
-            btnExport.Name = "btnExport";
-            btnExport.Size = new Size(100, 34);
-            btnExport.TabIndex = 3;
-            btnExport.Text = "Экспорт";
-            btnExport.UseVisualStyleBackColor = false;
-            btnExport.Click += BtnExport_Click;
             // 
             // addButton
             // 
@@ -221,7 +221,7 @@
             dataGridView.RowHeadersVisible = false;
             dataGridView.RowHeadersWidth = 51;
             dataGridView.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            dataGridView.Size = new Size(1008, 417);
+            dataGridView.Size = new Size(1008, 415);
             dataGridView.TabIndex = 5;
             dataGridView.CellClick += DataGridView_CellClick;
             dataGridView.ColumnHeaderMouseClick += DataGridView_ColumnHeaderMouseClick;
@@ -231,7 +231,7 @@
             countLabel.AutoSize = true;
             countLabel.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             countLabel.ForeColor = Color.FromArgb(33, 37, 41);
-            countLabel.Location = new Point(19, 556);
+            countLabel.Location = new Point(19, 554);
             countLabel.Margin = new Padding(3, 15, 3, 0);
             countLabel.Name = "countLabel";
             countLabel.Size = new Size(105, 25);

@@ -24,6 +24,7 @@ namespace AvtoServis.Forms.Screens
         private readonly StockViewModel _stockViewModel;
         private readonly StatusesViewModel _statusesViewModel;
         private readonly CarBrandViewModel _carBrandViewModel;
+        private readonly PartsIncomeViewModel _partsIncomeViewModel;
 
         public MainForm()
         {
@@ -61,6 +62,15 @@ namespace AvtoServis.Forms.Screens
                 _statusesViewModel = new StatusesViewModel(new StatusRepository(connectionString));
                 _partsQualitiesViewModel = new PartQualitiesViewModel(new PartQualitiesRepository(connectionString));
                 _carBrandViewModel = new CarBrandViewModel(new CarBrandRepository(connectionString));
+                _partsIncomeViewModel = new PartsIncomeViewModel(
+                    new PartsIncomeRepository(connectionString), 
+                    new PartsRepository(connectionString), 
+                    new SuppliersRepository(connectionString),
+                    new StatusRepository(connectionString),
+                    new Finance_StatusRepository(connectionString),
+                    new StockRepository(connectionString), 
+                    new BatchRepository(connectionString));
+                 
             }
             catch (Exception ex)
             {
@@ -420,7 +430,7 @@ namespace AvtoServis.Forms.Screens
         {
             try
             {
-                var indexIncomeControl = new IndexIncome();
+                var indexIncomeControl = new PartsIncomeControl(_partsIncomeViewModel, imageList1);
                 if (indexIncomeControl == null)
                 {
                     return;

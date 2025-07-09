@@ -22,6 +22,9 @@
     <Compile Update="Forms\Controls\PartsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\PartsIncomeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\Controls\StatusesControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -55,6 +58,9 @@
     <Compile Update="Forms\Modals\PartQualities\PartQualityFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Modals\PartsIncome\PartsIncomeFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Modals\PartsIncome\PartsIncomeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +92,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Status\StatusesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\Status\StatusesFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Stock\StockDialog.cs">

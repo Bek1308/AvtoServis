@@ -3,64 +3,148 @@
   "WorkspaceRootPath": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\viewmodels\\screens\\servicesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\viewmodels\\screens\\servicesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\partsincome\\partsincomeform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\partsincome\\partsincomeform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\services\\filterdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\services\\filterdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\partsincome\\partsincomeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\partsincome\\partsincomeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\servicesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\servicesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\partsincome\\partsincomedialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\partsincome\\partsincomedialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\controls\\servicecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\controls\\servicecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\controls\\partsincomecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\controls\\partsincomecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\controls\\servicecontrol.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\controls\\servicecontrol.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\avtoservis\\forms\\modals\\partsincome\\partsincomeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\partsincome\\partsincomeform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\iservicesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\iservicesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\avtoservis.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\avtoservis.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\controls\\servicecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\controls\\servicecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\viewmodels\\screens\\partsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\viewmodels\\screens\\partsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\services\\filterdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\services\\filterdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\model\\entities\\stock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\model\\entities\\stock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\services\\filterdialog.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\services\\filterdialog.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\screens\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\screens\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\avtoservis\\forms\\controls\\partsincomecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\controls\\partsincomecontrol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\batchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\batchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\ibatchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\ibatchrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\finance_statusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\finance_statusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\stockrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\stockrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\viewmodels\\screens\\partsincomeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\viewmodels\\screens\\partsincomeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\partsincomerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\partsincomerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\partsincome\\partsincomefilterdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\partsincome\\partsincomefilterdialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\partsincome\\partsincomefilterdialog.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\partsincome\\partsincomefilterdialog.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\isuppliersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\isuppliersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\model\\entities\\batch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\model\\entities\\batch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\manufacturersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\manufacturersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\userinterface\\iuserinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\userinterface\\iuserinterface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\viewmodels\\screens\\manufacturersviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\viewmodels\\screens\\manufacturersviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\viewmodels\\screens\\statusesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\viewmodels\\screens\\statusesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\carmodelsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\carmodelsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\statusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\statusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\ifinance_statusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\ifinance_statusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\ipartsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\ipartsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\istatusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\istatusrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\partsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\partsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\repositories\\partqualitiesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\repositories\\partqualitiesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\model\\entities\\finance_status.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\model\\entities\\finance_status.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\carbrand\\carbranddialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\carbrand\\carbranddialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\controls\\partsincomecontrol.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\controls\\partsincomecontrol.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\viewmodels\\screens\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\viewmodels\\screens\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\forms\\modals\\partsincome\\partsincomedialog.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\forms\\modals\\partsincome\\partsincomedialog.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\data\\interfaces\\ipartsincomerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\data\\interfaces\\ipartsincomerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|c:\\users\\laptop\\desktop\\\u043F\u0440\u043E\u0435\u043A\u0442\u0438\\avtoservis\\avtoservis\\avtoservis\\model\\entities\\part.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{269EF4BA-FAF0-4689-B89E-C2605D0A11DC}|AvtoServis\\AvtoServis.csproj|solutionrelative:avtoservis\\model\\entities\\part.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,98 +154,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 331,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ServiceControl.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\ServiceControl.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Controls\\ServiceControl.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\ServiceControl.cs",
-              "RelativeToolTip": "AvtoServis\\Forms\\Controls\\ServiceControl.cs",
-              "ViewState": "AgIAAAECAAAAAAAAAAA8wBoCAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:58:02.259Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ServicesRepository.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\ServicesRepository.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\ServicesRepository.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\ServicesRepository.cs",
-              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\ServicesRepository.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwA8BAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:57:15.974Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IServicesRepository.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IServicesRepository.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\IServicesRepository.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IServicesRepository.cs",
-              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\IServicesRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:57:00.21Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ServiceControl.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\ServiceControl.Designer.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Controls\\ServiceControl.Designer.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\ServiceControl.Designer.cs",
-              "RelativeToolTip": "AvtoServis\\Forms\\Controls\\ServiceControl.Designer.cs",
-              "ViewState": "AgIAAM8AAAAAAAAAAAAMwOIAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:56:36.797Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ServiceControl.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\ServiceControl.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Controls\\ServiceControl.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\ServiceControl.cs [Design]",
-              "RelativeToolTip": "AvtoServis\\Forms\\Controls\\ServiceControl.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:56:32.941Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ServicesViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\ServicesViewModel.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\ViewModels\\Screens\\ServicesViewModel.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\ServicesViewModel.cs",
-              "RelativeToolTip": "AvtoServis\\ViewModels\\Screens\\ServicesViewModel.cs",
-              "ViewState": "AgIAALEAAAAAAAAAAAAcwN8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:56:01.665Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "FilterDialog.Designer.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\Services\\FilterDialog.Designer.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\Services\\FilterDialog.Designer.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\Services\\FilterDialog.Designer.cs",
-              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\Services\\FilterDialog.Designer.cs",
-              "ViewState": "AgIAAKkAAAAAAAAAAAAcwMsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:55:22.93Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1a46fd64-28d5-434c-8eb3-17a02d419b53}"
@@ -172,106 +166,436 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "FilterDialog.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs",
-              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs",
-              "ViewState": "AgIAAA8BAAAAAAAAAAAcwDQBAAABAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "PartsViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\PartsViewModel.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\ViewModels\\Screens\\PartsViewModel.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\PartsViewModel.cs",
+              "RelativeToolTip": "AvtoServis\\ViewModels\\Screens\\PartsViewModel.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:55:17.587Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-07T16:58:03.483Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "FilterDialog.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs [Design]",
-              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\Services\\FilterDialog.cs [Design]",
+              "Title": "PartsIncomeForm.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs",
+              "ViewState": "AgIAAGIFAAAAAAAAAAAAwIIFAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:55:13.702Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "PartsRepository.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartsRepository.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\PartsRepository.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartsRepository.cs",
-              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\PartsRepository.cs",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAiwG0AAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:54:36.514Z",
+              "WhenOpened": "2025-07-07T14:08:47.763Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "PartQualitiesRepository.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartQualitiesRepository.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\PartQualitiesRepository.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartQualitiesRepository.cs",
-              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\PartQualitiesRepository.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAiwE4AAAATAAAAAAAAAA==",
+              "Title": "IBatchRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IBatchRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\IBatchRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IBatchRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\IBatchRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:54:33.8Z",
+              "WhenOpened": "2025-07-07T06:23:01.839Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "BatchRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\BatchRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\BatchRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\BatchRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\BatchRepository.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwEcAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:25:56.237Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PartsIncomeControl.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs",
+              "ViewState": "AgIAALMAAAAAAAAAAAD4v80AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:05:46.18Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PartsIncomeDialog.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.cs",
+              "ViewState": "AgIAAA0BAAAAAAAAAAAAAC8BAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:06:25.951Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PartsIncomeForm.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs [Design]",
+              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T03:26:23.354Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PartsIncomeForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.Designer.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.Designer.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.Designer.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeForm.Designer.cs",
+              "ViewState": "AgIAAK8CAAAAAAAAAAAYwNMCAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T14:45:21.273Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AvtoServis.csproj",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\AvtoServis.csproj",
+              "RelativeDocumentMoniker": "AvtoServis\\AvtoServis.csproj",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\AvtoServis.csproj",
+              "RelativeToolTip": "AvtoServis\\AvtoServis.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-07T16:59:16.334Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Finance_StatusRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\Finance_StatusRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\Finance_StatusRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\Finance_StatusRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\Finance_StatusRepository.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAgwEcAAABiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:15:09.629Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Stock.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Stock.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Model\\Entities\\Stock.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Stock.cs",
+              "RelativeToolTip": "AvtoServis\\Model\\Entities\\Stock.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T15:42:35.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Screens\\MainForm.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Screens\\MainForm.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Screens\\MainForm.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Screens\\MainForm.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAACgAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T07:30:24.508Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "PartsIncomeControl.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs [Design]",
+              "RelativeToolTip": "AvtoServis\\Forms\\Controls\\PartsIncomeControl.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T03:42:50.57Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
               "Title": "ManufacturersRepository.cs",
               "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\ManufacturersRepository.cs",
               "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\ManufacturersRepository.cs",
               "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\ManufacturersRepository.cs",
               "RelativeToolTip": "AvtoServis\\Data\\Repositories\\ManufacturersRepository.cs",
-              "ViewState": "AgIAAG8AAAAAAAAAAAAcwIMAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBEAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:54:27.896Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-07T06:59:03.372Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "CarBrandDialog.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\CarBrand\\CarBrandDialog.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\CarBrand\\CarBrandDialog.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\CarBrand\\CarBrandDialog.cs",
-              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\CarBrand\\CarBrandDialog.cs",
-              "ViewState": "AgIAAI0AAAAAAAAAAAAiwKEAAAA5AAAAAAAAAA==",
+              "DocumentIndex": 25,
+              "Title": "CarModelsRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\CarModelsRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\CarModelsRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\CarModelsRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\CarModelsRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:54:05.772Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-07T06:59:14.031Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Program.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\Program.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Program.cs",
-              "RelativeToolTip": "AvtoServis\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 24,
+              "Title": "StatusesViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\StatusesViewModel.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\ViewModels\\Screens\\StatusesViewModel.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\StatusesViewModel.cs",
+              "RelativeToolTip": "AvtoServis\\ViewModels\\Screens\\StatusesViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:51:41.462Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-07T07:00:21.912Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ManufacturersViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\ManufacturersViewModel.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\ViewModels\\Screens\\ManufacturersViewModel.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\ManufacturersViewModel.cs",
+              "RelativeToolTip": "AvtoServis\\ViewModels\\Screens\\ManufacturersViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T07:01:29.194Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "UsersRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\UsersRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\UsersRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\UsersRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\UsersRepository.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T07:02:02.82Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "IUserInterface.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\UserInterface\\IUserInterface.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\UserInterface\\IUserInterface.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\UserInterface\\IUserInterface.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\UserInterface\\IUserInterface.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T07:02:37.896Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "SignInViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\SignInViewModel.cs",
-              "RelativeDocumentMoniker": "AvtoServis\\ViewModels\\Screens\\SignInViewModel.cs",
-              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\SignInViewModel.cs",
-              "RelativeToolTip": "AvtoServis\\ViewModels\\Screens\\SignInViewModel.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAgAAAAAAAAAA==",
+              "Title": "StockRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\StockRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\StockRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\StockRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\StockRepository.cs",
+              "ViewState": "AgIAAG0AAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-04T04:48:15.321Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-07T11:16:40.341Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "PartsIncomeViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\PartsIncomeViewModel.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\ViewModels\\Screens\\PartsIncomeViewModel.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\ViewModels\\Screens\\PartsIncomeViewModel.cs",
+              "RelativeToolTip": "AvtoServis\\ViewModels\\Screens\\PartsIncomeViewModel.cs",
+              "ViewState": "AgIAALYBAAAAAAAAAAAwwNEBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T10:51:11.531Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ISuppliersRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\ISuppliersRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\ISuppliersRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\ISuppliersRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\ISuppliersRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T07:02:58.758Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "StatusRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\StatusRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\StatusRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\StatusRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\StatusRepository.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAgwEEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:58:25.145Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Batch.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Batch.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Model\\Entities\\Batch.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Batch.cs",
+              "RelativeToolTip": "AvtoServis\\Model\\Entities\\Batch.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:23:34.734Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "Finance_Status.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Finance_Status.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Model\\Entities\\Finance_Status.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Finance_Status.cs",
+              "RelativeToolTip": "AvtoServis\\Model\\Entities\\Finance_Status.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:13:50.197Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "IFinance_StatusRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IFinance_StatusRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\IFinance_StatusRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IFinance_StatusRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\IFinance_StatusRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:12:51.835Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "IStatusRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IStatusRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\IStatusRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IStatusRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\IStatusRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwAQAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:11:26.349Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "PartsIncomeDialog.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.Designer.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.Designer.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.Designer.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeDialog.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMQBAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:06:53.691Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "PartsIncomeFilterDialog.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.Designer.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.Designer.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.Designer.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.Designer.cs",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAIwNAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:06:46.466Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "PartsIncomeFilterDialog.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Modals\\PartsIncome\\PartsIncomeFilterDialog.cs",
+              "ViewState": "AgIAADUBAAAAAAAAAAAIwFoBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:06:36.421Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "PartsIncomeControl.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\PartsIncomeControl.Designer.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Forms\\Controls\\PartsIncomeControl.Designer.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Forms\\Controls\\PartsIncomeControl.Designer.cs",
+              "RelativeToolTip": "AvtoServis\\Forms\\Controls\\PartsIncomeControl.Designer.cs",
+              "ViewState": "AgIAAOYAAAAAAAAAAAAYwP0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T06:06:15.463Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "PartsRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartsRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\PartsRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartsRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\PartsRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T05:36:25.91Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "Part.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Part.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Model\\Entities\\Part.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Model\\Entities\\Part.cs",
+              "RelativeToolTip": "AvtoServis\\Model\\Entities\\Part.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T05:35:59.501Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PartsIncomeRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartsIncomeRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Repositories\\PartsIncomeRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Repositories\\PartsIncomeRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Repositories\\PartsIncomeRepository.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAkwAMBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T05:14:49.395Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "IPartsIncomeRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IPartsIncomeRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\IPartsIncomeRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IPartsIncomeRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\IPartsIncomeRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T05:10:25.61Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "IPartsRepository.cs",
+              "DocumentMoniker": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IPartsRepository.cs",
+              "RelativeDocumentMoniker": "AvtoServis\\Data\\Interfaces\\IPartsRepository.cs",
+              "ToolTip": "C:\\Users\\laptop\\Desktop\\\u041F\u0440\u043E\u0435\u043A\u0442\u0438\\AvtoServis\\AvtoServis\\AvtoServis\\Data\\Interfaces\\IPartsRepository.cs",
+              "RelativeToolTip": "AvtoServis\\Data\\Interfaces\\IPartsRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T05:09:16.228Z"
             }
           ]
         },

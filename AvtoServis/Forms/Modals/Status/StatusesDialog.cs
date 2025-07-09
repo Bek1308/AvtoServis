@@ -1,32 +1,30 @@
 ﻿using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using Timer = System.Windows.Forms.Timer;
+using System.Text.RegularExpressions;
 
 namespace AvtoServis.Forms.Controls
 {
     public partial class StatusesDialog : Form
     {
         private readonly StatusesViewModel _viewModel;
-        private readonly string _tableName;
         private readonly int? _statusId;
         private readonly bool _isDeleteMode;
+        private readonly bool _isViewOnly;
         private Status _status;
-        private Label lblMessage;
         private System.Windows.Forms.Timer _errorTimer;
 
-        public StatusesDialog(StatusesViewModel viewModel, string tableName, int? statusId, bool isDeleteMode = false)
+        public StatusesDialog(StatusesViewModel viewModel, int? statusId, bool isViewOnly = false, bool isDeleteMode = false)
         {
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-            _tableName = tableName ?? throw new ArgumentNullException(nameof(tableName));
             _statusId = statusId;
             _isDeleteMode = isDeleteMode;
+            _isViewOnly = isViewOnly;
             InitializeComponent();
-            _errorTimer = new Timer { Interval = 3000 };
+            _errorTimer = new System.Windows.Forms.Timer { Interval = 3000 };
             _errorTimer.Tick += ErrorTimer_Tick;
             lblError.Visible = false;
-            btnSave.Enabled = true;
-            Text = _viewModel.GetTableDisplayNames()[_tableName];
-            if (!isDeleteMode)
+            SetToolTips();
+            if (!_isDeleteMode)
             {
                 LoadStatus();
             }
@@ -36,33 +34,48 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(tableLayoutPanel, "Форма для добавления или редактирования статуса");
+            toolTip.SetToolTip(lblName, "Метка для ввода названия статуса");
+            toolTip.SetToolTip(txtName, _isDeleteMode ? "Название статуса" : "Введите название статуса (латинские буквы, цифры, пробел, максимум 100 символов)");
+            toolTip.SetToolTip(lblDescription, "Метка для ввода описания статуса");
+            toolTip.SetToolTip(txtDescription, _isDeleteMode ? "Описание статуса" : "Введите описание статуса (максимум 500 символов, необязательно)");
+            toolTip.SetToolTip(btnColor, "Выберите цвет статуса");
+            toolTip.SetToolTip(lblError, "Отображает ошибки или сообщения об операции");
+            toolTip.SetToolTip(btnCancel, _isDeleteMode ? "Отменить удаление" : "Закрыть без сохранения");
+            toolTip.SetToolTip(btnSave, _isDeleteMode ? "Подтвердить удаление" : "Сохранить изменения");
+            if (lblMessage != null)
+                toolTip.SetToolTip(lblMessage, "Подтверждение удаления статуса");
+        }
+
         private void LoadStatus()
         {
             try
             {
-                _status = _statusId == null ? new Status() : _viewModel.LoadStatuses(_tableName).Find(s => s.StatusID == _statusId);
+                _status = _statusId == null ? new Status() : _viewModel.LoadStatuses().Find(s => s.StatusID == _statusId);
                 if (_status == null && _statusId != null)
                 {
                     ShowError("Статус не найден.");
+                    btnSave.Enabled = false;
                     return;
                 }
 
-                if (_statusId != null)
+                txtName.Text = _status?.Name;
+                txtDescription.Text = _status?.Description;
+                btnColor.BackColor = string.IsNullOrEmpty(_status?.Color) ? Color.White : ColorTranslator.FromHtml(_status.Color);
+
+                if (_isViewOnly)
                 {
-                    txtName.Text = _status.Name;
-                    txtDescription.Text = _status.Description;
-                    if (!string.IsNullOrEmpty(_status.Color))
-                    {
-                        try
-                        {
-                            btnColor.BackColor = ColorTranslator.FromHtml(_status.Color);
-                        }
-                        catch
-                        {
-                            btnColor.BackColor = Color.White;
-                        }
-                    }
+                    txtName.Enabled = false;
+                    txtDescription.Enabled = false;
+                    btnColor.Enabled = false;
+                    btnSave.Visible = false;
+                    btnCancel.Text = "Закрыть";
+                    Text = "Просмотр статуса";
                 }
+
+                ValidateInputs();
             }
             catch (Exception ex)
             {
@@ -104,61 +117,103 @@ namespace AvtoServis.Forms.Controls
             btnCancel.BackColor = Color.FromArgb(25, 118, 210);
             btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
             btnSave.BackColor = Color.FromArgb(220, 53, 69);
-            btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 100, 100);
+            btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 77, 77);
         }
 
         private void ValidateInputs()
         {
-            if (_isDeleteMode) return;
+            if (_isDeleteMode || _isViewOnly) return;
 
             lblError.Visible = false;
+            btnSave.Enabled = true;
 
             if (string.IsNullOrWhiteSpace(txtName.Text))
             {
                 ShowError("Пожалуйста, введите название статуса.");
+                btnSave.Enabled = false;
                 return;
             }
 
             if (txtName.Text.Length > 100)
             {
                 ShowError("Название статуса не должно превышать 100 символов.");
+                btnSave.Enabled = false;
                 return;
             }
 
-            if (txtDescription.Text.Length > 255)
+            if (!Regex.IsMatch(txtName.Text, @"^[a-zA-Z0-9\s]+$"))
             {
-                ShowError("Описание не должно превышать 255 символов.");
+                ShowError("Название статуса должно содержать только латинские буквы, цифры и пробелы.");
+                btnSave.Enabled = false;
                 return;
             }
+
+            if (!string.IsNullOrEmpty(txtDescription.Text) && txtDescription.Text.Length > 500)
+            {
+                ShowError("Описание статуса не должно превышать 500 символов.");
+                btnSave.Enabled = false;
+                return;
+            }
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+            ValidateInputs();
+        }
+
+        private void txtDescription_TextChanged(object sender, EventArgs e)
+        {
+            ValidateInputs();
+        }
+
+        private void btnColor_Click(object sender, EventArgs e)
+        {
+            using (var colorDialog = new ColorDialog())
+            {
+                if (colorDialog.ShowDialog() == DialogResult.OK)
+                {
+                    btnColor.BackColor = colorDialog.Color;
+                    _status.Color = ColorTranslator.ToHtml(colorDialog.Color);
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                ValidateInputs();
-                if (lblError.Visible) return;
-
                 if (_isDeleteMode)
                 {
-                    _viewModel.DeleteStatus(_tableName, _statusId.Value);
+                    _viewModel.DeleteStatus(_statusId.Value);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                    return;
+                }
+
+                if (_isViewOnly)
+                {
                     DialogResult = DialogResult.OK;
                     Close();
                     return;
                 }
 
                 _status.Name = txtName.Text.Trim();
-                _status.Description = string.IsNullOrWhiteSpace(txtDescription.Text) ? null : txtDescription.Text.Trim();
+                _status.Description = txtDescription.Text.Trim();
                 _status.Color = ColorTranslator.ToHtml(btnColor.BackColor);
 
                 if (_statusId == null)
                 {
-                    _viewModel.AddStatus(_tableName, _status);
+                    _viewModel.AddStatus(_status);
                 }
                 else
                 {
-                    _status.StatusID = _statusId.Value;
-                    _viewModel.UpdateStatus(_tableName, _status);
+                    _viewModel.UpdateStatus(_status);
                 }
 
                 DialogResult = DialogResult.OK;
@@ -171,62 +226,18 @@ namespace AvtoServis.Forms.Controls
             }
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void ErrorTimer_Tick(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            lblError.Visible = false;
+            _errorTimer.Stop();
         }
 
         private void ShowError(string message)
         {
             lblError.Text = message;
             lblError.Visible = true;
-            panelError.Visible = true;
-            _errorTimer.Start();
-        }
-
-        private void ErrorTimer_Tick(object sender, EventArgs e)
-        {
-            lblError.Visible = false;
-            panelError.Visible = false;
             _errorTimer.Stop();
-        }
-
-        private void TxtName_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtName.Text) && txtName.Text.Length > 100)
-            {
-                ShowError("Название статуса не должно превышать 100 символов.");
-            }
-        }
-
-        private void TxtDescription_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtDescription.Text) && txtDescription.Text.Length > 255)
-            {
-                ShowError("Описание не должно превышать 255 символов.");
-            }
-        }
-
-        private void BtnColor_Click(object sender, EventArgs e)
-        {
-            using (ColorDialog colorDialog = new ColorDialog())
-            {
-                if (colorDialog.ShowDialog() == DialogResult.OK)
-                {
-                    btnColor.BackColor = colorDialog.Color;
-                }
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _errorTimer?.Dispose();
-                components?.Dispose();
-            }
-            base.Dispose(disposing);
+            _errorTimer.Start();
         }
     }
 }

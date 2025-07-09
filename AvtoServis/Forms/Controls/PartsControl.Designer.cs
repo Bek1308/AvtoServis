@@ -112,10 +112,10 @@
             buttonPanel.Controls.Add(btnColumns);
             buttonPanel.Controls.Add(addButton);
             buttonPanel.Dock = DockStyle.Right;
-            buttonPanel.Location = new Point(617, 73);
+            buttonPanel.Location = new Point(608, 73);
             buttonPanel.Margin = new Padding(3, 15, 3, 3);
             buttonPanel.Name = "buttonPanel";
-            buttonPanel.Size = new Size(427, 42);
+            buttonPanel.Size = new Size(440, 42);
             buttonPanel.TabIndex = 3;
             // 
             // btnExport

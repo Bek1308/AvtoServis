@@ -15,10 +15,10 @@ namespace AvtoServis
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             SignInForm signInForm = new SignInForm();
-            if (signInForm.ShowDialog() == DialogResult.OK)
-            {
+            //if (signInForm.ShowDialog() == DialogResult.OK)
+            //{
                 Application.Run(new MainForm()); // MainForm asosiy oyna sifatida ochiladi
-            }
+            //}
         }
     }
 }
