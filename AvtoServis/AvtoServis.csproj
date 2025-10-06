@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Catel.MVVM" Version="6.0.7" />
     <PackageReference Include="ClosedXML" Version="0.105.0" />
@@ -24,6 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Forms\Controls\FullServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

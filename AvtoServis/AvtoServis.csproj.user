@@ -10,8 +10,14 @@
     <Compile Update="Forms\Controls\CarModelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\CustomerDebtsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\Controls\CustomPanel.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Forms\Controls\FullPartsControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Controls\Incomes\IndexIncome.cs">
       <SubType>UserControl</SubType>
@@ -22,7 +28,13 @@
     <Compile Update="Forms\Controls\PartsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\PartsExpensesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\Controls\PartsIncomeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\Controls\ServiceOrdersControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="Forms\Controls\StatusesControl.cs">
@@ -46,16 +58,61 @@
     <Compile Update="Forms\Modals\CarModel\CarModelFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Modals\CustomerDebts\CustomerAddForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\CustomerDebts\CustomerDebtsFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\CustomerDebts\CustomerDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\CustomerDebts\CustomerEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\FullParts\FullPartsFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\FullParts\PartFullDetailsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Modals\Manufacturers\ManufacturerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Manufacturers\ManufacturerFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Modals\PartExpenses\PartExpenseDetailsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartExpenses\PartExpenseEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartExpenses\PartExpensesFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartExpenses\SaleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartExpenses\SearchProductDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\Modals\PartQualities\PartQualityDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\PartQualities\PartQualityFilterDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartsIncome\BatchConfirmationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartsIncome\BatchDetailsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartsIncome\PartsIncomeDeleteDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\PartsIncome\PartsIncomeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\PartsIncome\PartsIncomeFilterDialog.cs">
@@ -74,6 +131,18 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Parts\FullImageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\ServiceOrders\SearchServiceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\ServiceOrders\ServiceOrderEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\ServiceOrders\ServiceOrderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Modals\ServiceOrders\ServiceOrdersFilterDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\Modals\Services\FilterDialog.cs">
