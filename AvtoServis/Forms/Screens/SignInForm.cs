@@ -22,6 +22,9 @@ namespace AvtoServis.Forms.Screens
             };
             BindControls();
             _viewModel.OnLoginSuccess += OpenMainForm;
+            txtLogin.Text = "admin";
+            txtPasword.Text = "1234";
+            
         }
 
         private void BindControls()
@@ -60,6 +63,8 @@ namespace AvtoServis.Forms.Screens
 
         private void SignInForm_Load(object sender, EventArgs e)
         {
+            txtLogin.Text = "admin";
+            txtPasword.Text = "1234";
         }
     }
 }

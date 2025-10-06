@@ -277,24 +277,134 @@ namespace AvtoServis.ViewModels.Screens
             return filteredPartsIncomes;
         }
 
-        public void AddPartsIncome(PartsIncome partsIncome)
+        public void SavePartsIncomes(List<PartsIncome> partsIncomes, string batchName, decimal totalPaidAmount)
         {
             try
             {
-                _partsIncomeRepository.Add(partsIncome);
+                if (partsIncomes == null || !partsIncomes.Any())
+                {
+                    throw new ArgumentException("Нет данных для сохранения.");
+                }
+
+                // Umumiy narxni hisoblash
+                decimal totalCost = partsIncomes.Sum(item => item.Quantity * item.UnitPrice);
+                decimal totalPaidSum = partsIncomes.Sum(item => item.PaidAmount);
+
+                // Validatsiya
+                if (totalPaidAmount > totalCost)
+                {
+                    throw new ArgumentException("Общая оплаченная сумма не должна превышать общей стоимости деталей!");
+                }
+                if (totalPaidAmount < totalPaidSum)
+                {
+                    throw new ArgumentException("Общая оплаченная сумма не должна быть меньше оплаченной суммы деталей!");
+                }
+
+                // To'langan summasini taqsimlash
+                decimal remainingPaidAmount = totalPaidAmount;
+
+                // Agar totalPaidAmount totalCost ga teng bo'lsa, hamma PartsIncome uchun Finance_Status_Id = 1
+                if (totalPaidAmount == totalCost)
+                {
+                    foreach (var income in partsIncomes)
+                    {
+                        income.Finance_Status_Id = 1; // Оплачен
+                        income.PaidAmount = income.Quantity * income.UnitPrice;
+                    }
+                }
+                else
+                {
+                    // Avval qisman to'langan (Finance_Status_Id = 3) larni to'ldirish
+                    foreach (var income in partsIncomes.Where(x => x.Finance_Status_Id == 3))
+                    {
+                        decimal itemTotal = income.Quantity * income.UnitPrice;
+                        decimal remainingToPay = itemTotal - income.PaidAmount;
+                        if (remainingPaidAmount >= remainingToPay)
+                        {
+                            income.PaidAmount += remainingToPay;
+                            income.Finance_Status_Id = 1; // Оплачен
+                            remainingPaidAmount -= remainingToPay;
+                        }
+                        else
+                        {
+                            income.PaidAmount += remainingPaidAmount;
+                            income.Finance_Status_Id = 3; // Частично оплачен
+                            remainingPaidAmount = 0;
+                            break;
+                        }
+                    }
+
+                    // Qolgan summasini to'liq to'lanmagan (Finance_Status_Id = 2) larga taqsimlash
+                    if (remainingPaidAmount > 0)
+                    {
+                        var unpaidIncomes = partsIncomes.Where(x => x.Finance_Status_Id == 2).ToList();
+                        if (unpaidIncomes.Any())
+                        {
+                            decimal perIncome = remainingPaidAmount / unpaidIncomes.Count;
+                            foreach (var income in unpaidIncomes)
+                            {
+                                decimal itemTotal = income.Quantity * income.UnitPrice;
+                                if (perIncome >= itemTotal)
+                                {
+                                    income.PaidAmount = itemTotal;
+                                    income.Finance_Status_Id = 1; // Оплачен
+                                    remainingPaidAmount -= itemTotal;
+                                }
+                                else
+                                {
+                                    income.PaidAmount = perIncome;
+                                    income.Finance_Status_Id = 3; // Частично оплачен
+                                    remainingPaidAmount -= perIncome;
+                                }
+                            }
+                        }
+                    }
+
+                    // Agar hali ham qoldiq summa bo'lsa, qisman to'langan va to'liq to'lanmaganlarga taqsimlash
+                    if (remainingPaidAmount > 0)
+                    {
+                        var partialOrUnpaidIncomes = partsIncomes.Where(x => x.Finance_Status_Id == 2 || x.Finance_Status_Id == 3).ToList();
+                        if (partialOrUnpaidIncomes.Any())
+                        {
+                            decimal perIncome = remainingPaidAmount / partialOrUnpaidIncomes.Count;
+                            foreach (var income in partialOrUnpaidIncomes)
+                            {
+                                decimal itemTotal = income.Quantity * income.UnitPrice;
+                                decimal remainingToPay = itemTotal - income.PaidAmount;
+                                if (perIncome >= remainingToPay)
+                                {
+                                    income.PaidAmount += remainingToPay;
+                                    income.Finance_Status_Id = 1; // Оплачен
+                                    remainingPaidAmount -= remainingToPay;
+                                }
+                                else
+                                {
+                                    income.PaidAmount += perIncome;
+                                    income.Finance_Status_Id = 3; // Частично оплачен
+                                    remainingPaidAmount -= perIncome;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Ma'lumotlarni bazaga yozish
+                _partsIncomeRepository.SavePartsIncomes(partsIncomes, batchName);
+                System.Diagnostics.Debug.WriteLine($"SavePartsIncomes: Successfully saved {partsIncomes.Count} parts incomes with batch name '{batchName}'.");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"AddPartsIncome Xatosi: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine($"SavePartsIncomes Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 throw;
             }
         }
 
-        public void UpdatePartsIncome(PartsIncome partsIncome)
+
+        public void UpdatePartsIncome(PartsIncome partsIncome, string batchName)
         {
             try
             {
-                _partsIncomeRepository.Update(partsIncome);
+                _partsIncomeRepository.UpdatePartsIncomes(partsIncome, batchName);
             }
             catch (Exception ex)
             {
@@ -303,11 +413,11 @@ namespace AvtoServis.ViewModels.Screens
             }
         }
 
-        public void DeletePartsIncome(int id)
+        public void DeletePartsIncome(int id, string reason)
         {
             try
             {
-                _partsIncomeRepository.Delete(id);
+                _partsIncomeRepository.DeletePartsIncome(id, reason);
             }
             catch (Exception ex)
             {
@@ -320,10 +430,14 @@ namespace AvtoServis.ViewModels.Screens
         {
             try
             {
+                if (partsIncomes == null || !partsIncomes.Any())
+                {
+                    throw new ArgumentException("Нет данных для экспорта.");
+                }
+
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("PartsIncome");
-                    var headers = new List<string>();
                     var columnMapping = new Dictionary<string, string>
                     {
                         { "IncomeID", "ID поступления" },
@@ -344,14 +458,20 @@ namespace AvtoServis.ViewModels.Screens
                     };
 
                     int colIndex = 1;
+                    var headers = new List<string>();
                     foreach (var key in columnVisibility.Keys)
                     {
-                        if (key != "Actions" && columnVisibility[key])
+                        if (key != "Actions" && columnVisibility[key] && columnMapping.ContainsKey(key))
                         {
                             headers.Add(columnMapping[key]);
                             worksheet.Cell(1, colIndex).Value = columnMapping[key];
                             colIndex++;
                         }
+                    }
+
+                    if (!headers.Any())
+                    {
+                        throw new ArgumentException("Нет видимых столбцов для экспорта.");
                     }
 
                     var headerRange = worksheet.Range(1, 1, 1, colIndex - 1);
@@ -367,79 +487,80 @@ namespace AvtoServis.ViewModels.Screens
                     for (int i = 0; i < partsIncomes.Count; i++)
                     {
                         colIndex = 1;
-                        if (columnVisibility["IncomeID"])
+                        var income = partsIncomes[i];
+                        if (columnVisibility.ContainsKey("IncomeID") && columnVisibility["IncomeID"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].IncomeID;
+                            worksheet.Cell(i + 2, colIndex).Value = income.IncomeID;
                             colIndex++;
                         }
-                        if (columnVisibility["PartName"])
+                        if (columnVisibility.ContainsKey("PartName") && columnVisibility["PartName"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].PartName;
+                            worksheet.Cell(i + 2, colIndex).Value = income.PartName ?? "Неизвестно";
                             colIndex++;
                         }
-                        if (columnVisibility["SupplierName"])
+                        if (columnVisibility.ContainsKey("SupplierName") && columnVisibility["SupplierName"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].SupplierName;
+                            worksheet.Cell(i + 2, colIndex).Value = income.SupplierName ?? "Неизвестно";
                             colIndex++;
                         }
-                        if (columnVisibility["Date"])
+                        if (columnVisibility.ContainsKey("Date") && columnVisibility["Date"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].Date.ToString("yyyy-MM-dd");
+                            worksheet.Cell(i + 2, colIndex).Value = income.Date.ToString("yyyy-MM-dd");
                             colIndex++;
                         }
-                        if (columnVisibility["Quantity"])
+                        if (columnVisibility.ContainsKey("Quantity") && columnVisibility["Quantity"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].Quantity;
+                            worksheet.Cell(i + 2, colIndex).Value = income.Quantity;
                             colIndex++;
                         }
-                        if (columnVisibility["UnitPrice"])
+                        if (columnVisibility.ContainsKey("UnitPrice") && columnVisibility["UnitPrice"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].UnitPrice;
+                            worksheet.Cell(i + 2, colIndex).Value = income.UnitPrice;
                             colIndex++;
                         }
-                        if (columnVisibility["Markup"])
+                        if (columnVisibility.ContainsKey("Markup") && columnVisibility["Markup"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].Markup;
+                            worksheet.Cell(i + 2, colIndex).Value = income.Markup;
                             colIndex++;
                         }
-                        if (columnVisibility["StatusName"])
+                        if (columnVisibility.ContainsKey("StatusName") && columnVisibility["StatusName"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].StatusName;
+                            worksheet.Cell(i + 2, colIndex).Value = income.StatusName ?? "Неизвестно";
                             colIndex++;
                         }
-                        if (columnVisibility["FinanceStatusName"])
+                        if (columnVisibility.ContainsKey("FinanceStatusName") && columnVisibility["FinanceStatusName"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].Finance_Status_Name;
+                            worksheet.Cell(i + 2, colIndex).Value = income.Finance_Status_Name ?? "Неизвестно";
                             colIndex++;
                         }
-                        if (columnVisibility["OperationID"])
+                        if (columnVisibility.ContainsKey("OperationID") && columnVisibility["OperationID"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].OperationID;
+                            worksheet.Cell(i + 2, colIndex).Value = income.OperationID;
                             colIndex++;
                         }
-                        if (columnVisibility["StockName"])
+                        if (columnVisibility.ContainsKey("StockName") && columnVisibility["StockName"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].StockName;
+                            worksheet.Cell(i + 2, colIndex).Value = income.StockName ?? "Неизвестно";
                             colIndex++;
                         }
-                        if (columnVisibility["InvoiceNumber"])
+                        if (columnVisibility.ContainsKey("InvoiceNumber") && columnVisibility["InvoiceNumber"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].InvoiceNumber;
+                            worksheet.Cell(i + 2, colIndex).Value = income.InvoiceNumber ?? "Неизвестно";
                             colIndex++;
                         }
-                        if (columnVisibility["UserFullName"])
+                        if (columnVisibility.ContainsKey("UserFullName") && columnVisibility["UserFullName"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].UserFullName;
+                            worksheet.Cell(i + 2, colIndex).Value = income.UserFullName ?? "Неизвестно";
                             colIndex++;
                         }
-                        if (columnVisibility["PaidAmount"])
+                        if (columnVisibility.ContainsKey("PaidAmount") && columnVisibility["PaidAmount"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].PaidAmount;
+                            worksheet.Cell(i + 2, colIndex).Value = income.PaidAmount;
                             colIndex++;
                         }
-                        if (columnVisibility["BatchName"])
+                        if (columnVisibility.ContainsKey("BatchName") && columnVisibility["BatchName"])
                         {
-                            worksheet.Cell(i + 2, colIndex).Value = partsIncomes[i].BatchName;
+                            worksheet.Cell(i + 2, colIndex).Value = income.BatchName ?? "Неизвестно";
                             colIndex++;
                         }
                     }

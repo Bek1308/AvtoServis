@@ -1,4 +1,5 @@
-﻿using AvtoServis.Model.Entities;
+﻿using AvtoServis.Forms.Modals.PartsIncome;
+using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
 using System;
 using System.Collections.Generic;
@@ -179,7 +180,7 @@ namespace AvtoServis.Forms.Controls
         {
             try
             {
-                using (var dialog = new PartsIncomeForm())
+                using (var dialog = new PartsIncomeForm(_viewModel, _actionImageList))
                 {
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
@@ -384,13 +385,13 @@ namespace AvtoServis.Forms.Controls
                     };
                     deleteItem.Click += (s, ev) =>
                     {
-                        //using (var dialog = new PartsIncomeDialog(_viewModel, id, isDeleteMode: true))
-                        //{
-                        //    if (dialog.ShowDialog() == DialogResult.OK)
-                        //    {
-                        //        LoadData();
-                        //    }
-                        //}
+                        using (var dialog = new PartsIncomeDeleteDialog(_viewModel, id))
+                        {
+                            if (dialog.ShowDialog() == DialogResult.OK)
+                            {
+                                LoadData();
+                            }
+                        }
                     };
                     menu.Items.Add(deleteItem);
 
@@ -561,20 +562,20 @@ namespace AvtoServis.Forms.Controls
 
         public void ShowDialog(int? id)
         {
-            //try
-            //{
-            //    using (var dialog = new PartsIncomeDialog(_viewModel, id))
-            //    {
-            //        if (dialog.ShowDialog() == DialogResult.OK)
-            //        {
-            //            LoadData();
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    LogAndShowError(ex, "открытии диалога");
-            //}
+            try
+            {
+                using (var dialog = new PartsIncomeDialog(_viewModel, id))
+                {
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadData();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex, "открытии диалога");
+            }
         }
 
         private void RefreshDataGridView()

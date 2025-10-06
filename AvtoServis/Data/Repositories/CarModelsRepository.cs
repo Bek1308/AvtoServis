@@ -125,130 +125,66 @@ namespace AvtoServis.Data
             }
         }
 
-        //public List<CarModel> SearchByModel(string model)
-        //{
-        //    var models = new List<CarModel>();
-        //    try
-        //    {
-        //        using (var connection = new SqlConnection(_connectionString))
-        //        {
-        //            connection.Open();
-        //            var query = @"
-        //                SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
-        //                FROM CarModels cm
-        //                JOIN CarBrands cb ON cm.CarBrandId = cb.Id
-        //                WHERE cm.Model LIKE @Model";
-        //            using (var command = new SqlCommand(query, connection))
-        //            {
-        //                command.Parameters.AddWithValue("@Model", $"%{model}%");
-        //                using (var reader = command.ExecuteReader())
-        //                {
-        //                    while (reader.Read())
-        //                    {
-        //                        models.Add(new CarModel
-        //                        {
-        //                            Id = reader.GetInt32(0),
-        //                            Model = reader.GetString(1),
-        //                            Year = reader.GetInt32(2),
-        //                            CarBrandId = reader.GetInt32(3),
-        //                            CarBrandName = reader.GetString(4)
-        //                        });
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        System.Diagnostics.Debug.WriteLine($"SearchByModel: Found {models.Count} models matching '{model}'.");
-        //        return models;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine($"SearchByModel Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-        //        throw new Exception("Ошибка при поиске моделей.", ex);
-        //    }
-        //}
+        public List<CarModel> GetCarModels(int? customerId = null)
+        {
+            var models = new List<CarModel>();
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
 
-        //public List<CarModel> SearchByYear(int year)
-        //{
-        //    var models = new List<CarModel>();
-        //    try
-        //    {
-        //        using (var connection = new SqlConnection(_connectionString))
-        //        {
-        //            connection.Open();
-        //            var query = @"
-        //                SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
-        //                FROM CarModels cm
-        //                JOIN CarBrands cb ON cm.CarBrandId = cb.Id
-        //                WHERE cm.Year = @Year";
-        //            using (var command = new SqlCommand(query, connection))
-        //            {
-        //                command.Parameters.AddWithValue("@Year", year);
-        //                using (var reader = command.ExecuteReader())
-        //                {
-        //                    while (reader.Read())
-        //                    {
-        //                        models.Add(new CarModel
-        //                        {
-        //                            Id = reader.GetInt32(0),
-        //                            Model = reader.GetString(1),
-        //                            Year = reader.GetInt32(2),
-        //                            CarBrandId = reader.GetInt32(3),
-        //                            CarBrandName = reader.GetString(4)
-        //                        });
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        System.Diagnostics.Debug.WriteLine($"SearchByYear: Found {models.Count} models for year {year}.");
-        //        return models;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine($"SearchByYear Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-        //        throw new Exception("Ошибка при поиске моделей по году.", ex);
-        //    }
-        //}
+                    var query = @"
+                    SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
+                    FROM CarModels cm
+                    JOIN CarBrand cb ON cm.CarBrandId = cb.Id
+                    /**customerJoin**/
+                    /**customerWhere**/";
 
-        //public List<CarModel> FilterByBrand(int brandId)
-        //{
-        //    var models = new List<CarModel>();
-        //    try
-        //    {
-        //        using (var connection = new SqlConnection(_connectionString))
-        //        {
-        //            connection.Open();
-        //            var query = @"
-        //                SELECT cm.Id, cm.Model, cm.Year, cm.CarBrandId, cb.CarBrandName
-        //                FROM CarModels cm
-        //                JOIN CarBrands cb ON cm.CarBrandId = cb.Id
-        //                WHERE cm.CarBrandId = @CarBrandId";
-        //            using (var command = new SqlCommand(query, connection))
-        //            {
-        //                command.Parameters.AddWithValue("@CarBrandId", brandId);
-        //                using (var reader = command.ExecuteReader())
-        //                {
-        //                    while (reader.Read())
-        //                    {
-        //                        models.Add(new CarModel
-        //                        {
-        //                            Id = reader.GetInt32(0),
-        //                            Model = reader.GetString(1),
-        //                            Year = reader.GetInt32(2),
-        //                            CarBrandId = reader.GetInt32(3),
-        //                            CarBrandName = reader.GetString(4)
-        //                        });
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        System.Diagnostics.Debug.WriteLine($"FilterByBrand: Found {models.Count} models for brand ID {brandId}.");
-        //        return models;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine($"FilterByBrand Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-        //        throw new Exception("Ошибка при фильтрации моделей по марке.", ex);
-        //    }
-        //}
+                    if (customerId.HasValue)
+                    {
+                        query = query
+                            .Replace("/**customerJoin**/", "JOIN CustomersCars cc ON cm.Id = cc.CarModel_Id")
+                            .Replace("/**customerWhere**/", "WHERE cc.CustomerId = @CustomerId");
+                    }
+                    else
+                    {
+                        query = query
+                            .Replace("/**customerJoin**/", "")
+                            .Replace("/**customerWhere**/", "");
+                    }
+
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        if (customerId.HasValue)
+                            command.Parameters.AddWithValue("@CustomerId", customerId.Value);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                models.Add(new CarModel
+                                {
+                                    Id = reader.GetInt32(0),
+                                    Model = reader.GetString(1),
+                                    Year = reader.GetInt32(2),
+                                    CarBrandId = reader.GetInt32(3),
+                                    CarBrandName = reader.GetString(4)
+                                });
+                            }
+                        }
+                    }
+                }
+
+                System.Diagnostics.Debug.WriteLine($"GetCarModels: Retrieved {models.Count} car models.");
+                return models;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetCarModels Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                throw new Exception("Ошибка при получении списка моделей.", ex);
+            }
+        }
+
     }
 }

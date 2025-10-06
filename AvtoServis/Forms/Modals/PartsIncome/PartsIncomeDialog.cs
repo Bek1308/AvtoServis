@@ -1,304 +1,340 @@
-﻿//using AvtoServis.Model.Entities;
-//using AvtoServis.ViewModels.Screens;
-//using System;
-//using System.Drawing;
-//using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using AvtoServis.Data.Configuration;
+using AvtoServis.Data.Repositories;
+using AvtoServis.Model.Entities;
+using AvtoServis.ViewModels.Screens;
 
-//namespace AvtoServis.Forms.Controls
-//{
-//    public partial class PartsIncomeDialog : Form
-//    {
-//        private readonly PartsIncomeViewModel _viewModel;
-//        private readonly int? _incomeId;
-//        private readonly bool _isDeleteMode;
-//        private PartsIncome _income;
-//        private System.Windows.Forms.Timer _errorTimer;
+namespace AvtoServis.Forms.Controls
+{
+    public partial class PartsIncomeDialog : Form
+    {
+        private readonly PartsIncomeViewModel _viewModel;
+        private readonly int? _incomeId;
+        private PartsIncome _partsIncome;
+        private readonly string _connectionString = DatabaseConfig.ConnectionString;
 
-//        public PartsIncomeDialog(PartsIncomeViewModel viewModel, int? incomeId, bool isDeleteMode = false)
-//        {
-//            _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-//            _incomeId = incomeId;
-//            _isDeleteMode = isDeleteMode;
-//            InitializeComponent();
-//            _errorTimer = new System.Windows.Forms.Timer { Interval = 3000 };
-//            _errorTimer.Tick += ErrorTimer_Tick;
-//            lblError.Visible = false;
-//            if (!_isDeleteMode)
-//            {
-//                LoadIncome();
-//            }
-//            else
-//            {
-//                SetupDeleteModeUI();
-//            }
-//            SetToolTips();
-//        }
+        public PartsIncomeDialog(PartsIncomeViewModel viewModel, int? incomeId = null)
+        {
+            _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+            _incomeId = incomeId;
+            InitializeComponent();
+            InitializeTimer();
+            InitializeComboBoxes();
+            ShowInitialMessage();
+            LoadData();
+        }
 
-//        private void SetToolTips()
-//        {
-//            toolTip.SetToolTip(tableLayoutPanel, "Форма для добавления или редактирования поступления деталей");
-//            toolTip.SetToolTip(lblPart, "Выберите деталь");
-//            toolTip.SetToolTip(cmbPart, "Список доступных деталей");
-//            toolTip.SetToolTip(lblSupplier, "Выберите поставщика");
-//            toolTip.SetToolTip(cmbSupplier, "Список доступных поставщиков");
-//            toolTip.SetToolTip(lblDate, "Введите дату поступления");
-//            toolTip.SetToolTip(dtpDate, "Дата поступления");
-//            toolTip.SetToolTip(lblQuantity, "Введите количество");
-//            toolTip.SetToolTip(txtQuantity, "Количество поступивших деталей");
-//            toolTip.SetToolTip(lblUnitPrice, "Введите цену за единицу");
-//            toolTip.SetToolTip(txtUnitPrice, "Цена за единицу детали");
-//            toolTip.SetToolTip(lblMarkup, "Введите наценку");
-//            toolTip.SetToolTip(txtMarkup, "Наценка на деталь");
-//            toolTip.SetToolTip(lblStatus, "Выберите статус");
-//            toolTip.SetToolTip(cmbStatus, "Список доступных статусов");
-//            toolTip.SetToolTip(lblOperation, "Выберите операцию");
-//            toolTip.SetToolTip(cmbOperation, "Список доступных операций");
-//            toolTip.SetToolTip(lblStock, "Выберите склад");
-//            toolTip.SetToolTip(cmbStock, "Список доступных складов");
-//            toolTip.SetToolTip(lblInvoiceNumber, "Введите номер счета");
-//            toolTip.SetToolTip(txtInvoiceNumber, "Номер счета для поступления");
-//            toolTip.SetToolTip(lblUser, "Выберите пользователя");
-//            toolTip.SetToolTip(cmbUser, "Список доступных пользователей");
-//            toolTip.SetToolTip(lblPaidAmount, "Введите оплаченную сумму");
-//            toolTip.SetToolTip(txtPaidAmount, "Оплаченная сумма за поступление");
-//            toolTip.SetToolTip(lblBatch, "Введите ID партии");
-//            toolTip.SetToolTip(txtBatch, "ID партии поступления");
-//            toolTip.SetToolTip(btnCancel, "Отменить изменения");
-//            toolTip.SetToolTip(btnSave, _isDeleteMode ? "Подтвердить удаление поступления" : "Сохранить изменения");
-//            toolTip.SetToolTip(lblError, "Сообщение об ошибке");
-//        }
+        private void InitializeTimer()
+        {
+            errorTimer.Tick += (s, e) =>
+            {
+                _messagePanel.Visible = true; // Xabar paneli doimiy ko'rinib turadi
+                _messageLabel.Visible = true;
+                errorTimer.Stop();
+                AdjustFormHeight();
+            };
+        }
 
-//        private void LoadIncome()
-//        {
-//            try
-//            {
-//                _income = _incomeId == null ? new PartsIncome() : _viewModel.LoadPartsIncome().Find(p => p.IncomeID == _incomeId);
-//                if (_income == null && _incomeId != null)
-//                {
-//                    ShowError("Поступление не найдено.");
-//                    return;
-//                }
+        private void InitializeComboBoxes()
+        {
+            try
+            {
+                var partsRepository = new PartsRepository(_connectionString);
+                var parts = partsRepository.GetAll();
+                cmbPartID.DataSource = parts;
+                cmbPartID.DisplayMember = "PartName";
+                cmbPartID.ValueMember = "PartID";
+                cmbPartID.SelectedIndex = -1;
 
-//                var parts = _viewModel.LoadParts();
-//                cmbPart.DataSource = parts;
-//                cmbPart.DisplayMember = "PartName";
-//                cmbPart.ValueMember = "PartID";
+                var suppliersRepository = new SuppliersRepository(_connectionString);
+                var suppliers = suppliersRepository.GetAll();
+                cmbSupplierID.DataSource = suppliers;
+                cmbSupplierID.DisplayMember = "Name";
+                cmbSupplierID.ValueMember = "SupplierID";
+                cmbSupplierID.SelectedIndex = -1;
 
-//                var suppliers = _viewModel.LoadSuppliers();
-//                cmbSupplier.DataSource = suppliers;
-//                cmbSupplier.DisplayMember = "Name";
-//                cmbSupplier.ValueMember = "SupplierID";
+                var statusesRepository = new StatusRepository(_connectionString);
+                var statuses = statusesRepository.GetAll("IncomeStatuses");
+                cmbStatusID.DataSource = statuses;
+                cmbStatusID.DisplayMember = "Name";
+                cmbStatusID.ValueMember = "StatusID";
+                cmbStatusID.SelectedIndex = -1;
 
-//                var statuses = _viewModel.LoadStatuses();
-//                cmbStatus.DataSource = statuses;
-//                cmbStatus.DisplayMember = "Name";
-//                cmbStatus.ValueMember = "StatusID";
+                var stockRepository = new StockRepository(_connectionString);
+                var stocks = stockRepository.GetAll();
+                cmbStockID.DataSource = stocks;
+                cmbStockID.DisplayMember = "Name";
+                cmbStockID.ValueMember = "StockID";
+                cmbStockID.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Ошибка при загрузке данных для выпадающих списков: {ex.Message}");
+            }
+        }
 
-//                var operations = _viewModel.LoadOperations();
-//                cmbOperation.DataSource = operations;
-//                cmbOperation.DisplayMember = "Name";
-//                cmbOperation.ValueMember = "OperationID";
+        private void ShowInitialMessage()
+        {
+            _messageLabel.Text = "Редактирование поступления: измените необходимые поля и нажмите 'Сохранить'";
+            _messageLabel.ForeColor = Color.FromArgb(40, 167, 69);
+            _messageLabel.BackColor = Color.Transparent;
+            _messagePanel.BackColor = Color.FromArgb(245, 255, 245);
+            _messagePanel.Visible = true;
+            _messageLabel.Visible = true;
+            _messagePanel.BringToFront();
+            AdjustFormHeight();
+        }
 
-//                var stocks = _viewModel.LoadStocks();
-//                cmbStock.DataSource = stocks;
-//                cmbStock.DisplayMember = "Name";
-//                cmbStock.ValueMember = "StockID";
+        private void ShowError(string message)
+        {
+            _messageLabel.Text = message;
+            _messageLabel.ForeColor = Color.FromArgb(220, 53, 69);
+            _messageLabel.BackColor = Color.Transparent;
+            _messagePanel.BackColor = Color.FromArgb(255, 245, 245);
+            _messagePanel.Visible = true;
+            _messageLabel.Visible = true;
+            _messagePanel.BringToFront();
+            AdjustFormHeight();
+        }
 
-//                var users = _viewModel.LoadUsers();
-//                cmbUser.DataSource = users;
-//                cmbUser.DisplayMember = "Name";
-//                cmbUser.ValueMember = "UserID";
+        private void ShowSuccess(string message)
+        {
+            _messageLabel.Text = message;
+            _messageLabel.ForeColor = Color.FromArgb(40, 167, 69);
+            _messageLabel.BackColor = Color.Transparent;
+            _messagePanel.BackColor = Color.FromArgb(245, 255, 245);
+            _messagePanel.Visible = true;
+            _messageLabel.Visible = true;
+            _messagePanel.BringToFront();
+            AdjustFormHeight();
+        }
 
-//                if (_incomeId != null)
-//                {
-//                    cmbPart.SelectedValue = _income.PartID;
-//                    cmbSupplier.SelectedValue = _income.SupplierID;
-//                    dtpDate.Value = _income.Date;
-//                    txtQuantity.Text = _income.Quantity.ToString();
-//                    txtUnitPrice.Text = _income.UnitPrice.ToString();
-//                    txtMarkup.Text = _income.Markup.ToString();
-//                    cmbStatus.SelectedValue = _income.StatusID;
-//                    cmbOperation.SelectedValue = _income.OperationID;
-//                    cmbStock.SelectedValue = _income.StockID;
-//                    txtInvoiceNumber.Text = _income.InvoiceNumber;
-//                    cmbUser.SelectedValue = _income.UserID;
-//                    txtPaidAmount.Text = _income.PaidAmount.ToString();
-//                    txtBatch.Text = _income.BatchID.ToString();
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                ShowError($"Ошибка при загрузке поступления: {ex.Message}");
-//                System.Diagnostics.Debug.WriteLine($"LoadIncome Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-//            }
-//        }
+        private void AdjustFormHeight()
+        {
+            _messageLabel.AutoSize = true;
+            _messageLabel.MaximumSize = new Size(460, 0);
+            int textHeight = TextRenderer.MeasureText(_messageLabel.Text, _messageLabel.Font, new Size(460, 0), TextFormatFlags.WordBreak).Height;
+            _messagePanel.Height = textHeight + _messagePanel.Padding.Top + _messagePanel.Padding.Bottom;
+            tableLayoutPanel.RowStyles[11].Height = _messagePanel.Height;
 
-//        private void SetupDeleteModeUI()
-//        {
-//            this.ClientSize = new Size(434, 142);
-//            this.Text = "Подтверждение удаления";
+            // Forma balandligini qatorlar va paddinglarga qarab hisoblash
+            int newFormHeight = 0;
+            foreach (RowStyle row in tableLayoutPanel.RowStyles)
+            {
+                newFormHeight += (int)row.Height;
+            }
+            newFormHeight += tableLayoutPanel.Padding.Top + tableLayoutPanel.Padding.Bottom + 20; // Qo'shimcha bo'shliq
 
-//            var lblMessage = new Label
-//            {
-//                AutoSize = true,
-//                Text = "Вы хотите удалить это поступление?",
-//                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
-//                ForeColor = Color.FromArgb(33, 37, 41),
-//                Name = "lblMessage",
-//                Anchor = AnchorStyles.Left,
-//                AccessibleName = "Сообщение об удалении",
-//                AccessibleDescription = "Подтверждение удаления поступления"
-//            };
+            // Forma va tableLayoutPanel balandligini o'zgartirish
+            ClientSize = new Size(ClientSize.Width, newFormHeight);
+            tableLayoutPanel.Size = new Size(tableLayoutPanel.Width, newFormHeight);
+        }
 
-//            tableLayoutPanel.Controls.Clear();
-//            tableLayoutPanel.RowCount = 2;
-//            tableLayoutPanel.RowStyles.Clear();
-//            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-//            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+        private void LoadData()
+        {
+            if (_incomeId.HasValue)
+            {
+                try
+                {
+                    var partsIncomes = _viewModel.LoadPartsIncomes();
+                    _partsIncome = partsIncomes.FirstOrDefault(p => p.IncomeID == _incomeId);
+                    if (_partsIncome == null)
+                    {
+                        ShowError("Поступление не найдено!");
+                        return;
+                    }
 
-//            tableLayoutPanel.Controls.Add(lblMessage, 0, 0);
-//            tableLayoutPanel.SetColumnSpan(lblMessage, 2);
-//            tableLayoutPanel.Controls.Add(btnCancel, 0, 1);
-//            tableLayoutPanel.Controls.Add(btnSave, 1, 1);
+                    txtBatchName.Text = _partsIncome.BatchName;
+                    cmbPartID.SelectedValue = _partsIncome.PartID;
+                    cmbSupplierID.SelectedValue = _partsIncome.SupplierID;
+                    dtpDate.Value = _partsIncome.Date;
+                    txtQuantity.Text = _partsIncome.Quantity.ToString();
+                    txtUnitPrice.Text = _partsIncome.UnitPrice.ToString();
+                    txtMarkup.Text = _partsIncome.Markup.ToString();
+                    cmbStatusID.SelectedValue = _partsIncome.StatusID;
+                    cmbStockID.SelectedValue = _partsIncome.StockID;
+                    txtInvoiceNumber.Text = _partsIncome.InvoiceNumber;
+                    txtPaidAmount.Text = _partsIncome.PaidAmount.ToString();
+                }
+                catch (Exception ex)
+                {
+                    ShowError($"Ошибка при загрузке данных: {ex.Message}");
+                }
+            }
+            else
+            {
+                _partsIncome = new PartsIncome();
+            }
+            ValidateInputs();
+        }
 
-//            btnCancel.Text = "Нет";
-//            btnSave.Text = "Да";
-//            btnCancel.BackColor = Color.FromArgb(25, 118, 210);
-//            btnCancel.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 140, 230);
-//            btnSave.BackColor = Color.FromArgb(220, 53, 69);
-//            btnSave.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 100, 100);
-//        }
+        private void ValidateInputs()
+        {
+            var errors = new List<string>();
 
-//        private void BtnSave_Click(object sender, EventArgs e)
-//        {
-//            try
-//            {
-//                if (_isDeleteMode)
-//                {
-//                    _viewModel.DeletePartsIncome(_incomeId.Value);
-//                    DialogResult = DialogResult.OK;
-//                    Close();
-//                    return;
-//                }
+            if (string.IsNullOrWhiteSpace(txtBatchName.Text))
+                errors.Add("Введите название партии!");
+            if (cmbPartID.SelectedValue == null)
+                errors.Add("Выберите деталь!");
+            if (cmbSupplierID.SelectedValue == null)
+                errors.Add("Выберите поставщика!");
+            if (string.IsNullOrWhiteSpace(txtQuantity.Text) || !int.TryParse(txtQuantity.Text, out int quantity) || quantity <= 0)
+                errors.Add("Введите корректное количество (положительное число)!");
+            if (string.IsNullOrWhiteSpace(txtUnitPrice.Text) || !decimal.TryParse(txtUnitPrice.Text, out decimal unitPrice) || unitPrice <= 0)
+                errors.Add("Введите корректную цену за единицу (положительное число)!");
+            if (string.IsNullOrWhiteSpace(txtMarkup.Text) || !decimal.TryParse(txtMarkup.Text, out decimal markup) || markup < 0)
+                errors.Add("Введите корректную наценку (неотрицательное число)!");
+            if (cmbStatusID.SelectedValue == null)
+                errors.Add("Выберите статус!");
+            if (cmbStockID.SelectedValue == null)
+                errors.Add("Выберите склад!");
+            if (string.IsNullOrWhiteSpace(txtPaidAmount.Text) || !decimal.TryParse(txtPaidAmount.Text, out decimal paidAmount) || paidAmount < 0)
+                errors.Add("Введите корректную оплаченную сумму (неотрицательное число)!");
 
-//                if (!ValidateInput()) return;
+            // Replace the selected code block with the following:
+            if (int.TryParse(txtQuantity.Text, out quantity) && decimal.TryParse(txtUnitPrice.Text, out unitPrice) && decimal.TryParse(txtPaidAmount.Text, out paidAmount))
+            {
+                decimal expectedPaidAmount = quantity * unitPrice;
+                if (paidAmount > expectedPaidAmount + 0.01m)
+                    errors.Add("Оплаченная сумма не должна превышать количество * цену за единицу!");
+            }
 
-//                _income.PartID = (int)cmbPart.SelectedValue;
-//                _income.SupplierID = (int)cmbSupplier.SelectedValue;
-//                _income.Date = dtpDate.Value;
-//                _income.Quantity = int.Parse(txtQuantity.Text.Trim());
-//                _income.UnitPrice = decimal.Parse(txtUnitPrice.Text.Trim());
-//                _income.Markup = decimal.Parse(txtMarkup.Text.Trim());
-//                _income.StatusID = (int)cmbStatus.SelectedValue;
-//                _income.OperationID = (int)cmbOperation.SelectedValue;
-//                _income.StockID = (int)cmbStock.SelectedValue;
-//                _income.InvoiceNumber = txtInvoiceNumber.Text.Trim();
-//                _income.UserID = (int)cmbUser.SelectedValue;
-//                _income.PaidAmount = decimal.Parse(txtPaidAmount.Text.Trim());
-//                _income.BatchID = int.Parse(txtBatch.Text.Trim());
+            if (errors.Count > 0)
+            {
+                ShowError(string.Join("\n", errors));
+                return;
+            }
 
-//                if (_incomeId == null)
-//                {
-//                    _viewModel.AddPartsIncome(_income);
-//                }
-//                else
-//                {
-//                    _viewModel.UpdatePartsIncome(_income);
-//                }
+            ShowSuccess("Все данные введены корректно! Нажмите 'Сохранить'.");
+        }
 
-//                DialogResult = DialogResult.OK;
-//                Close();
-//            }
-//            catch (Exception ex)
-//            {
-//                ShowError($"Ошибка при сохранении: {ex.Message}");
-//                System.Diagnostics.Debug.WriteLine($"BtnSave_Click Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
-//            }
-//        }
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            var errors = new List<string>();
+            int quantity = 0;
+            decimal unitPrice = 0;
+            decimal markup = 0;
+            decimal paidAmount = 0;
 
-//        private bool ValidateInput()
-//        {
-//            if (cmbPart.SelectedValue == null)
-//            {
-//                ShowError("Выберите деталь.");
-//                return false;
-//            }
-//            if (cmbSupplier.SelectedValue == null)
-//            {
-//                ShowError("Выберите поставщика.");
-//                return false;
-//            }
-//            if (string.IsNullOrWhiteSpace(txtQuantity.Text) || !int.TryParse(txtQuantity.Text.Trim(), out int quantity) || quantity <= 0)
-//            {
-//                ShowError("Введите корректное количество (положительное число).");
-//                return false;
-//            }
-//            if (string.IsNullOrWhiteSpace(txtUnitPrice.Text) || !decimal.TryParse(txtUnitPrice.Text.Trim(), out decimal unitPrice) || unitPrice < 0)
-//            {
-//                ShowError("Введите корректную цену за единицу (неотрицательное число).");
-//                return false;
-//            }
-//            if (string.IsNullOrWhiteSpace(txtMarkup.Text) || !decimal.TryParse(txtMarkup.Text.Trim(), out decimal markup) || markup < 0)
-//            {
-//                ShowError("Введите корректную наценку (неотрицательное число).");
-//                return false;
-//            }
-//            if (cmbStatus.SelectedValue == null)
-//            {
-//                ShowError("Выберите статус.");
-//                return false;
-//            }
-//            if (cmbOperation.SelectedValue == null)
-//            {
-//                ShowError("Выберите операцию.");
-//                return false;
-//            }
-//            if (cmbStock.SelectedValue == null)
-//            {
-//                ShowError("Выберите склад.");
-//                return false;
-//            }
-//            if (string.IsNullOrWhiteSpace(txtInvoiceNumber.Text))
-//            {
-//                ShowError("Введите номер счета.");
-//                return false;
-//            }
-//            if (cmbUser.SelectedValue == null)
-//            {
-//                ShowError("Выберите пользователя.");
-//                return false;
-//            }
-//            if (string.IsNullOrWhiteSpace(txtPaidAmount.Text) || !decimal.TryParse(txtPaidAmount.Text.Trim(), out decimal paidAmount) || paidAmount < 0)
-//            {
-//                ShowError("Введите корректную оплаченную сумму (неотрицательное число).");
-//                return false;
-//            }
-//            if (string.IsNullOrWhiteSpace(txtBatch.Text) || !int.TryParse(txtBatch.Text.Trim(), out int batchId) || batchId <= 0)
-//            {
-//                ShowError("Введите корректный ID партии (положительное число).");
-//                return false;
-//            }
-//            return true;
-//        }
+            if (string.IsNullOrWhiteSpace(txtBatchName.Text))
+                errors.Add("Введите название партии!");
+            if (cmbPartID.SelectedValue == null)
+                errors.Add("Выберите деталь!");
+            if (cmbSupplierID.SelectedValue == null)
+                errors.Add("Выберите поставщика!");
+            if (string.IsNullOrWhiteSpace(txtQuantity.Text) || !int.TryParse(txtQuantity.Text, out quantity) || quantity <= 0)
+                errors.Add("Введите корректное количество (положительное число)!");
+            if (string.IsNullOrWhiteSpace(txtUnitPrice.Text) || !decimal.TryParse(txtUnitPrice.Text, out unitPrice) || unitPrice <= 0)
+                errors.Add("Введите корректную цену за единицу (положительное число)!");
+            if (string.IsNullOrWhiteSpace(txtMarkup.Text) || !decimal.TryParse(txtMarkup.Text, out markup) || markup < 0)
+                errors.Add("Введите корректную наценку (неотрицательное число)!");
+            if (cmbStatusID.SelectedValue == null)
+                errors.Add("Выберите статус!");
+            if (cmbStockID.SelectedValue == null)
+                errors.Add("Выберите склад!");
+            if (string.IsNullOrWhiteSpace(txtPaidAmount.Text) || !decimal.TryParse(txtPaidAmount.Text, out paidAmount) || paidAmount < 0)
+                errors.Add("Введите корректную оплаченную сумму (неотрицательное число)!");
 
-//        private void BtnCancel_Click(object sender, EventArgs e)
-//        {
-//            DialogResult = DialogResult.Cancel;
-//            Close();
-//        }
+            if (int.TryParse(txtQuantity.Text, out quantity) && decimal.TryParse(txtUnitPrice.Text, out unitPrice) && decimal.TryParse(txtPaidAmount.Text, out paidAmount))
+            {
+                decimal expectedPaidAmount = quantity * unitPrice;
+                if (paidAmount > expectedPaidAmount + 0.01m)
+                    errors.Add("Оплаченная сумма не должна превышать количество * цену за единицу!");
+            }
 
-//        private void ErrorTimer_Tick(object sender, EventArgs e)
-//        {
-//            lblError.Visible = false;
-//            _errorTimer.Stop();
-//        }
+            if (errors.Count > 0)
+            {
+                ShowError(string.Join("\n", errors));
+                return;
+            }
 
-//        private void ShowError(string message)
-//        {
-//            lblError.Text = message;
-//            lblError.Visible = true;
-//            _errorTimer.Stop();
-//            _errorTimer.Start();
-//        }
-//    }
-//}
+            try
+            {
+                _partsIncome.BatchName = txtBatchName.Text;
+                _partsIncome.PartID = (int)cmbPartID.SelectedValue;
+                _partsIncome.SupplierID = (int)cmbSupplierID.SelectedValue;
+                _partsIncome.Date = dtpDate.Value;
+                _partsIncome.Quantity = quantity;
+                _partsIncome.UnitPrice = unitPrice;
+                _partsIncome.Markup = markup;
+                _partsIncome.StatusID = (int)cmbStatusID.SelectedValue;
+                _partsIncome.StockID = (int)cmbStockID.SelectedValue;
+                _partsIncome.InvoiceNumber = string.IsNullOrWhiteSpace(txtInvoiceNumber.Text) ? null : txtInvoiceNumber.Text;
+                _partsIncome.PaidAmount = paidAmount;
+
+                if (_incomeId.HasValue)
+                {
+                    _viewModel.UpdatePartsIncome(_partsIncome, txtBatchName.Text);
+                    ShowSuccess("Поступление успешно обновлено!");
+                }
+                else
+                {
+                    _viewModel.SavePartsIncomes(new List<PartsIncome> { _partsIncome }, txtBatchName.Text, _partsIncome.PaidAmount);
+                    ShowSuccess("Поступление успешно сохранено!");
+                }
+
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Ошибка при сохранении: {ex.Message}");
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void txtBatchName_TextChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void cmbPartID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void cmbSupplierID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void txtQuantity_TextChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void txtUnitPrice_TextChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void txtMarkup_TextChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void cmbStatusID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void cmbStockID_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+
+        private void txtPaidAmount_TextChanged(object sender, EventArgs e)
+        {
+            if (!DesignMode) ValidateInputs();
+        }
+    }
+}

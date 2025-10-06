@@ -48,6 +48,8 @@
             button9 = new Button();
             panel19 = new Panel();
             button10 = new Button();
+            panel22 = new Panel();
+            btnParts = new Button();
             pnReport = new Panel();
             btnReport = new Button();
             SprContainer = new FlowLayoutPanel();
@@ -67,6 +69,8 @@
             btnSsuplier = new Button();
             panel15 = new Panel();
             button6 = new Button();
+            panel21 = new Panel();
+            btnCarBrand = new Button();
             panel13 = new Panel();
             btnSstock = new Button();
             flowLayoutPanel5 = new FlowLayoutPanel();
@@ -88,8 +92,13 @@
             flowLayoutPanel4 = new FlowLayoutPanel();
             panel2 = new Panel();
             ContentPanel = new CustomPanel();
-            panel21 = new Panel();
-            btnCarBrand = new Button();
+            deptsPanel = new FlowLayoutPanel();
+            panel23 = new Panel();
+            btnDepts = new Button();
+            panel24 = new Panel();
+            debtors = new Button();
+            panel25 = new Panel();
+            btnMydepts = new Button();
             sidebarContainer.SuspendLayout();
             pnMain.SuspendLayout();
             pnSell.SuspendLayout();
@@ -99,6 +108,7 @@
             panel17.SuspendLayout();
             panel18.SuspendLayout();
             panel19.SuspendLayout();
+            panel22.SuspendLayout();
             pnReport.SuspendLayout();
             SprContainer.SuspendLayout();
             panel7.SuspendLayout();
@@ -109,6 +119,7 @@
             panel8.SuspendLayout();
             panel12.SuspendLayout();
             panel15.SuspendLayout();
+            panel21.SuspendLayout();
             panel13.SuspendLayout();
             flowLayoutPanel5.SuspendLayout();
             panel3.SuspendLayout();
@@ -116,7 +127,10 @@
             panel5.SuspendLayout();
             panel6.SuspendLayout();
             panel14.SuspendLayout();
-            panel21.SuspendLayout();
+            deptsPanel.SuspendLayout();
+            panel23.SuspendLayout();
+            panel24.SuspendLayout();
+            panel25.SuspendLayout();
             SuspendLayout();
             // 
             // sidebarContainer
@@ -126,7 +140,9 @@
             sidebarContainer.Controls.Add(pnMain);
             sidebarContainer.Controls.Add(pnSell);
             sidebarContainer.Controls.Add(pnServis);
+            sidebarContainer.Controls.Add(deptsPanel);
             sidebarContainer.Controls.Add(pnIncome);
+            sidebarContainer.Controls.Add(panel22);
             sidebarContainer.Controls.Add(pnReport);
             sidebarContainer.Controls.Add(SprContainer);
             sidebarContainer.Dock = DockStyle.Left;
@@ -140,18 +156,17 @@
             // 
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(250, 76);
+            panel1.Size = new Size(233, 64);
             panel1.TabIndex = 0;
             // 
             // pnMain
             // 
             pnMain.BackColor = Color.Transparent;
             pnMain.Controls.Add(btnMain);
-            pnMain.Location = new Point(3, 85);
+            pnMain.Location = new Point(3, 73);
             pnMain.Name = "pnMain";
             pnMain.Size = new Size(229, 43);
             pnMain.TabIndex = 1;
-            pnMain.Paint += panel2_Paint;
             // 
             // btnMain
             // 
@@ -186,12 +201,14 @@
             imageList1.Images.SetKeyName(8, "icons8-delete-64.png");
             imageList1.Images.SetKeyName(9, "icons8-edit-50.png");
             imageList1.Images.SetKeyName(10, "point_icon_151143.png");
+            imageList1.Images.SetKeyName(11, "icons8-flat-tire-32.png");
+            imageList1.Images.SetKeyName(12, "icons8-get-cash-64.png");
             // 
             // pnSell
             // 
             pnSell.BackColor = Color.Transparent;
             pnSell.Controls.Add(btnSell);
-            pnSell.Location = new Point(3, 134);
+            pnSell.Location = new Point(3, 122);
             pnSell.Name = "pnSell";
             pnSell.Size = new Size(229, 43);
             pnSell.TabIndex = 2;
@@ -211,13 +228,14 @@
             btnSell.Text = "            Продажа";
             btnSell.TextAlign = ContentAlignment.MiddleLeft;
             btnSell.UseVisualStyleBackColor = false;
+            btnSell.Click += btnSell_Click;
             btnSell.MouseEnter += ApplyHoverEffect;
             // 
             // pnServis
             // 
             pnServis.BackColor = Color.Transparent;
             pnServis.Controls.Add(btnServis);
-            pnServis.Location = new Point(3, 183);
+            pnServis.Location = new Point(3, 171);
             pnServis.Name = "pnServis";
             pnServis.Size = new Size(229, 43);
             pnServis.TabIndex = 2;
@@ -237,6 +255,7 @@
             btnServis.Text = "            Услуги";
             btnServis.TextAlign = ContentAlignment.MiddleLeft;
             btnServis.UseVisualStyleBackColor = false;
+            btnServis.Click += btnServis_Click;
             btnServis.MouseEnter += ApplyHoverEffect;
             // 
             // pnIncome
@@ -246,7 +265,7 @@
             pnIncome.Controls.Add(panel17);
             pnIncome.Controls.Add(panel18);
             pnIncome.Controls.Add(panel19);
-            pnIncome.Location = new Point(3, 232);
+            pnIncome.Location = new Point(3, 273);
             pnIncome.Name = "pnIncome";
             pnIncome.Size = new Size(233, 40);
             pnIncome.TabIndex = 6;
@@ -304,6 +323,8 @@
             btIndexIncome.Text = "            Закупка";
             btIndexIncome.TextAlign = ContentAlignment.MiddleLeft;
             btIndexIncome.UseVisualStyleBackColor = false;
+            btIndexIncome.Click += btnSubIncome_Click;
+            btIndexIncome.MouseEnter += ApplyHoverEffect;
             // 
             // panel18
             // 
@@ -328,9 +349,11 @@
             button9.Padding = new Padding(59, 0, 0, 0);
             button9.Size = new Size(274, 43);
             button9.TabIndex = 0;
-            button9.Text = "            Что то";
+            button9.Text = "            Партии";
             button9.TextAlign = ContentAlignment.MiddleLeft;
             button9.UseVisualStyleBackColor = false;
+            button9.Click += btnBatch_Click;
+            button9.MouseEnter += ApplyHoverEffect;
             // 
             // panel19
             // 
@@ -358,12 +381,39 @@
             button10.Text = "            Что то";
             button10.TextAlign = ContentAlignment.MiddleLeft;
             button10.UseVisualStyleBackColor = false;
+            button10.MouseEnter += ApplyHoverEffect;
+            // 
+            // panel22
+            // 
+            panel22.BackColor = Color.Transparent;
+            panel22.Controls.Add(btnParts);
+            panel22.Location = new Point(3, 319);
+            panel22.Name = "panel22";
+            panel22.Size = new Size(229, 43);
+            panel22.TabIndex = 7;
+            // 
+            // btnParts
+            // 
+            btnParts.BackColor = Color.FromArgb(248, 248, 248);
+            btnParts.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnParts.ImageAlign = ContentAlignment.MiddleLeft;
+            btnParts.ImageIndex = 11;
+            btnParts.ImageList = imageList1;
+            btnParts.Location = new Point(-15, -12);
+            btnParts.Name = "btnParts";
+            btnParts.Padding = new Padding(25, 0, 0, 0);
+            btnParts.Size = new Size(265, 67);
+            btnParts.TabIndex = 0;
+            btnParts.Text = "            Запчасты";
+            btnParts.TextAlign = ContentAlignment.MiddleLeft;
+            btnParts.UseVisualStyleBackColor = false;
+            btnParts.Click += btnParts_Click;
             // 
             // pnReport
             // 
             pnReport.BackColor = Color.Transparent;
             pnReport.Controls.Add(btnReport);
-            pnReport.Location = new Point(3, 278);
+            pnReport.Location = new Point(3, 368);
             pnReport.Name = "pnReport";
             pnReport.Size = new Size(229, 43);
             pnReport.TabIndex = 3;
@@ -399,11 +449,10 @@
             SprContainer.Controls.Add(panel21);
             SprContainer.Controls.Add(panel13);
             SprContainer.Controls.Add(flowLayoutPanel5);
-            SprContainer.Location = new Point(3, 327);
+            SprContainer.Location = new Point(3, 417);
             SprContainer.Name = "SprContainer";
             SprContainer.Size = new Size(233, 46);
             SprContainer.TabIndex = 5;
-            SprContainer.Paint += SprContainer_Paint;
             // 
             // panel7
             // 
@@ -634,6 +683,35 @@
             button6.UseVisualStyleBackColor = false;
             button6.Click += button6_Click_1;
             button6.MouseEnter += ApplyHoverEffect;
+            // 
+            // panel21
+            // 
+            panel21.BackColor = Color.Transparent;
+            panel21.Controls.Add(btnCarBrand);
+            panel21.ForeColor = Color.DodgerBlue;
+            panel21.Location = new Point(3, 320);
+            panel21.Margin = new Padding(3, 7, 3, 0);
+            panel21.Name = "panel21";
+            panel21.Size = new Size(241, 32);
+            panel21.TabIndex = 10;
+            // 
+            // btnCarBrand
+            // 
+            btnCarBrand.BackColor = Color.FromArgb(248, 248, 248);
+            btnCarBrand.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnCarBrand.ImageAlign = ContentAlignment.MiddleLeft;
+            btnCarBrand.ImageIndex = 6;
+            btnCarBrand.ImageList = imageList1;
+            btnCarBrand.Location = new Point(-24, -5);
+            btnCarBrand.Name = "btnCarBrand";
+            btnCarBrand.Padding = new Padding(59, 0, 0, 0);
+            btnCarBrand.Size = new Size(274, 43);
+            btnCarBrand.TabIndex = 0;
+            btnCarBrand.Text = "            Марка машини";
+            btnCarBrand.TextAlign = ContentAlignment.MiddleLeft;
+            btnCarBrand.UseVisualStyleBackColor = false;
+            btnCarBrand.Click += btnCarBrand_Click;
+            btnCarBrand.MouseEnter += ApplyHoverEffect;
             // 
             // panel13
             // 
@@ -875,37 +953,97 @@
             ContentPanel.Name = "ContentPanel";
             ContentPanel.Size = new Size(1109, 640);
             ContentPanel.TabIndex = 7;
-            ContentPanel.Paint += ContentPanel_Paint;
             // 
-            // panel21
+            // deptsPanel
             // 
-            panel21.BackColor = Color.Transparent;
-            panel21.Controls.Add(btnCarBrand);
-            panel21.ForeColor = Color.DodgerBlue;
-            panel21.Location = new Point(3, 320);
-            panel21.Margin = new Padding(3, 7, 3, 0);
-            panel21.Name = "panel21";
-            panel21.Size = new Size(241, 32);
-            panel21.TabIndex = 10;
-
+            deptsPanel.BackColor = Color.FromArgb(248, 248, 248);
+            deptsPanel.Controls.Add(panel23);
+            deptsPanel.Controls.Add(panel24);
+            deptsPanel.Controls.Add(panel25);
+            deptsPanel.Location = new Point(3, 220);
+            deptsPanel.Name = "deptsPanel";
+            deptsPanel.Size = new Size(233, 47);
+            deptsPanel.TabIndex = 7;
             // 
-            // btnCarBrand
+            // panel23
             // 
-            btnCarBrand.BackColor = Color.FromArgb(248, 248, 248);
-            btnCarBrand.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            btnCarBrand.ImageAlign = ContentAlignment.MiddleLeft;
-            btnCarBrand.ImageIndex = 6;
-            btnCarBrand.ImageList = imageList1;
-            btnCarBrand.Location = new Point(-24, -5);
-            btnCarBrand.Name = "btnCarBrand";
-            btnCarBrand.Padding = new Padding(59, 0, 0, 0);
-            btnCarBrand.Size = new Size(274, 43);
-            btnCarBrand.TabIndex = 0;
-            btnCarBrand.Text = "            Марка машини";
-            btnCarBrand.TextAlign = ContentAlignment.MiddleLeft;
-            btnCarBrand.UseVisualStyleBackColor = false;
-            btnCarBrand.MouseEnter += ApplyHoverEffect;
-            btnCarBrand.Click += btnCarBrand_Click;
+            panel23.BackColor = Color.Transparent;
+            panel23.Controls.Add(btnDepts);
+            panel23.Location = new Point(3, 3);
+            panel23.Name = "panel23";
+            panel23.Size = new Size(247, 43);
+            panel23.TabIndex = 4;
+            // 
+            // btnDepts
+            // 
+            btnDepts.BackColor = Color.FromArgb(248, 248, 248);
+            btnDepts.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnDepts.ImageAlign = ContentAlignment.MiddleLeft;
+            btnDepts.ImageIndex = 12;
+            btnDepts.ImageList = imageList1;
+            btnDepts.Location = new Point(-15, -19);
+            btnDepts.Name = "btnDepts";
+            btnDepts.Padding = new Padding(25, 0, 0, 0);
+            btnDepts.Size = new Size(265, 75);
+            btnDepts.TabIndex = 0;
+            btnDepts.Text = "            Долги";
+            btnDepts.TextAlign = ContentAlignment.MiddleLeft;
+            btnDepts.UseVisualStyleBackColor = false;
+            btnDepts.Click += btnDepts_Click;
+            // 
+            // panel24
+            // 
+            panel24.BackColor = Color.Transparent;
+            panel24.Controls.Add(debtors);
+            panel24.ForeColor = Color.DodgerBlue;
+            panel24.Location = new Point(3, 56);
+            panel24.Margin = new Padding(3, 7, 3, 0);
+            panel24.Name = "panel24";
+            panel24.Size = new Size(241, 29);
+            panel24.TabIndex = 7;
+            // 
+            // debtors
+            // 
+            debtors.BackColor = Color.FromArgb(248, 248, 248);
+            debtors.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            debtors.ImageAlign = ContentAlignment.MiddleLeft;
+            debtors.ImageIndex = 6;
+            debtors.ImageList = imageList1;
+            debtors.Location = new Point(-24, -11);
+            debtors.Name = "debtors";
+            debtors.Padding = new Padding(59, 0, 0, 0);
+            debtors.Size = new Size(274, 49);
+            debtors.TabIndex = 0;
+            debtors.Text = "            Должники";
+            debtors.TextAlign = ContentAlignment.MiddleLeft;
+            debtors.UseVisualStyleBackColor = false;
+            // 
+            // panel25
+            // 
+            panel25.BackColor = Color.Transparent;
+            panel25.Controls.Add(btnMydepts);
+            panel25.ForeColor = Color.DodgerBlue;
+            panel25.Location = new Point(3, 92);
+            panel25.Margin = new Padding(3, 7, 3, 0);
+            panel25.Name = "panel25";
+            panel25.Size = new Size(241, 32);
+            panel25.TabIndex = 8;
+            // 
+            // btnMydepts
+            // 
+            btnMydepts.BackColor = Color.FromArgb(248, 248, 248);
+            btnMydepts.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            btnMydepts.ImageAlign = ContentAlignment.MiddleLeft;
+            btnMydepts.ImageIndex = 6;
+            btnMydepts.ImageList = imageList1;
+            btnMydepts.Location = new Point(-24, -5);
+            btnMydepts.Name = "btnMydepts";
+            btnMydepts.Padding = new Padding(59, 0, 0, 0);
+            btnMydepts.Size = new Size(274, 43);
+            btnMydepts.TabIndex = 0;
+            btnMydepts.Text = "            Мои долги";
+            btnMydepts.TextAlign = ContentAlignment.MiddleLeft;
+            btnMydepts.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
@@ -933,6 +1071,7 @@
             panel17.ResumeLayout(false);
             panel18.ResumeLayout(false);
             panel19.ResumeLayout(false);
+            panel22.ResumeLayout(false);
             pnReport.ResumeLayout(false);
             SprContainer.ResumeLayout(false);
             panel7.ResumeLayout(false);
@@ -943,6 +1082,7 @@
             panel8.ResumeLayout(false);
             panel12.ResumeLayout(false);
             panel15.ResumeLayout(false);
+            panel21.ResumeLayout(false);
             panel13.ResumeLayout(false);
             flowLayoutPanel5.ResumeLayout(false);
             panel3.ResumeLayout(false);
@@ -950,7 +1090,10 @@
             panel5.ResumeLayout(false);
             panel6.ResumeLayout(false);
             panel14.ResumeLayout(false);
-            panel21.ResumeLayout(false);
+            deptsPanel.ResumeLayout(false);
+            panel23.ResumeLayout(false);
+            panel24.ResumeLayout(false);
+            panel25.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -987,7 +1130,6 @@
         private FlowLayoutPanel flowLayoutPanel3;
         private FlowLayoutPanel flowLayoutPanel4;
         private Panel panel2;
-        private CustomPanel ContentPanel;
         private FlowLayoutPanel flowLayoutPanel5;
         private Panel panel3;
         private Button button1;
@@ -1015,5 +1157,15 @@
         private Button btnPartQuality;
         private Panel panel21;
         private Button btnCarBrand;
+        private Panel panel22;
+        private Button btnParts;
+        private CustomPanel ContentPanel;
+        private FlowLayoutPanel deptsPanel;
+        private Panel panel23;
+        private Button btnDepts;
+        private Panel panel24;
+        private Button debtors;
+        private Panel panel25;
+        private Button btnMydepts;
     }
 }

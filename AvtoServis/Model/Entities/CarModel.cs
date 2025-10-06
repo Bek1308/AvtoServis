@@ -7,5 +7,11 @@
         public string Model { get; set; }
         public int Year { get; set; }
         public string CarBrandName { get; set; }
+
+        // Qo'shimcha property faqat Display uchun
+        public string DisplayName
+        {
+            get { return $"{CarBrandName} {Model} {Year}"; }
+        }
     }
 }

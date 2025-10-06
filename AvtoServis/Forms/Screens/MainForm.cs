@@ -4,6 +4,7 @@ using AvtoServis.Data.Repositories;
 using AvtoServis.Forms.Controls;
 using AvtoServis.ViewModels.Screens;
 using System.Reflection;
+using Timer = System.Windows.Forms.Timer;
 
 namespace AvtoServis.Forms.Screens
 {
@@ -15,6 +16,14 @@ namespace AvtoServis.Forms.Screens
         private const int STANDARD_MENU_HEIGHT = 430; // Standard menyuning balandligi
         private const int EXTENDED_MENU_HEIGHT = 540; // button1 menyusi bilan balandlik
         private const int COLLAPSED_HEIGHT = 52; // Yig'ilgan holat balandligi
+
+        // Alohida Income paneli uchun (pnIncome deb faraz qilamiz)
+        private bool incomeExpand = false; // Income panel holati
+        private int incomeTargetHeight = 48; // pnIncome uchun maqsadli balandlik
+        private const int INCOME_COLLAPSED_HEIGHT = 42; // Yig'ilgan holat balandligi
+        private const int INCOME_EXTENDED_HEIGHT = 132; // Kengaygan holat balandligi (designer'da o'lchang)
+        private Timer incomeTransition; // Yangi timer
+
         private readonly ServicesViewModel _servicesViewModel;
         private readonly ManufacturersViewModel _manufactureViewModel;
         private readonly CarModelViewModel _carModelViewModel;
@@ -25,6 +34,11 @@ namespace AvtoServis.Forms.Screens
         private readonly StatusesViewModel _statusesViewModel;
         private readonly CarBrandViewModel _carBrandViewModel;
         private readonly PartsIncomeViewModel _partsIncomeViewModel;
+        private readonly FullPartsViewModel _fullPartsViewModel;
+        private readonly PartExpensesViewModel _partExpensesViewModel;
+        private readonly ServiceOrdersViewModel _serviceOrdersViewModel;
+        private readonly CustomerDebtsViewModel _customerDebtsViewModel;
+        private readonly string connectionString = DatabaseConfig.ConnectionString;
 
         public MainForm()
         {
@@ -36,9 +50,18 @@ namespace AvtoServis.Forms.Screens
             if (ContentPanel != null) SetDoubleBuffered(ContentPanel);
             if (SprContainer != null) SetDoubleBuffered(SprContainer);
             if (sidebarContainer != null) SetDoubleBuffered(sidebarContainer);
-
+            SetDoubleBuffered(this);
+            SetDoubleBuffered(btnParts);
             menuTransition.Interval = 15;
             string connectionString = DatabaseConfig.ConnectionString;
+            // Alohida Income paneli animatsiyasi uchun timer yaratish
+            incomeTransition = new Timer();
+            incomeTransition.Interval = 15;
+            incomeTransition.Tick += incomeTransition_Tick;
+
+            // pnIncome panelini double-buffered qilish (agar mavjud bo'lsa)
+            if (pnIncome != null) SetDoubleBuffered(pnIncome);
+
             if (string.IsNullOrEmpty(connectionString))
             {
                 MessageBox.Show("Ошибка: строка подключения к базе данных не найдена.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -63,14 +86,31 @@ namespace AvtoServis.Forms.Screens
                 _partsQualitiesViewModel = new PartQualitiesViewModel(new PartQualitiesRepository(connectionString));
                 _carBrandViewModel = new CarBrandViewModel(new CarBrandRepository(connectionString));
                 _partsIncomeViewModel = new PartsIncomeViewModel(
-                    new PartsIncomeRepository(connectionString), 
-                    new PartsRepository(connectionString), 
+                    new PartsIncomeRepository(connectionString),
+                    new PartsRepository(connectionString),
                     new SuppliersRepository(connectionString),
                     new StatusRepository(connectionString),
                     new Finance_StatusRepository(connectionString),
-                    new StockRepository(connectionString), 
+                    new StockRepository(connectionString),
                     new BatchRepository(connectionString));
-                 
+                _fullPartsViewModel = new FullPartsViewModel(new FullPartsRepository(connectionString));
+                _partExpensesViewModel = new PartExpensesViewModel(
+                    new PartsExpensesRepository(connectionString),
+                    new PartsRepository(connectionString),
+                    new CustomerRepository(connectionString),
+                    new StatusRepository(connectionString),
+                    new PartsIncomeRepository(connectionString),
+                    connectionString);
+                _serviceOrdersViewModel = new ServiceOrdersViewModel(
+                    new ServiceOrdersRepository(connectionString),
+                    new CustomerRepository(connectionString),
+                    new ServicesRepository(connectionString),
+                    new CarModelsRepository(connectionString),
+                    new StatusRepository(connectionString),
+                    new UsersRepository(),
+                    connectionString);
+                _customerDebtsViewModel = new CustomerDebtsViewModel( new CustomerRepository(connectionString));
+
             }
             catch (Exception ex)
             {
@@ -156,6 +196,39 @@ namespace AvtoServis.Forms.Screens
             this.ResumeLayout(false);
         }
 
+        private void incomeTransition_Tick(object sender, EventArgs e)
+        {
+            this.SuspendLayout();
+            int step = 15; // Animatsiya qadami
+            if (pnIncome.Height < incomeTargetHeight)
+            {
+                pnIncome.Height += step;
+                if (pnIncome.Height >= incomeTargetHeight)
+                {
+                    pnIncome.Height = incomeTargetHeight;
+                    incomeTransition.Stop();
+                }
+            }
+            else if (pnIncome.Height > incomeTargetHeight)
+            {
+                pnIncome.Height -= step;
+                if (pnIncome.Height <= incomeTargetHeight)
+                {
+                    pnIncome.Height = incomeTargetHeight;
+                    incomeTransition.Stop();
+                    if (incomeTargetHeight == INCOME_COLLAPSED_HEIGHT)
+                    {
+                        incomeExpand = false;
+                    }
+                }
+            }
+            else
+            {
+                incomeTransition.Stop();
+            }
+            this.ResumeLayout(false);
+        }
+
         private void btnSpr_Click(object sender, EventArgs e)
         {
             if (!menuTransition.Enabled)
@@ -202,9 +275,6 @@ namespace AvtoServis.Forms.Screens
             }
         }
 
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-        }
 
         private void btnMain_Click(object sender, EventArgs e)
         {
@@ -262,9 +332,6 @@ namespace AvtoServis.Forms.Screens
             }
         }
 
-        private void SprContainer_Paint(object sender, PaintEventArgs e)
-        {
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -291,9 +358,6 @@ namespace AvtoServis.Forms.Screens
             }
         }
 
-        private void ContentPanel_Paint(object sender, PaintEventArgs e)
-        {
-        }
 
         private void button6_Click_1(object sender, EventArgs e)
         {
@@ -436,6 +500,21 @@ namespace AvtoServis.Forms.Screens
                     return;
                 }
                 OpenUserControl(indexIncomeControl);
+
+                if (!incomeTransition.Enabled)
+                {
+                    if (incomeExpand)
+                    {
+                        incomeTargetHeight = INCOME_COLLAPSED_HEIGHT;
+                        incomeExpand = false;
+                    }
+                    else
+                    {
+                        incomeTargetHeight = INCOME_EXTENDED_HEIGHT;
+                        incomeExpand = true;
+                    }
+                    incomeTransition.Start();
+                }
             }
             catch (Exception ex)
             {
@@ -444,6 +523,44 @@ namespace AvtoServis.Forms.Screens
             }
         }
 
+        private void btnSubIncome_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                var indexIncomeControl = new PartsIncomeControl(_partsIncomeViewModel, imageList1);
+                if (indexIncomeControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(indexIncomeControl);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии indexIncomeControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private void btnBatch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var indexIncomeControl = new IndexIncome(new PartsIncomeRepository(connectionString));
+                if (indexIncomeControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(indexIncomeControl);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии indexIncomeControl: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
         private void sidebarContainer_Paint(object sender, PaintEventArgs e)
         {
         }
@@ -462,6 +579,96 @@ namespace AvtoServis.Forms.Screens
                     return;
                 }
                 OpenUserControl(partsQualityControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private void btnParts_Click(object sender, EventArgs e)
+        {
+            if (_fullPartsViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var fullPartsControl = new FullPartsControl(_fullPartsViewModel, imageList1);
+                if (fullPartsControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(fullPartsControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+
+        }
+
+        private void btnSell_Click(object sender, EventArgs e)
+        {
+            if (_partExpensesViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var partExpensesControl = new PartsExpensesControl(_partExpensesViewModel);
+                if (partExpensesControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(partExpensesControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+
+        }
+
+        private void btnServis_Click(object sender, EventArgs e)
+        {
+            if (_serviceOrdersViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var serviceOrdersControl = new ServiceOrdersControl(_serviceOrdersViewModel);
+                if (serviceOrdersControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(serviceOrdersControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private void btnDepts_Click(object sender, EventArgs e)
+        {
+            if (_customerDebtsViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var customerDeptsControl = new CustomerDebtsControl(_customerDebtsViewModel);
+                if (customerDeptsControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(customerDeptsControl);
             }
             catch (Exception ex)
             {

@@ -52,7 +52,6 @@
             // 
             // txtLogin
             // 
-            txtLogin.BorderStyle = BorderStyle.Fixed3D;
             txtLogin.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtLogin.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             txtLogin.Location = new Point(130, 282);
@@ -73,7 +72,6 @@
             // 
             // txtPsw
             // 
-
             txtPsw.AutoSize = true;
             txtPsw.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             txtPsw.ForeColor = SystemColors.ControlDarkDark;
@@ -85,7 +83,6 @@
             // 
             // txtPasword
             // 
-            txtPasword.BorderStyle = BorderStyle.Fixed3D;
             txtPasword.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             txtPasword.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
             txtPasword.Location = new Point(130, 385);

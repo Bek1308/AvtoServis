@@ -11,5 +11,11 @@ namespace AvtoServis.Data.Interfaces
         //List<CarModel> SearchByModel(string model);
         //List<CarModel> SearchByYear(int year);
         //List<CarModel> FilterByBrand(int brandId);
+
+        /// <summary>
+        /// Agar customerId kiritilsa faqat shu customer’ga tegishli modellarni qaytaradi,
+        /// aks holda barcha modellarni qaytaradi.
+        /// </summary>
+        List<CarModel> GetCarModels(int? customerId = null);
     }
 }

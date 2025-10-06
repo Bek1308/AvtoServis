@@ -4,12 +4,8 @@ using AvtoServis.Data.Repositories;
 using AvtoServis.Forms.Controls;
 using AvtoServis.Model.Entities;
 using AvtoServis.ViewModels.Screens;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
+using AvtoServis.Forms.Modals.PartsIncome;
 using ClosedXML.Excel;
 using System.Text.Json;
 using System.IO;
@@ -58,7 +54,7 @@ namespace AvtoServis.Forms
                 { "UnitPrice", true },
                 { "Markup", true },
                 { "StatusName", true },
-                { "OperationID", true },
+                //{ "OperationID", true },
                 { "StockName", true },
                 { "InvoiceNumber", true },
                 { "UserFullName", true },
@@ -193,7 +189,7 @@ namespace AvtoServis.Forms
                 ("UnitPrice", "Цена за единицу", "UnitPrice"),
                 ("Markup", "Наценка", "Markup"),
                 ("StatusName", "Статус", "StatusName"),
-                ("OperationID", "ID операции", "OperationID"),
+                //("OperationID", "ID операции", "OperationID"),
                 ("StockName", "Склад", "StockName"),
                 ("InvoiceNumber", "Номер счета", "InvoiceNumber"),
                 ("UserFullName", "Пользователь", "UserFullName"),
@@ -371,6 +367,9 @@ namespace AvtoServis.Forms
         {
             if (!ValidateInputs()) return;
 
+            var current = CurrentUser.Instance;
+            var user = current.IsAuthenticated ? current.User : null;
+
             var income = new PartsIncome
             {
                 IncomeID = _dataSource.Any() ? _dataSource.Max(x => x.IncomeID) + 1 : 1,
@@ -388,8 +387,8 @@ namespace AvtoServis.Forms
                 SupplierName = cmbSupplierID.Text,
                 StatusName = cmbStatusID.Text,
                 StockName = cmbStockID.Text,
-                UserID = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.UserID : 0,
-                UserFullName = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.FullName : "Текущий пользователь"
+                UserID = user?.UserID ?? 0,
+                UserFullName = user?.FullName ?? "Текущий пользователь"
             };
 
             _dataSource.Add(income);
@@ -407,9 +406,48 @@ namespace AvtoServis.Forms
                 ShowError("Исправьте все ошибки в данных перед сохранением!");
                 return;
             }
-            DialogResult = DialogResult.OK;
-            File.Delete(_tempFilePath);
-            Close();
+
+            // Umumiy narxni hisoblash (Quantity * UnitPrice)
+            decimal totalCost = _dataSource.Sum(item => item.Quantity * item.UnitPrice);
+            decimal totalPaidSum = _dataSource.Sum(item => item.PaidAmount);
+            // Yangi tasdiqlash formasini ochish
+            using (var dialog = new BatchConfirmationForm(totalCost, totalPaidSum))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Partiya nomini va umumiy to'langan summasini olish
+                        string batchName = dialog.BatchName;
+                        decimal totalPaidAmount = dialog.TotalPaidAmount;
+
+                        // Validatsiya: Umumiy to'langan summa totalCost dan oshmasligi kerak
+                        if (totalPaidAmount > totalCost)
+                        {
+                            ShowError("Указанная общая оплаченная сумма превышает стоимость всех деталей!");
+                            return;
+                        }
+                        if (totalPaidAmount < totalPaidSum)
+                        {
+                            ShowError("Указанная общая оплаченная сумма не может быть меньше суммы оплаченных сумм деталей!");
+                            return;
+                        }
+
+                        // Ma'lumotlarni bazaga yozish
+                        _viewModel.SavePartsIncomes(_dataSource, batchName, totalPaidAmount);
+
+                        // Muvaffaqiyatli saqlangandan so'ng
+                        File.Delete(_tempFilePath);
+                        DialogResult = DialogResult.OK;
+                        ShowSuccess("Данные успешно сохранены в базу!");
+                        Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogAndShowError(ex, "сохранении данных в базу");
+                    }
+                }
+            }
         }
 
         private void BtnCancel_Click(object sender, EventArgs e)
@@ -444,7 +482,7 @@ namespace AvtoServis.Forms
             using (var dialog = new Form
             {
                 Text = "Импорт данных",
-                Size = new Size(300, 200),
+                Size = new Size(300, 150),
                 StartPosition = FormStartPosition.CenterParent,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 MaximizeBox = false,
@@ -452,10 +490,19 @@ namespace AvtoServis.Forms
                 BackColor = Color.FromArgb(245, 245, 245)
             })
             {
+                var lblMessage = new Label
+                {
+                    Text = "Выберите действия",
+                    Location = new Point(15, 10),
+                    AutoSize = true,
+                    ForeColor = Color.Black,
+                    Font = new Font("Segoe UI", 10F, FontStyle.Bold)
+
+                };
                 var btnImport = new Button
                 {
                     Text = "Импорт",
-                    Location = new Point(50, 50),
+                    Location = new Point(15, 50),
                     Size = new Size(100, 30),
                     BackColor = Color.FromArgb(25, 118, 210),
                     ForeColor = Color.White,
@@ -468,7 +515,7 @@ namespace AvtoServis.Forms
                 var btnExample = new Button
                 {
                     Text = "Пример",
-                    Location = new Point(160, 50),
+                    Location = new Point(165, 50),
                     Size = new Size(100, 30),
                     BackColor = Color.FromArgb(25, 118, 210),
                     ForeColor = Color.White,
@@ -478,22 +525,10 @@ namespace AvtoServis.Forms
                 };
                 btnExample.Click += (s, ev) => { DownloadExampleExcel(); dialog.Close(); };
 
-                var btnCancel = new Button
-                {
-                    Text = "Отменить",
-                    Location = new Point(105, 100),
-                    Size = new Size(100, 30),
-                    BackColor = Color.FromArgb(108, 117, 125),
-                    ForeColor = Color.White,
-                    FlatStyle = FlatStyle.Flat,
-                    FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(130, 140, 150) },
-                    Font = new Font("Segoe UI", 10F, FontStyle.Bold)
-                };
-                btnCancel.Click += (s, ev) => dialog.Close();
 
                 dialog.Controls.Add(btnImport);
                 dialog.Controls.Add(btnExample);
-                dialog.Controls.Add(btnCancel);
+                dialog.Controls.Add(lblMessage);
                 dialog.ShowDialog();
             }
         }
@@ -505,27 +540,64 @@ namespace AvtoServis.Forms
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("PartsIncomeExample");
-                    worksheet.Cell(1, 1).Value = "PartName";
-                    worksheet.Cell(1, 2).Value = "SupplierName";
+
+                    // Заголовки (только ID и обязательные поля)
+                    worksheet.Cell(1, 1).Value = "PartID";
+                    worksheet.Cell(1, 2).Value = "SupplierID";
                     worksheet.Cell(1, 3).Value = "Date";
                     worksheet.Cell(1, 4).Value = "Quantity";
                     worksheet.Cell(1, 5).Value = "UnitPrice";
                     worksheet.Cell(1, 6).Value = "Markup";
-                    worksheet.Cell(1, 7).Value = "StatusName";
-                    worksheet.Cell(1, 8).Value = "StockName";
+                    worksheet.Cell(1, 7).Value = "StatusID";
+                    worksheet.Cell(1, 8).Value = "StockID";
                     worksheet.Cell(1, 9).Value = "InvoiceNumber";
                     worksheet.Cell(1, 10).Value = "PaidAmount";
+                    worksheet.Cell(1, 11).Value = "UserID";
+                    worksheet.Cell(1, 12).Value = "BatchID";
 
-                    worksheet.Cell(2, 1).Value = "Shina";
-                    worksheet.Cell(2, 2).Value = "AutoSupplier";
-                    worksheet.Cell(2, 3).Value = DateTime.Now.ToString("yyyy-MM-dd");
-                    worksheet.Cell(2, 4).Value = 10;
-                    worksheet.Cell(2, 5).Value = 100.50;
-                    worksheet.Cell(2, 6).Value = 20.00; // Ixtiyoriy maydon
-                    worksheet.Cell(2, 7).Value = "Received";
-                    worksheet.Cell(2, 8).Value = "MainStock";
-                    worksheet.Cell(2, 9).Value = "INV001";
-                    worksheet.Cell(2, 10).Value = 1000.00; // Ixtiyoriy maydon
+                    // Пример данных из базы
+                    var partsRepo = new PartsRepository(connectionString);
+                    var suppliersRepo = new SuppliersRepository(connectionString);
+                    var statusesRepo = new StatusRepository(connectionString);
+                    var stocksRepo = new StockRepository(connectionString);
+
+                    var parts = partsRepo.GetAll().Take(2).ToList();
+                    var suppliers = suppliersRepo.GetAll().Take(2).ToList();
+                    var statuses = statusesRepo.GetAll("IncomeStatuses").Take(2).ToList();
+                    var stocks = stocksRepo.GetAll().Take(2).ToList();
+
+                    int row = 2;
+                    worksheet.Cell(row, 1).Value = parts.Any() ? parts[0].PartID : 1;
+                    worksheet.Cell(row, 2).Value = suppliers.Any() ? suppliers[0].SupplierID : 1;
+                    worksheet.Cell(row, 3).Value = DateTime.Now.ToString("yyyy-MM-dd");
+                    worksheet.Cell(row, 4).Value = 10;
+                    worksheet.Cell(row, 5).Value = 100.50;
+                    worksheet.Cell(row, 6).Value = 20.00;
+                    worksheet.Cell(row, 7).Value = statuses.Any() ? statuses[0].StatusID : 1;
+                    worksheet.Cell(row, 8).Value = stocks.Any() ? stocks[0].StockID : 1;
+                    worksheet.Cell(row, 9).Value = "INV001";
+                    worksheet.Cell(row, 10).Value = 1000.00;
+                    worksheet.Cell(row, 11).Value = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.UserID : 1;
+                    worksheet.Cell(row, 12).Value = 1;
+
+                    row++;
+                    if (parts.Count > 1 && suppliers.Count > 1 && statuses.Count > 1 && stocks.Count > 1)
+                    {
+                        worksheet.Cell(row, 1).Value = parts[1].PartID;
+                        worksheet.Cell(row, 2).Value = suppliers[1].SupplierID;
+                        worksheet.Cell(row, 3).Value = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+                        worksheet.Cell(row, 4).Value = 5;
+                        worksheet.Cell(row, 5).Value = 200.75;
+                        worksheet.Cell(row, 6).Value = 15.00;
+                        worksheet.Cell(row, 7).Value = statuses[1].StatusID;
+                        worksheet.Cell(row, 8).Value = stocks[1].StockID;
+                        worksheet.Cell(row, 9).Value = "INV002";
+                        worksheet.Cell(row, 10).Value = 1500.00;
+                        worksheet.Cell(row, 11).Value = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.UserID : 1;
+                        worksheet.Cell(row, 12).Value = 2;
+                    }
+
+                    worksheet.Columns().AdjustToContents();
 
                     using (var saveFileDialog = new SaveFileDialog())
                     {
@@ -534,14 +606,14 @@ namespace AvtoServis.Forms
                         if (saveFileDialog.ShowDialog() == DialogResult.OK)
                         {
                             workbook.SaveAs(saveFileDialog.FileName);
-                            MessageBox.Show("Пример Excel файла успешно сохранен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("Пример файла Excel успешно сохранен!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogAndShowError(ex, "создании примера Excel файла");
+                LogAndShowError(ex, "при создании примера файла Excel");
             }
         }
 
@@ -581,192 +653,257 @@ namespace AvtoServis.Forms
                             var statuses = statusesRepo.GetAll("IncomeStatuses").ToList();
                             var stocks = stocksRepo.GetAll().ToList();
 
+                            var errors = new List<string>();
+                            bool hasValidData = false;
+
                             for (int row = 2; row <= rowCount; row++)
                             {
+                                var cerrent = CurrentUser.Instance;
+                                var  user = cerrent.IsAuthenticated ? cerrent.User : null;
                                 var income = new PartsIncome
                                 {
+
                                     IncomeID = _dataSource.Any() ? _dataSource.Max(x => x.IncomeID) + 1 : 1,
-                                    UserID = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.UserID : 0,
-                                    UserFullName = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.FullName : "Текущий пользователь",
-                                    Date = DateTime.Now,
+                                    UserID = user?.UserID ?? 1,
+                                    UserFullName = user?.FullName ?? "Текущий пользователь",
+                                    //Date = DateTime.Now, // Default sifatida null
                                     PaidAmount = 0,
-                                    Markup = 0
+                                    Markup = 0,
+                                    Quantity = 0,
+                                    UnitPrice = 0,
+                                    //PartID = 0,
+                                    //SupplierID = 0,
+                                    //StatusID = 0,
+                                    //StockID = 0,
+                                    ////OperationID = 0,
+                                    //Finance_Status_Id = 0,
+                                    //BatchID = 0
                                 };
 
-                                bool hasRequiredFields = true;
+                                bool hasAnyValidField = false;
+                                var rowErrors = new List<string>();
 
-                                if (headers.ContainsKey("PartID") && int.TryParse(worksheet.Cell(row, headers["PartID"]).GetString(), out int partID) && parts.Any(p => p.PartID == partID))
+                                // PartID
+                                if (headers.ContainsKey("PartID") && int.TryParse(worksheet.Cell(row, headers["PartID"]).GetString(), out int partID))
                                 {
-                                    income.PartID = partID;
-                                    income.PartName = parts.First(p => p.PartID == partID).PartName;
-                                }
-                                else if (headers.ContainsKey("PartName"))
-                                {
-                                    var partName = worksheet.Cell(row, headers["PartName"]).GetString()?.Trim();
-                                    var part = parts.FirstOrDefault(p => p.PartName.Equals(partName, StringComparison.OrdinalIgnoreCase));
-                                    if (part != null)
+                                    if (parts.Any(p => p.PartID == partID))
                                     {
-                                        income.PartID = part.PartID;
-                                        income.PartName = part.PartName;
+                                        income.PartID = partID;
+                                        income.PartName = parts.First(p => p.PartID == partID).PartName;
+                                        hasAnyValidField = true;
                                     }
                                     else
                                     {
-                                        hasRequiredFields = false;
+                                        rowErrors.Add($"PartID '{partID}' не найден, установлен как 0.");
                                     }
                                 }
-                                else
-                                {
-                                    hasRequiredFields = false;
-                                }
 
-                                if (headers.ContainsKey("Quantity") && int.TryParse(worksheet.Cell(row, headers["Quantity"]).GetString(), out int quantity) && quantity > 0)
+                                // SupplierID
+                                if (headers.ContainsKey("SupplierID") && int.TryParse(worksheet.Cell(row, headers["SupplierID"]).GetString(), out int supplierID))
                                 {
-                                    income.Quantity = quantity;
-                                }
-                                else
-                                {
-                                    hasRequiredFields = false;
-                                }
-
-                                if (headers.ContainsKey("UnitPrice") && decimal.TryParse(worksheet.Cell(row, headers["UnitPrice"]).GetString(), out decimal unitPrice) && unitPrice >= 0)
-                                {
-                                    income.UnitPrice = unitPrice;
-                                }
-                                else
-                                {
-                                    hasRequiredFields = false;
-                                }
-
-                                if (headers.ContainsKey("Markup") && decimal.TryParse(worksheet.Cell(row, headers["Markup"]).GetString(), out decimal markup) && markup >= 0)
-                                {
-                                    income.Markup = markup;
-                                }
-                                // Markup ixtiyoriy, shuning uchun bo'sh bo'lsa 0 qabul qilinadi
-
-                                if (headers.ContainsKey("SupplierID") && int.TryParse(worksheet.Cell(row, headers["SupplierID"]).GetString(), out int supplierID) && suppliers.Any(s => s.SupplierID == supplierID))
-                                {
-                                    income.SupplierID = supplierID;
-                                    income.SupplierName = suppliers.First(s => s.SupplierID == supplierID).Name;
-                                }
-                                else if (headers.ContainsKey("SupplierName"))
-                                {
-                                    var supplierName = worksheet.Cell(row, headers["SupplierName"]).GetString()?.Trim();
-                                    var supplier = suppliers.FirstOrDefault(s => s.Name.Equals(supplierName, StringComparison.OrdinalIgnoreCase));
-                                    if (supplier != null)
+                                    if (suppliers.Any(s => s.SupplierID == supplierID))
                                     {
-                                        income.SupplierID = supplier.SupplierID;
-                                        income.SupplierName = supplier.Name;
+                                        income.SupplierID = supplierID;
+                                        income.SupplierName = suppliers.First(s => s.SupplierID == supplierID).Name;
+                                        hasAnyValidField = true;
                                     }
                                     else
                                     {
-                                        hasRequiredFields = false;
+                                        rowErrors.Add($"SupplierID '{supplierID}' не найден, установлен как 0.");
                                     }
                                 }
-                                else
-                                {
-                                    hasRequiredFields = false;
-                                }
 
+                                // Date
                                 if (headers.ContainsKey("Date") && DateTime.TryParse(worksheet.Cell(row, headers["Date"]).GetString(), out DateTime date))
                                 {
                                     income.Date = date;
+                                    hasAnyValidField = true;
                                 }
-                                else
+                                else if (headers.ContainsKey("Date"))
                                 {
-                                    hasRequiredFields = false;
+                                    rowErrors.Add("Дата некорректна, установлена как null.");
                                 }
 
-                                if (headers.ContainsKey("StatusID") && int.TryParse(worksheet.Cell(row, headers["StatusID"]).GetString(), out int statusID) && statuses.Any(s => s.StatusID == statusID))
+                                // Quantity
+                                if (headers.ContainsKey("Quantity") && int.TryParse(worksheet.Cell(row, headers["Quantity"]).GetString(), out int quantity))
                                 {
-                                    income.StatusID = statusID;
-                                    income.StatusName = statuses.First(s => s.StatusID == statusID).Name;
-                                }
-                                else if (headers.ContainsKey("StatusName"))
-                                {
-                                    var statusName = worksheet.Cell(row, headers["StatusName"]).GetString()?.Trim();
-                                    var status = statuses.FirstOrDefault(s => s.Name.Equals(statusName, StringComparison.OrdinalIgnoreCase));
-                                    if (status != null)
+                                    if (quantity >= 0)
                                     {
-                                        income.StatusID = status.StatusID;
-                                        income.StatusName = status.Name;
+                                        income.Quantity = quantity;
+                                        hasAnyValidField = true;
                                     }
                                     else
                                     {
-                                        hasRequiredFields = false;
+                                        rowErrors.Add("Количество отрицательное, установлено как 0.");
                                     }
                                 }
-                                else
+                                else if (headers.ContainsKey("Quantity"))
                                 {
-                                    hasRequiredFields = false;
+                                    rowErrors.Add("Количество некорректно, установлено как 0.");
                                 }
 
-                                if (headers.ContainsKey("StockID") && int.TryParse(worksheet.Cell(row, headers["StockID"]).GetString(), out int stockID) && stocks.Any(s => s.StockID == stockID))
+                                // UnitPrice
+                                if (headers.ContainsKey("UnitPrice") && decimal.TryParse(worksheet.Cell(row, headers["UnitPrice"]).GetString(), out decimal unitPrice))
                                 {
-                                    income.StockID = stockID;
-                                    income.StockName = stocks.First(s => s.StockID == stockID).Name;
-                                }
-                                else if (headers.ContainsKey("StockName"))
-                                {
-                                    var stockName = worksheet.Cell(row, headers["StockName"]).GetString()?.Trim();
-                                    var stock = stocks.FirstOrDefault(s => s.Name.Equals(stockName, StringComparison.OrdinalIgnoreCase));
-                                    if (stock != null)
+                                    if (unitPrice >= 0)
                                     {
-                                        income.StockID = stock.StockID;
-                                        income.StockName = stock.Name;
+                                        income.UnitPrice = unitPrice;
+                                        hasAnyValidField = true;
                                     }
                                     else
                                     {
-                                        hasRequiredFields = false;
+                                        rowErrors.Add("Цена за единицу отрицательная, установлена как 0.");
                                     }
                                 }
-                                else
+                                else if (headers.ContainsKey("UnitPrice"))
                                 {
-                                    hasRequiredFields = false;
+                                    rowErrors.Add("Цена за единицу некорректна, установлена как 0.");
                                 }
 
+                                // Markup
+                                if (headers.ContainsKey("Markup") && decimal.TryParse(worksheet.Cell(row, headers["Markup"]).GetString(), out decimal markup))
+                                {
+                                    if (markup >= 0)
+                                    {
+                                        income.Markup = markup;
+                                        hasAnyValidField = true;
+                                    }
+                                    else
+                                    {
+                                        rowErrors.Add("Наценка отрицательная, установлена как 0.");
+                                    }
+                                }
+
+                                // StatusID
+                                if (headers.ContainsKey("StatusID") && int.TryParse(worksheet.Cell(row, headers["StatusID"]).GetString(), out int statusID))
+                                {
+                                    if (statuses.Any(s => s.StatusID == statusID))
+                                    {
+                                        income.StatusID = statusID;
+                                        income.StatusName = statuses.First(s => s.StatusID == statusID).Name;
+                                        hasAnyValidField = true;
+                                    }
+                                    else
+                                    {
+                                        rowErrors.Add($"StatusID '{statusID}' не найден, установлен как 0.");
+                                    }
+                                }
+
+                                // StockID
+                                if (headers.ContainsKey("StockID") && int.TryParse(worksheet.Cell(row, headers["StockID"]).GetString(), out int stockID))
+                                {
+                                    if (stocks.Any(s => s.StockID == stockID))
+                                    {
+                                        income.StockID = stockID;
+                                        income.StockName = stocks.First(s => s.StockID == stockID).Name;
+                                        hasAnyValidField = true;
+                                    }
+                                    else
+                                    {
+                                        rowErrors.Add($"StockID '{stockID}' не найден, установлен как 0.");
+                                    }
+                                }
+
+                                // InvoiceNumber
                                 if (headers.ContainsKey("InvoiceNumber"))
                                 {
                                     var invoiceNumber = worksheet.Cell(row, headers["InvoiceNumber"]).GetString()?.Trim();
                                     if (!string.IsNullOrWhiteSpace(invoiceNumber))
                                     {
                                         income.InvoiceNumber = invoiceNumber;
+                                        hasAnyValidField = true;
                                     }
                                     else
                                     {
-                                        hasRequiredFields = false;
+                                        rowErrors.Add("Номер счета-фактуры пуст, установлен как null.");
+                                    }
+                                }
+
+                                // PaidAmount
+                                if (headers.ContainsKey("PaidAmount") && decimal.TryParse(worksheet.Cell(row, headers["PaidAmount"]).GetString(), out decimal paidAmount))
+                                {
+                                    if (paidAmount >= 0)
+                                    {
+                                        income.PaidAmount = paidAmount;
+                                        hasAnyValidField = true;
+                                    }
+                                    else
+                                    {
+                                        rowErrors.Add("Оплаченная сумма отрицательная, установлена как 0.");
+                                    }
+                                }
+
+                                // UserID
+                                if (headers.ContainsKey("UserID") && int.TryParse(worksheet.Cell(row, headers["UserID"]).GetString(), out int userID))
+                                {
+                                    income.UserID = userID;
+                                    hasAnyValidField = true;
+                                }
+
+                                // BatchID
+                                if (headers.ContainsKey("BatchID") && int.TryParse(worksheet.Cell(row, headers["BatchID"]).GetString(), out int batchID))
+                                {
+                                    income.BatchID = batchID;
+                                    hasAnyValidField = true;
+                                }
+
+                                // Простая валидация
+                                bool isValid = hasAnyValidField; // Хотя бы одно корректное поле
+                                if (isValid)
+                                {
+                                    // Проверка минимальных требований
+                                    if (income.Quantity < 0)
+                                    {
+                                        income.Quantity = 0;
+                                        rowErrors.Add("Количество было отрицательным, установлено как 0.");
+                                    }
+                                    if (income.UnitPrice < 0)
+                                    {
+                                        income.UnitPrice = 0;
+                                        rowErrors.Add("Цена за единицу была отрицательной, установлена как 0.");
+                                    }
+                                    if (income.PaidAmount < 0)
+                                    {
+                                        income.PaidAmount = 0;
+                                        rowErrors.Add("Оплаченная сумма была отрицательной, установлена как 0.");
+                                    }
+                                    if (income.Markup < 0)
+                                    {
+                                        income.Markup = 0;
+                                        rowErrors.Add("Наценка была отрицательной, установлена как 0.");
+                                    }
+
+                                    _dataSource.Add(income);
+                                    hasValidData = true;
+                                    if (rowErrors.Any())
+                                    {
+                                        errors.Add($"Строка {row}: {string.Join("; ", rowErrors)}");
                                     }
                                 }
                                 else
                                 {
-                                    hasRequiredFields = false;
-                                }
-
-                                if (headers.ContainsKey("PaidAmount") && decimal.TryParse(worksheet.Cell(row, headers["PaidAmount"]).GetString(), out decimal paidAmount) && paidAmount >= 0)
-                                {
-                                    income.PaidAmount = paidAmount;
-                                }
-                                // PaidAmount ixtiyoriy, shuning uchun bo'sh bo'lsa 0 qabul qilinadi
-
-                                if (hasRequiredFields && ValidateIncome(income))
-                                {
-                                    _dataSource.Add(income);
-                                }
-                                else
-                                {
-                                    ShowError($"Qator {row} import qilinmadi: to'liq bo'lmagan yoki noto'g'ri ma'lumotlar.");
+                                    errors.Add($"Строка {row}: Не найдено корректных данных.");
                                 }
                             }
 
                             SaveTempData();
                             RefreshDataGridView();
                             UpdateSaveButtonState();
-                            if (_dataSource.Any())
+
+                            if (hasValidData)
                             {
-                                ShowSuccess("Данные успешно импортированы! Пропущенные или неверные поля отмечены красным в таблице.");
+                                if (errors.Any())
+                                {
+                                    ShowError($"Некоторые строки не были импортированы:\n{string.Join("\n", errors)}");
+                                }
+                                else
+                                {
+                                    ShowSuccess("Данные успешно импортированы!");
+                                }
                             }
                             else
                             {
-                                ShowError("Ни одна строка не была импортирована, так как не найдено корректных данных.");
+                                ShowError("Ни одна строка не была импортирована:\n" + string.Join("\n", errors));
                             }
                         }
                     }
@@ -774,7 +911,7 @@ namespace AvtoServis.Forms
             }
             catch (Exception ex)
             {
-                LogAndShowError(ex, "импорте данных из Excel");
+                LogAndShowError(ex, "при импорте данных из Excel");
             }
         }
 
@@ -888,6 +1025,7 @@ namespace AvtoServis.Forms
             }
         }
 
+
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (_isProcessing || e.RowIndex < 0 || e.ColumnIndex < 0 || e.RowIndex >= _dataSource.Count) return;
@@ -908,37 +1046,75 @@ namespace AvtoServis.Forms
                     return;
                 }
 
-                var menu = new ContextMenuStrip
+                try
                 {
-                    ImageScalingSize = new Size(24, 24),
-                    Renderer = new ToolStripProfessionalRenderer()
-                };
+                    Size ActionIconSize = new(24, 24);
+                    var menu = new ContextMenuStrip
+                    {
+                        ImageScalingSize = ActionIconSize,
+                        Renderer = new CustomToolStripRenderer()
+                    };
 
-                var editItem = new ToolStripMenuItem
+                    var editItem = new ToolStripMenuItem
+                    {
+                        Text = "Редактировать",
+                        Image = _actionImageList.Images[9],
+                        ImageAlign = ContentAlignment.MiddleLeft,
+                        TextImageRelation = TextImageRelation.ImageBeforeText,
+                        Size = new Size(0, 32),
+                        Tag = "Edit"
+                    };
+                    editItem.Click += (s, ev) => EditIncome(income);
+                    menu.Items.Add(editItem);
+
+                    var deleteItem = new ToolStripMenuItem
+                    {
+                        Text = "Удалить",
+                        Image = _actionImageList.Images[8],
+                        ImageAlign = ContentAlignment.MiddleLeft,
+                        TextImageRelation = TextImageRelation.ImageBeforeText,
+                        Size = new Size(0, 32),
+                        Tag = "Delete"
+                    };
+                    deleteItem.Click += (s, ev) => DeleteIncome(income);
+                    menu.Items.Add(deleteItem);
+
+                    menu.Show(dataGridView, dataGridView.PointToClient(Cursor.Position));
+                }
+                catch (Exception ex)
                 {
-                    Text = "Редактировать",
-                    ImageAlign = ContentAlignment.MiddleLeft,
-                    TextImageRelation = TextImageRelation.ImageBeforeText,
-                    Size = new Size(0, 32),
-                    Tag = "Edit"
-                };
-                editItem.Click += (s, ev) => EditIncome(income);
-                menu.Items.Add(editItem);
-
-                var deleteItem = new ToolStripMenuItem
-                {
-                    Text = "Удалить",
-                    ImageAlign = ContentAlignment.MiddleLeft,
-                    TextImageRelation = TextImageRelation.ImageBeforeText,
-                    Size = new Size(0, 32),
-                    Tag = "Delete"
-                };
-                deleteItem.Click += (s, ev) => DeleteIncome(income);
-                menu.Items.Add(deleteItem);
-
-                menu.Show(dataGridView, dataGridView.PointToClient(Cursor.Position));
+                    LogAndShowError(ex, "выполнении действия");
+                }
             }
         }
+
+        private class CustomToolStripRenderer : ToolStripProfessionalRenderer
+        {
+            protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
+            {
+                var item = e.Item as ToolStripMenuItem;
+                if (item != null)
+                {
+                    Color backgroundColor = item.Selected ? Color.FromArgb(200, 230, 255) : Color.White;
+                    if (item.Tag?.ToString() == "Edit")
+                        backgroundColor = item.Selected ? Color.FromArgb(50, 140, 230) : Color.FromArgb(25, 118, 210);
+                    else if (item.Tag?.ToString() == "Delete")
+                        backgroundColor = item.Selected ? Color.FromArgb(255, 77, 77) : Color.FromArgb(220, 53, 69);
+
+                    using (var brush = new SolidBrush(backgroundColor))
+                    {
+                        e.Graphics.FillRectangle(brush, new Rectangle(0, 0, e.Item.Width, e.Item.Height));
+                    }
+                }
+            }
+
+            protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
+            {
+                e.TextColor = e.Item.Selected ? Color.Black : Color.White;
+                base.OnRenderItemText(e);
+            }
+        }
+
 
         private void DataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -1066,6 +1242,9 @@ namespace AvtoServis.Forms
                 {
                     try
                     {
+
+                        var current = CurrentUser.Instance;
+                        var user = current.IsAuthenticated ? current.User : null;
                         if (!ValidateInputs()) return;
 
                         income.PartID = (int)cmbPartID.SelectedValue;
@@ -1078,8 +1257,8 @@ namespace AvtoServis.Forms
                         income.StockID = (int)cmbStockID.SelectedValue;
                         income.InvoiceNumber = txtInvoiceNumber.Text;
                         income.PaidAmount = string.IsNullOrWhiteSpace(txtPaidAmount.Text) ? 0 : decimal.Parse(txtPaidAmount.Text);
-                        income.UserID = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.UserID : 0;
-                        income.UserFullName = CurrentUser.Instance.IsAuthenticated ? CurrentUser.Instance.User.FullName : "Текущий пользователь";
+                        income.UserID = user?.UserID ?? 0;
+                        income.UserFullName = user?.FullName ?? "Текущий пользователь";
                         income.PartName = cmbPartID.Text;
                         income.SupplierName = cmbSupplierID.Text;
                         income.StatusName = cmbStatusID.Text;
@@ -1115,39 +1294,94 @@ namespace AvtoServis.Forms
             }
         }
 
+
         private void DeleteIncome(PartsIncome income)
         {
-            if (_isProcessing) return;
             try
             {
-                _isProcessing = true;
-                var result = MessageBox.Show($"Вы уверены, что хотите удалить поступление #{income.IncomeID}?", "Подтверждение удаления", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
+                using (var dialog = new Form
                 {
-                    var itemToRemove = _dataSource.FirstOrDefault(x => x.IncomeID == income.IncomeID);
-                    if (itemToRemove != null)
+                    Text = "Подтверждение удаления",
+                    ClientSize = new Size(400, 142),
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.FixedDialog,
+                    MaximizeBox = false,
+                    MinimizeBox = false,
+                    BackColor = Color.FromArgb(245, 245, 245)
+                })
+                {
+                    var tableLayoutPanel = new TableLayoutPanel
                     {
-                        _dataSource.Remove(itemToRemove);
+                        Dock = DockStyle.Fill,
+                        RowCount = 2,
+                        ColumnCount = 2,
+                        Padding = new Padding(16),
+                        BackColor = Color.FromArgb(245, 245, 245)
+                    };
+                    tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+                    tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+                    tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+                    tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+
+                    var lblMessage = new Label
+                    {
+                        Text = $"Вы хотите удалить поступление #{income.IncomeID} ({income.PartName})?",
+                        Font = new Font("Segoe UI", 10F),
+                        ForeColor = Color.FromArgb(33, 37, 41),
+                        AutoSize = true,
+                        Location = new Point(19, 16),
+                        TextAlign = ContentAlignment.MiddleLeft
+                    };
+
+                    var btnConfirm = new Button
+                    {
+                        Text = "Да",
+                        Size = new Size(100, 36),
+                        BackColor = Color.FromArgb(220, 53, 69),
+                        ForeColor = Color.White,
+                        FlatStyle = FlatStyle.Flat,
+                        FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(255, 100, 100) },
+                        Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                        Location = new Point(dialog.ClientSize.Width - 110, dialog.ClientSize.Height - 46), // O'ng chetdan 10px
+                        Anchor = AnchorStyles.Top | AnchorStyles.Right
+                    };
+                    btnConfirm.Click += (s, ev) =>
+                    {
+                        _dataSource.Remove(income);
                         SaveTempData();
                         RefreshDataGridView();
                         ShowSuccess("Запись успешно удалена!");
-                        UpdateSaveButtonState();
-                    }
-                    else
+                        dialog.Close();
+                    };
+
+                    var btnCancel = new Button
                     {
-                        ShowError("Запись не найдена для удаления!");
-                    }
+                        Text = "Нет",
+                        Size = new Size(100, 36),
+                        BackColor = Color.FromArgb(25, 118, 210),
+                        ForeColor = Color.White,
+                        FlatStyle = FlatStyle.Flat,
+                        FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(50, 140, 230) },
+                        Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                        Location = new Point(10, dialog.ClientSize.Height - 46), // Chap chetdan 10px
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left
+                    };
+                    btnCancel.Click += (s, ev) => dialog.Close();
+
+                    tableLayoutPanel.Controls.Add(lblMessage, 0, 0);
+                    tableLayoutPanel.SetColumnSpan(lblMessage, 2);
+                    dialog.Controls.Add(btnConfirm);
+                    dialog.Controls.Add(btnCancel);
+                    dialog.Controls.Add(tableLayoutPanel);
+                    dialog.ShowDialog();
                 }
             }
             catch (Exception ex)
             {
                 LogAndShowError(ex, "удалении записи");
             }
-            finally
-            {
-                _isProcessing = false;
-            }
         }
+
 
         private bool ValidateInputs()
         {
@@ -1407,5 +1641,5 @@ namespace AvtoServis.Forms
             Console.WriteLine($"Ошибка при {operation}: {ex.Message}\nStackTrace: {ex.StackTrace}");
             ShowError($"Ошибка при {operation}: {ex.Message}");
         }
-    }
-}
+    }                                                                                                                                                                                                                                                                                    
+}            

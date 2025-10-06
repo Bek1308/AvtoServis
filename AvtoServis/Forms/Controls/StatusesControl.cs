@@ -20,7 +20,6 @@ namespace AvtoServis.Forms.Controls
         {
             { "ExpenseStatuses", "Статусы расходов" },
             { "IncomeStatuses", "Статусы доходов" },
-            { "OperationStatuses", "Статусы операций" },
             { "OrderStatuses", "Статусы заказов" }
         };
 
@@ -607,9 +606,9 @@ namespace AvtoServis.Forms.Controls
                 case "IncomeStatuses":
                     titleLabel.Text = "Статусы доходов";
                     break;
-                case "OperationStatuses":
-                    titleLabel.Text = "Статусы операций";
-                    break;
+                //case "OperationStatuses":
+                //    titleLabel.Text = "Статусы операций";
+                //    break;
                 case "OrderStatuses":
                     titleLabel.Text = "Статусы заказов";
                     break;
