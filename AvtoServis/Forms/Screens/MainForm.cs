@@ -1,8 +1,10 @@
 ﻿using AvtoServis.Data;
 using AvtoServis.Data.Configuration;
+using AvtoServis.Data.Interfaces;
 using AvtoServis.Data.Repositories;
 using AvtoServis.Forms.Controls;
 using AvtoServis.ViewModels.Screens;
+using DocumentFormat.OpenXml.InkML;
 using System.Reflection;
 using Timer = System.Windows.Forms.Timer;
 
@@ -38,6 +40,7 @@ namespace AvtoServis.Forms.Screens
         private readonly PartExpensesViewModel _partExpensesViewModel;
         private readonly ServiceOrdersViewModel _serviceOrdersViewModel;
         private readonly CustomerDebtsViewModel _customerDebtsViewModel;
+        private readonly UserProfileViewModel _userProfileViewModel;
         private readonly string connectionString = DatabaseConfig.ConnectionString;
 
         public MainForm()
@@ -109,7 +112,8 @@ namespace AvtoServis.Forms.Screens
                     new StatusRepository(connectionString),
                     new UsersRepository(),
                     connectionString);
-                _customerDebtsViewModel = new CustomerDebtsViewModel( new CustomerRepository(connectionString));
+                _customerDebtsViewModel = new CustomerDebtsViewModel(new CustomerRepository(connectionString));
+                _userProfileViewModel = new UserProfileViewModel(connectionString);
 
             }
             catch (Exception ex)
@@ -674,6 +678,82 @@ namespace AvtoServis.Forms.Screens
             {
                 MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private void btnprofile_Click(object sender, EventArgs e)
+        {
+            if (_userProfileViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var userProfileControl = new UserProfileControl(_userProfileViewModel, 1);
+                if (userProfileControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(userProfileControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private void logo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var viewModel = new ServiceOrderViewModel(
+                    new ServicesRepository(connectionString),
+                    new ServiceOrdersRepository(connectionString),
+                    new StatusRepository(connectionString),
+                    new CarModelsRepository(connectionString),
+                    new CustomerRepository(connectionString),
+                    new UsersRepository(),
+                    connectionString
+                    );
+                var saleForm = new ServiceOrderForm(viewModel, new CustomerRepository(connectionString));
+                saleForm.Show();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Произошла ошибка: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var viewModel = new SaleViewModel(
+                    new FullPartsRepository(connectionString),
+                    new PartsExpensesRepository(connectionString),
+                    new PartsIncomeRepository(connectionString),
+                    new StatusRepository(connectionString)
+                    );
+
+                // SaleForm ochish
+                var SaleForm = new SaleForm(viewModel, new CustomerRepository(connectionString));
+                SaleForm.Show();
+                //using (var saleForm = new SaleForm(viewModel, new CustomerRepository(connectionString)))
+                //{
+                //    saleForm.ShowDialog();
+                //}
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Произошла ошибка при откритие Форма: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

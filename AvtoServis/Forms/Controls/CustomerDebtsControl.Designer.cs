@@ -78,7 +78,7 @@ namespace AvtoServis.Forms.Controls
             titleLabel.ForeColor = Color.FromArgb(33, 37, 41);
             titleLabel.Location = new Point(19, 16);
             titleLabel.Name = "titleLabel";
-            titleLabel.Size = new Size(220, 32);
+            titleLabel.Size = new Size(242, 32);
             titleLabel.TabIndex = 0;
             titleLabel.Text = "Список должников";
             // 
@@ -180,7 +180,7 @@ namespace AvtoServis.Forms.Controls
             btnAddCustomer.Name = "btnAddCustomer";
             btnAddCustomer.Size = new Size(100, 34);
             btnAddCustomer.TabIndex = 4;
-            btnAddCustomer.Text = "Янги мижоз";
+            btnAddCustomer.Text = "Добавить ";
             btnAddCustomer.UseVisualStyleBackColor = false;
             btnAddCustomer.Click += BtnAddCustomer_Click;
             // 
@@ -236,7 +236,7 @@ namespace AvtoServis.Forms.Controls
             countLabel.Location = new Point(19, 563);
             countLabel.Margin = new Padding(3, 15, 3, 0);
             countLabel.Name = "countLabel";
-            countLabel.Size = new Size(100, 25);
+            countLabel.Size = new Size(99, 25);
             countLabel.TabIndex = 4;
             countLabel.Text = "Записи: 0";
             // 

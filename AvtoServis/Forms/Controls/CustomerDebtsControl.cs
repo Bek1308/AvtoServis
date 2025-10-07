@@ -242,39 +242,82 @@ namespace AvtoServis.Forms.Controls
         {
             try
             {
-                using (var form = new Form { Size = new Size(300, 400), Text = "Выбрать столбцы", StartPosition = FormStartPosition.CenterParent })
+                using (var form = new Form
                 {
-                    var checkBoxList = new CheckedListBox
+                    Text = "Выбор столбцов",
+                    Size = new Size(300, 400),
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.FixedDialog,
+                    MaximizeBox = false,
+                    MinimizeBox = false,
+                    BackColor = Color.FromArgb(245, 245, 245)
+                })
+                {
+                    var checkedListBox = new CheckedListBox
                     {
-                        Dock = DockStyle.Fill,
-                        Font = new Font("Segoe UI", 10F)
+                        Location = new Point(10, 10),
+                        Size = new Size(260, 300),
+                        CheckOnClick = true,
+                        Font = new Font("Segoe UI", 10F),
+                        BorderStyle = BorderStyle.FixedSingle
+                    };
+                    var columnMapping = new Dictionary<string, string>
+                    {
+                        { "CustomerID", "ID" },
+                        { "FullName", "ФИО" },
+                        { "Phone", "Телефон" },
+                        { "Email", "Эл. почта" },
+                        { "Address", "Адрес" },
+                        { "RegistrationDate", "Дата регистрации" },
+                        { "IsActive", "Активен" },
+                        { "UmumiyQarz", "Общий долг" },
+                        { "CarModels", "Модели машин" },
+                        { "DebtDetails", "Детали долга" }
                     };
                     foreach (var column in _columnVisibility.Where(c => c.Key != "Action"))
                     {
-                        checkBoxList.Items.Add(column.Key, column.Value);
+                        checkedListBox.Items.Add(new { Name = column.Key, DisplayName = columnMapping[column.Key] }, column.Value);
                     }
-                    form.Controls.Add(checkBoxList);
-                    var btnSave = new Button
+                    checkedListBox.DisplayMember = "DisplayName";
+                    checkedListBox.ValueMember = "Name";
+
+                    var btnOk = new Button
                     {
-                        Text = "Сохранить",
-                        Dock = DockStyle.Bottom,
-                        Height = 40,
+                        Text = "ОК",
+                        Location = new Point(100, 320),
+                        Size = new Size(80, 30),
                         BackColor = Color.FromArgb(40, 167, 69),
                         ForeColor = Color.White,
-                        FlatStyle = FlatStyle.Flat
+                        FlatStyle = FlatStyle.Flat,
+                        FlatAppearance = { BorderSize = 0, MouseOverBackColor = Color.FromArgb(60, 187, 89) },
+                        Font = new Font("Segoe UI", 10F, FontStyle.Bold)
                     };
-                    btnSave.Click += (s, ev) =>
+                    btnOk.Click += (s, ev) =>
                     {
-                        for (int i = 0; i < checkBoxList.Items.Count; i++)
+                        int visibleCount = checkedListBox.CheckedItems.Count;
+                        if (visibleCount == 0 && !_columnVisibility["Action"])
                         {
-                            _columnVisibility[checkBoxList.Items[i].ToString()] = checkBoxList.GetItemChecked(i);
+                            MessageBox.Show("Необходимо выбрать хотя бы один столбец!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        foreach (var column in _columnVisibility.Keys.ToList())
+                        {
+                            if (column != "Action")
+                                _columnVisibility[column] = false;
+                        }
+                        foreach (var item in checkedListBox.CheckedItems)
+                        {
+                            var col = (dynamic)item;
+                            _columnVisibility[col.Name] = true;
                         }
                         ConfigureColumns();
                         UpdateVisibleColumns();
                         RefreshDataGridView();
                         form.Close();
                     };
-                    form.Controls.Add(btnSave);
+
+                    form.Controls.Add(checkedListBox);
+                    form.Controls.Add(btnOk);
                     form.ShowDialog();
                 }
             }
@@ -310,7 +353,7 @@ namespace AvtoServis.Forms.Controls
                 var customerId = (int)dataGridView.Rows[e.RowIndex].Tag;
                 var contextMenu = new ContextMenuStrip { Renderer = new CustomToolStripRenderer() };
                 var editItem = new ToolStripMenuItem("Редактировать", null, (s, ev) => _viewModel.OpenCustomerEditForm(customerId, this.FindForm())) { Tag = "Edit" };
-                var detailsItem = new ToolStripMenuItem("Подробности", null, (s, ev) => _viewModel.ShowCustomerDetails(customerId, this.FindForm())) { Tag = "Details" };
+                var detailsItem = new ToolStripMenuItem("Подробности", null, (s, ev) => ShowCustomerDetails(customerId)) { Tag = "Details" };
                 contextMenu.Items.AddRange(new[] { editItem, detailsItem });
                 contextMenu.Show(dataGridView, dataGridView.PointToClient(Cursor.Position));
             }
@@ -439,6 +482,52 @@ namespace AvtoServis.Forms.Controls
             {
                 e.TextColor = e.Item.Selected ? Color.Black : Color.White;
                 base.OnRenderItemText(e);
+            }
+        }
+
+        private async void ShowCustomerDetails(int customerId)
+        {
+            try
+            {
+                var customerFullInfo = await _viewModel.GetCustomerWithDebtDetailsAsync(customerId);
+
+                if (customerFullInfo == null)
+                {
+                    MessageBox.Show("Информация о клиенте не найдена!", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string cars = (customerFullInfo.CarModels != null && customerFullInfo.CarModels.Any())
+                    ? string.Join(Environment.NewLine, customerFullInfo.CarModels
+                        .Select((c, index) => $"   {index + 1}. {c}"))
+                    : "Данные отсутствуют";
+
+                string debtDetails = (customerFullInfo.DebtDetails != null && customerFullInfo.DebtDetails.Any())
+                    ? string.Join(Environment.NewLine, customerFullInfo.DebtDetails
+                        .Select((d, index) => $"   {index + 1}. {d.ItemName}: {d.Amount:#,0}".Replace(",", ".")))
+                    : "Долгов нет";
+
+                string umumiyQarz = customerFullInfo.UmumiyQarz.ToString("#,0").Replace(",", ".") + " С";
+
+                string message =
+                    $"👤 ФИО: {customerFullInfo.FullName}\n" +
+                    $"📞 Телефон: {customerFullInfo.Phone}\n" +
+                    $"🆔 ID: {customerFullInfo.CustomerID}\n" +
+                    $"📧 Email: {customerFullInfo.Email}\n" +
+                    $"🏠 Адрес: {customerFullInfo.Address}\n" +
+                    $"📅 Дата регистрации: {customerFullInfo.RegistrationDate:dd.MM.yyyy}\n" +
+                    $"🔄 Статус: {(customerFullInfo.IsActive ? "Активен" : "Неактивен")}\n" +
+                    $"🚗 Автомобили:\n{cars}\n" +
+                    $"💰 Общий долг: {umumiyQarz}\n" +
+                    $"📌 Детализация долгов:\n{debtDetails}";
+
+                MessageBox.Show(message, "Информация о клиенте",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError(ex, "показ деталей клиента");
             }
         }
     }

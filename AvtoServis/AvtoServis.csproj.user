@@ -46,6 +46,9 @@
     <Compile Update="Forms\Controls\SuppliersControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\Controls\UserProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\Modals\CarBrand\CarBrandDialog.cs">
       <SubType>Form</SubType>
     </Compile>

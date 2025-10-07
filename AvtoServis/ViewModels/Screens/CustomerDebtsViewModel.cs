@@ -313,5 +313,19 @@ namespace AvtoServis.ViewModels.Screens
                 MessageBox.Show($"Ошибка при открытии деталей клиента: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public async Task<CustomerDebtInfoDto> GetCustomerWithDebtDetailsAsync(int customerId)
+        {
+            try
+            {
+                var customer = _customerRepository.GetCustomerWithDebtDetailsById(customerId);
+                return customer;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving customer debt details: " + ex.Message, ex);
+            }
+        }
     }
 }
