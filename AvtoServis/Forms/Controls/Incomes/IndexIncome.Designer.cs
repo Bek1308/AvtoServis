@@ -28,8 +28,8 @@
             tableLayoutPanelTop.BackColor = Color.FromArgb(248, 248, 248);
             tableLayoutPanelTop.ColumnCount = 3;
             tableLayoutPanelTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.4872971F));
-            tableLayoutPanelTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 15.8198614F));
-            tableLayoutPanelTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.69284F));
+            tableLayoutPanelTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48.2679F));
+            tableLayoutPanelTop.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 18.2448044F));
             tableLayoutPanelTop.Controls.Add(searchBox, 0, 0);
             tableLayoutPanelTop.Controls.Add(addButton, 2, 0);
             tableLayoutPanelTop.Controls.Add(btnOpenFilterDialog, 1, 0);
@@ -61,14 +61,14 @@
             // 
             addButton.AccessibleDescription = "Открывает форму для добавления новой партии";
             addButton.AccessibleName = "Новая партия";
-            addButton.Anchor = AnchorStyles.Right;
+            addButton.Anchor = AnchorStyles.Left;
             addButton.BackColor = Color.FromArgb(25, 118, 210);
             addButton.FlatStyle = FlatStyle.Flat;
             addButton.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             addButton.ForeColor = Color.White;
-            addButton.Location = new Point(726, 19);
+            addButton.Location = new Point(727, 19);
             addButton.Name = "addButton";
-            addButton.Size = new Size(153, 38);
+            addButton.Size = new Size(152, 38);
             addButton.TabIndex = 2;
             addButton.Text = "Новый";
             addButton.UseVisualStyleBackColor = false;
@@ -78,12 +78,12 @@
             // 
             btnOpenFilterDialog.AccessibleDescription = "Открывает окно для фильтрации партий";
             btnOpenFilterDialog.AccessibleName = "Открыть фильтры";
-            btnOpenFilterDialog.Anchor = AnchorStyles.Left;
+            btnOpenFilterDialog.Anchor = AnchorStyles.Right;
             btnOpenFilterDialog.BackColor = Color.LimeGreen;
             btnOpenFilterDialog.FlatStyle = FlatStyle.Flat;
             btnOpenFilterDialog.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnOpenFilterDialog.ForeColor = Color.White;
-            btnOpenFilterDialog.Location = new Point(309, 19);
+            btnOpenFilterDialog.Location = new Point(591, 19);
             btnOpenFilterDialog.Name = "btnOpenFilterDialog";
             btnOpenFilterDialog.Size = new Size(130, 38);
             btnOpenFilterDialog.TabIndex = 1;
