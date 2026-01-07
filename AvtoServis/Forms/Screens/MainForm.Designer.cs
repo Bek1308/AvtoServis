@@ -95,12 +95,12 @@
             menuTransition = new System.Windows.Forms.Timer(components);
             sidebarTransition = new System.Windows.Forms.Timer(components);
             flowLayoutPanel1 = new FlowLayoutPanel();
-            panel27 = new Panel();
-            button7 = new Button();
-            panel28 = new Panel();
-            button8 = new Button();
             panel29 = new Panel();
             button11 = new Button();
+            panel28 = new Panel();
+            button8 = new Button();
+            panel27 = new Panel();
+            button7 = new Button();
             flowLayoutPanel2 = new FlowLayoutPanel();
             flowLayoutPanel3 = new FlowLayoutPanel();
             flowLayoutPanel4 = new FlowLayoutPanel();
@@ -141,9 +141,9 @@
             panel6.SuspendLayout();
             panel14.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
-            panel27.SuspendLayout();
-            panel28.SuspendLayout();
             panel29.SuspendLayout();
+            panel28.SuspendLayout();
+            panel27.SuspendLayout();
             SuspendLayout();
             // 
             // sidebarContainer
@@ -210,6 +210,7 @@
             btnMain.Text = "            Главная";
             btnMain.TextAlign = ContentAlignment.MiddleLeft;
             btnMain.UseVisualStyleBackColor = false;
+            btnMain.Click += btnMain_Click_1;
             btnMain.MouseEnter += ApplyHoverEffect;
             // 
             // imageList1
@@ -1032,31 +1033,32 @@
             flowLayoutPanel1.Size = new Size(1181, 51);
             flowLayoutPanel1.TabIndex = 2;
             // 
-            // panel27
+            // panel29
             // 
-            panel27.BackColor = Color.Transparent;
-            panel27.Controls.Add(button7);
-            panel27.Location = new Point(1119, 3);
-            panel27.Name = "panel27";
-            panel27.Size = new Size(59, 46);
-            panel27.TabIndex = 3;
+            panel29.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            panel29.BackColor = Color.Transparent;
+            panel29.Controls.Add(button11);
+            panel29.Location = new Point(1119, 3);
+            panel29.Name = "panel29";
+            panel29.Size = new Size(59, 46);
+            panel29.TabIndex = 4;
             // 
-            // button7
+            // button11
             // 
-            button7.BackColor = Color.FromArgb(248, 248, 248);
-            button7.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            button7.ImageAlign = ContentAlignment.MiddleLeft;
-            button7.ImageIndex = 1;
-            button7.ImageList = imageList1;
-            button7.Location = new Point(-15, -12);
-            button7.Name = "button7";
-            button7.Padding = new Padding(25, 0, 0, 0);
-            button7.Size = new Size(86, 67);
-            button7.TabIndex = 0;
-            button7.TextAlign = ContentAlignment.MiddleLeft;
-            button7.UseVisualStyleBackColor = false;
-            button7.Click += button7_Click;
-            button7.MouseEnter += ApplyHoverEffect;
+            button11.BackColor = Color.FromArgb(248, 248, 248);
+            button11.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            button11.ImageAlign = ContentAlignment.MiddleLeft;
+            button11.ImageIndex = 13;
+            button11.ImageList = imageList1;
+            button11.Location = new Point(-15, -12);
+            button11.Name = "button11";
+            button11.Padding = new Padding(25, 0, 0, 0);
+            button11.Size = new Size(84, 67);
+            button11.TabIndex = 0;
+            button11.TextAlign = ContentAlignment.MiddleLeft;
+            button11.UseVisualStyleBackColor = false;
+            button11.Click += btnprofile_Click;
+            button11.MouseEnter += ApplyHoverEffect;
             // 
             // panel28
             // 
@@ -1084,32 +1086,31 @@
             button8.Click += button8_Click;
             button8.MouseEnter += ApplyHoverEffect;
             // 
-            // panel29
+            // panel27
             // 
-            panel29.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            panel29.BackColor = Color.Transparent;
-            panel29.Controls.Add(button11);
-            panel29.Location = new Point(989, 3);
-            panel29.Name = "panel29";
-            panel29.Size = new Size(59, 46);
-            panel29.TabIndex = 4;
+            panel27.BackColor = Color.Transparent;
+            panel27.Controls.Add(button7);
+            panel27.Location = new Point(989, 3);
+            panel27.Name = "panel27";
+            panel27.Size = new Size(59, 46);
+            panel27.TabIndex = 3;
             // 
-            // button11
+            // button7
             // 
-            button11.BackColor = Color.FromArgb(248, 248, 248);
-            button11.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            button11.ImageAlign = ContentAlignment.MiddleLeft;
-            button11.ImageIndex = 13;
-            button11.ImageList = imageList1;
-            button11.Location = new Point(-15, -12);
-            button11.Name = "button11";
-            button11.Padding = new Padding(25, 0, 0, 0);
-            button11.Size = new Size(84, 67);
-            button11.TabIndex = 0;
-            button11.TextAlign = ContentAlignment.MiddleLeft;
-            button11.UseVisualStyleBackColor = false;
-            button11.Click += btnprofile_Click;
-            button11.MouseEnter += ApplyHoverEffect;
+            button7.BackColor = Color.FromArgb(248, 248, 248);
+            button7.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            button7.ImageAlign = ContentAlignment.MiddleLeft;
+            button7.ImageIndex = 1;
+            button7.ImageList = imageList1;
+            button7.Location = new Point(-15, -12);
+            button7.Name = "button7";
+            button7.Padding = new Padding(25, 0, 0, 0);
+            button7.Size = new Size(86, 67);
+            button7.TabIndex = 0;
+            button7.TextAlign = ContentAlignment.MiddleLeft;
+            button7.UseVisualStyleBackColor = false;
+            button7.Click += button7_Click;
+            button7.MouseEnter += ApplyHoverEffect;
             // 
             // flowLayoutPanel2
             // 
@@ -1208,9 +1209,9 @@
             panel6.ResumeLayout(false);
             panel14.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
-            panel27.ResumeLayout(false);
-            panel28.ResumeLayout(false);
             panel29.ResumeLayout(false);
+            panel28.ResumeLayout(false);
+            panel27.ResumeLayout(false);
             ResumeLayout(false);
         }
 

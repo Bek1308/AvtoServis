@@ -823,7 +823,8 @@ namespace AvtoServis.ViewModels.Screens
                 }
                 else
                 {
-                    var price = Math.Round((product.IncomeUnitPrice ?? 0) * (1 + (product.Markup ?? 0.1m) / 100), 2);
+                    decimal price = (product.IncomeUnitPrice ?? 0) + (product.Markup ?? 0);
+
                     SelectedProducts.Add(new SaleItemDto
                     {
                         ProductId = product.PartID,

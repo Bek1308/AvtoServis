@@ -4,6 +4,7 @@ using AvtoServis.Data.Interfaces;
 using AvtoServis.Data.Repositories;
 using AvtoServis.Forms.Controls;
 using AvtoServis.ViewModels.Screens;
+using Catel.MVVM;
 using DocumentFormat.OpenXml.InkML;
 using System.Reflection;
 using Timer = System.Windows.Forms.Timer;
@@ -41,6 +42,7 @@ namespace AvtoServis.Forms.Screens
         private readonly ServiceOrdersViewModel _serviceOrdersViewModel;
         private readonly CustomerDebtsViewModel _customerDebtsViewModel;
         private readonly UserProfileViewModel _userProfileViewModel;
+        private readonly StatisticsViewModel _statisticsViewModel;
         private readonly string connectionString = DatabaseConfig.ConnectionString;
 
         public MainForm()
@@ -114,6 +116,7 @@ namespace AvtoServis.Forms.Screens
                     connectionString);
                 _customerDebtsViewModel = new CustomerDebtsViewModel(new CustomerRepository(connectionString));
                 _userProfileViewModel = new UserProfileViewModel(connectionString);
+                _statisticsViewModel = new StatisticsViewModel(new StatisticsRepository(connectionString));
 
             }
             catch (Exception ex)
@@ -122,6 +125,7 @@ namespace AvtoServis.Forms.Screens
                 System.Diagnostics.Debug.WriteLine($"MainForm Init Error: {ex.Message}");
                 return;
             }
+            OpenDefaultPage();
         }
 
         private void SetDoubleBuffered(Control control)
@@ -755,6 +759,51 @@ namespace AvtoServis.Forms.Screens
             {
                 MessageBox.Show($"Произошла ошибка при откритие Форма: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnMain_Click_1(object sender, EventArgs e)
+        {
+            
+            if (_userProfileViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var statisticsControl = new StatisticsUserControl(_statisticsViewModel);
+                if ( statisticsControl== null)
+                {
+                    return;
+                }
+                OpenUserControl(statisticsControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+        }
+        private void OpenDefaultPage()
+        {
+            if (_userProfileViewModel == null || imageList1 == null)
+            {
+                return;
+            }
+            try
+            {
+                var statisticsControl = new StatisticsUserControl(_statisticsViewModel);
+                if (statisticsControl == null)
+                {
+                    return;
+                }
+                OpenUserControl(statisticsControl);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии PartsQualitiesControls: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            }
+
         }
     }
 }

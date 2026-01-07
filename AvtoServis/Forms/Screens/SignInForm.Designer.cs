@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SignInForm));
             lblError = new Label();
             txtLogin = new TextBox();
             lblLogin = new Label();
@@ -37,6 +38,8 @@
             footer = new Label();
             lblsp = new Label();
             label1 = new Label();
+            pictureBox1 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // lblError
@@ -139,11 +142,23 @@
             label1.TabIndex = 8;
             label1.Text = "Вход в система-SmartServis";
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(110, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(310, 88);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 9;
+            pictureBox1.TabStop = false;
+            // 
             // SignInForm
             // 
             AccessibleDescription = "";
             BackColor = SystemColors.ControlLightLight;
             ClientSize = new Size(596, 775);
+            Controls.Add(pictureBox1);
             Controls.Add(label1);
             Controls.Add(lblsp);
             Controls.Add(footer);
@@ -160,6 +175,7 @@
             Name = "SignInForm";
             StartPosition = FormStartPosition.CenterScreen;
             Load += SignInForm_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
@@ -177,5 +193,6 @@
         private Label footer;
         private Label lblsp;
         private Label label1;
+        private PictureBox pictureBox1;
     }
 }

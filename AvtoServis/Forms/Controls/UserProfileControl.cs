@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AvtoServis.Forms.Screens;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -349,14 +350,24 @@ namespace AvtoServis.Forms.Controls
 
         private void BtnExit_Click(object sender, EventArgs e)
         {
-            if (_isEditing)
-            {
-                var result = MessageBox.Show("Вы хотите выйти без сохранения изменений?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.No)
-                    return;
-            }
-            ParentForm?.Close();
+            var result = MessageBox.Show(
+                "Вы хотите выйти без сохранения изменений?",
+                "Подтверждение",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.No)
+                return;
+
+            // Avval yangi forma ochamiz
+            SignInForm signInForm = new SignInForm();
+            signInForm.Show();
+
+            // Keyin hozirgi forma (usercontrol joylashgan) ni yopamiz
+            Form parentForm = this.FindForm();
+            parentForm?.Hide();
         }
+
 
         private void BtnChangeAvatar_Click(object sender, EventArgs e)
         {
